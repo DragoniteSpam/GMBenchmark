@@ -18,9 +18,23 @@ function Benchmark() constructor {
     }
     self.name = string("{0}: {1} ms", self.source_name, self.runtime);
     
-    array_sort(self.tests, function(a, b) {
-        return sign(a.runtime - b.runtime);
-    });
+    self.SortBestToWorst = function() {
+        array_sort(self.tests, function(a, b) {
+            return sign(a.runtime - b.runtime);
+        });
+    };
+    
+    self.SortWorstToBest = function() {
+        array_sort(self.tests, function(a, b) {
+            return sign(b.runtime - a.runtime);
+        });
+    };
+    
+    self.SortAlphabetical = function() {
+        array_sort(self.tests, function(a, b) {
+            return b.name < a.name;
+        });
+    };
 }
 
 function TestCase(name, fn) constructor {

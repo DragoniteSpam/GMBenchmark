@@ -1,5 +1,13 @@
 randomize();
 
+enum ESortTypes {
+    BEST_TO_WORST,
+    WORST_TO_BEST,
+    ALPHABETICAL
+}
+
+self.sort_type = ESortTypes.BEST_TO_WORST;
+
 var ew = 360;
 var eh = 32;
 
@@ -8,7 +16,7 @@ var c2 = c1 + 32 + ew;
 
 self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddContent([
     new EmuText(c1, EMU_AUTO, ew, eh, string("[c_aqua]GameMaker Benchmark Tool[/c] ({0})", code_is_compiled() ? "YYC" : "VM")),
-    new EmuList(c1, EMU_AUTO, ew, eh, "Benchmarks:", eh, 10, function() {
+    new EmuList(c1, EMU_AUTO, ew, eh, "Benchmarks:", eh, 6, function() {
         var bench = self.GetSelectedItem();
         var item_list = self.GetSibling("BENCHMARK TEST LIST");
         if (item_list) {
@@ -31,6 +39,19 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         .SetVacantText("Select a benchmark")
         .SetEntryTypes(E_ListEntryTypes.STRUCTS)
         .SetID("BENCHMARK TEST LIST"),
+    new EmuRadioArray(c1, EMU_AUTO, ew, eh, "Sort by:", self.sort_type, function() {
+        if (obj_main.sort_type != self.value) {
+            obj_main.sort_type = self.value;
+            for (var i = 0, n = array_length(Benchmarks); i < n; i++) {
+                switch (self.value) {
+                    case ESortTypes.BEST_TO_WORST: Benchmarks[i].SortBestToWorst(); break;
+                    case ESortTypes.WORST_TO_BEST: Benchmarks[i].SortWorstToBest(); break;
+                    case ESortTypes.ALPHABETICAL: Benchmarks[i].SortAlphabetical(); break;
+                }
+            }
+        }
+    })
+        .AddOptions(["Best to Worst", "Worst to Best", "Alphabetical"]),
     new EmuRenderSurface(c2, 32, 360, 360, function(mx, my) {
         // render
         draw_clear_alpha(c_black, 0);
