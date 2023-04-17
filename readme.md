@@ -37,6 +37,8 @@ For example:
 
 If your tests require any additional setup you may consider tossing a few global variables in the `GM_Benchmark_Setup` code file so that it doesn't bog down the results of the actual test. Don't worry, I won't tell the GameMaker police.
 
+![image](https://user-images.githubusercontent.com/7087495/232585003-00a37367-fc97-4250-b349-f0774bf216b9.png)
+
 ## Contributing
 
 ### Tests
