@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "benchmark",
+  "name": "GM_Benchmark",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

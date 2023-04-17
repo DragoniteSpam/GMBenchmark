@@ -1,6 +1,7 @@
-function benchmark() {
-    var tests = [];
-    for (var i = 0; i < argument_count; i++) {
+function Benchmark() constructor {
+    self.name = argument[0];
+    self.tests = [];
+    for (var i = 1; i < argument_count; i++) {
         var test = argument[i];
         if (!is_instanceof(test, TestCase)) {
             show_debug_message("Benchmark {0} is not a testable case", i);
@@ -10,9 +11,8 @@ function benchmark() {
         test.fn();
         test.runtime = (get_timer() - t_start) / 1000;
         show_debug_message("{0} took {1} ms", test.name, test.runtime);
-        array_push(tests, test);
+        array_push(self.tests, test);
     }
-    return tests;
 }
 
 function TestCase(name, fn) constructor {
@@ -20,3 +20,5 @@ function TestCase(name, fn) constructor {
     self.fn = fn;
     self.runtime = 0;
 }
+
+#macro Benchmarks global.__benchmarks__
