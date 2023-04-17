@@ -1,0 +1,7 @@
+{
+  "FolderOrderSettings": [],
+  "ResourceOrderSettings": [
+    {"name":"benchmark","order":2,"path":"scripts/benchmark/benchmark.yy",},
+    {"name":"Room1","order":1,"path":"rooms/Room1/Room1.yy",},
+  ],
+}
