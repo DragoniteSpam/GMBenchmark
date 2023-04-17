@@ -63,7 +63,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     new EmuRenderSurface(c2, 32, 360, 360, function(mx, my) {
         // render
         draw_clear_alpha(c_black, 0);
-        obj_main.DrawPieChart(self.width / 2, self.height / 2, min(self.width, self.height) / 2);
+        obj_main.DrawPieChart(self.width, self.height, min(self.width, self.height) / 2);
     }, function(mx, my) {
         // step
     }),
@@ -93,6 +93,10 @@ Tests contained: {2}
 ]);
 
 self.DrawPieChart = function(w, h, r) {
+    // draw the pie chart centered in the middle of the canvas
+    var xx = w div 2;
+    var yy = h div 2;
+    
     var current_benchmark = self.container.GetChild("BENCHMARK LIST").GetSelectedItem();
     if (!current_benchmark) return;
     
@@ -112,11 +116,11 @@ self.DrawPieChart = function(w, h, r) {
         }
         
         draw_primitive_begin(pr_trianglefan);
-        draw_vertex_colour(x, y, test.color, 1);
-        draw_vertex_colour(x + r * dcos(angle), y - r * dsin(angle), test.color, 1);
+        draw_vertex_colour(xx, yy, test.color, 1);
+        draw_vertex_colour(xx + r * dcos(angle), yy - r * dsin(angle), test.color, 1);
         while (angle <= slice_end) {
             angle += resolution;
-            draw_vertex_colour(x + r * dcos(angle), y - r * dsin(angle), test.color, 1);
+            draw_vertex_colour(xx + r * dcos(angle), yy - r * dsin(angle), test.color, 1);
         }
         draw_primitive_end();
         
