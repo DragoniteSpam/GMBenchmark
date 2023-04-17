@@ -7,7 +7,8 @@ var c1 = 32;
 var c2 = c1 + 32 + ew;
 
 self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddContent([
-    new EmuList(c1, EMU_AUTO, ew, eh, "Benchmarks:", eh, 12, function() {
+    new EmuText(c1, EMU_AUTO, ew, eh, string("[c_aqua]GameMaker Benchmark Tool[/c]({0})", code_is_compiled() ? "YYC" : "VM")),
+    new EmuList(c1, EMU_AUTO, ew, eh, "Benchmarks:", eh, 10, function() {
         var bench = self.GetSelectedItem();
         var item_list = self.GetSibling("BENCHMARK TEST LIST");
         if (item_list) {
