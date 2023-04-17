@@ -125,6 +125,7 @@
     {"name":"scribble_super_glyph_copy","order":2,"path":"scripts/scribble_super_glyph_copy/scribble_super_glyph_copy.yy",},
     {"name":"__shd_scribble_bake_outline_4dir","order":1,"path":"shaders/__shd_scribble_bake_outline_4dir/__shd_scribble_bake_outline_4dir.yy",},
     {"name":"scribble_font_force_bilinear_filtering","order":5,"path":"scripts/scribble_font_force_bilinear_filtering/scribble_font_force_bilinear_filtering.yy",},
+    {"name":"shd_selected_benchmark_test","order":9,"path":"shaders/shd_selected_benchmark_test/shd_selected_benchmark_test.yy",},
     {"name":"__scribble_class_font","order":2,"path":"scripts/__scribble_class_font/__scribble_class_font.yy",},
     {"name":"Room1","order":1,"path":"rooms/Room1/Room1.yy",},
   ],
