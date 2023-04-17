@@ -59,7 +59,6 @@
     {"name":"spr_emu_knob","order":10,"path":"sprites/spr_emu_knob/spr_emu_knob.yy",},
     {"name":"scribble_anim_pulse","order":3,"path":"scripts/scribble_anim_pulse/scribble_anim_pulse.yy",},
     {"name":"scribble_font_scale","order":9,"path":"scripts/scribble_font_scale/scribble_font_scale.yy",},
-    {"name":"obj_benchmark","order":3,"path":"objects/obj_benchmark/obj_benchmark.yy",},
     {"name":"scribble_is_text_element","order":6,"path":"scripts/scribble_is_text_element/scribble_is_text_element.yy",},
     {"name":"scribble_anim_shake","order":6,"path":"scripts/scribble_anim_shake/scribble_anim_shake.yy",},
     {"name":"scribble_super_create","order":1,"path":"scripts/scribble_super_create/scribble_super_create.yy",},

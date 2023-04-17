@@ -1,3 +1,5 @@
+randomize();
+
 var ew = 320;
 var eh = 32;
 
@@ -26,3 +28,38 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         .SetEntryTypes(E_ListEntryTypes.STRUCTS)
         .SetID("BENCHMARK ITEM LIST")
 ]);
+
+self.DrawPieChart = function(x, y, r, colors = undefined) {
+    var current_benchmark = self.container.GetChild("BENCHMARK LIST").GetSelectedItem();
+    if (!current_benchmark) return;
+    
+    static color_offset = random(255);
+    var benchmark_count = array_length(current_benchmark.tests);
+    if (colors == undefined) {
+        colors = array_create(benchmark_count);
+        for (var i = 0; i < benchmark_count; i++) {
+            colors[i] = make_colour_hsv((color_offset + i / benchmark_count * 255) % 255, 255, 255);
+        }
+    }
+    
+    var total_time = 0;
+    for (i = 0; i < benchmark_count; i++) {
+        total_time += current_benchmark.tests[i].runtime;
+    }
+    
+    static resolution = 4;          // degrees
+    
+    var angle = 0;
+    for (var i = 0; i < benchmark_count; i++) {
+        var slice_start = angle;
+        var slice_end = 360 * current_benchmark.tests[i].runtime / total_time + angle;
+        draw_primitive_begin(pr_trianglefan);
+        draw_vertex_colour(x, y, colors[i], 1);
+        draw_vertex_colour(x + r * dcos(angle), y - r * dsin(angle), colors[i], 1);
+        while (angle <= slice_end) {
+            angle += resolution;
+            draw_vertex_colour(x + r * dcos(angle), y - r * dsin(angle), colors[i], 1);
+        }
+        draw_primitive_end();
+    }
+};
