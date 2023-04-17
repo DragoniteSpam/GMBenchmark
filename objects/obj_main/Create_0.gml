@@ -50,7 +50,7 @@ Total runtime: {1}
 [c_aqua]{2}[/c]
 Test {3} of {4}
 Test runtime: {5} ({6}% of total)
-", benchmark.source_name, benchmark.runtime, test.source_name, test_index, array_length(benchmark.tests), test.runtime, test.runtime / benchmark.runtime);
+", benchmark.source_name, benchmark.runtime, test.source_name, test_index, array_length(benchmark.tests), test.runtime, test.runtime / benchmark.runtime * 100);
             } else if (benchmark) {
                 self.text = string(@"[c_aqua]{0}[/c]
 Total runtime: {1}
@@ -62,7 +62,7 @@ Tests contained: {2}
         })
 ]);
 
-self.DrawPieChart = function(x, y, r, colors = undefined) {
+self.DrawPieChart = function(x, y, r) {
     var current_benchmark = self.container.GetChild("BENCHMARK LIST").GetSelectedItem();
     if (!current_benchmark) return;
     
@@ -70,25 +70,18 @@ self.DrawPieChart = function(x, y, r, colors = undefined) {
     
     static color_offset = random(255);
     var benchmark_count = array_length(current_benchmark.tests);
-    if (colors == undefined) {
-        colors = array_create(benchmark_count);
-        for (var i = 0; i < benchmark_count; i++) {
-            colors[i] = make_colour_hsv((color_offset + i / benchmark_count * 255) % 255, 255, 255);
-        }
+    var colors = array_create(benchmark_count);
+    for (var i = 0; i < benchmark_count; i++) {
+        colors[i] = make_colour_hsv((color_offset + i / benchmark_count * 255) % 255, 255, 255);
     }
     
-    var total_time = 0;
-    for (i = 0; i < benchmark_count; i++) {
-        total_time += current_benchmark.tests[i].runtime;
-    }
-    
-    static resolution = 4;          // degrees
+    static resolution = 2;          // degrees
     
     var angle = 0;
     for (var i = 0; i < benchmark_count; i++) {
         var test = current_benchmark.tests[i];
         var slice_start = angle;
-        var slice_end = 360 * test.runtime / total_time + angle;
+        var slice_end = 360 * test.runtime / current_benchmark.runtime + angle;
         
         if (test == selected_benchmark_test) {
             shader_set(shd_selected_benchmark_test);
