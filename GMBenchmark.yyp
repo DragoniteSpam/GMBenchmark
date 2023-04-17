@@ -152,7 +152,7 @@
     {"id":{"name":"scribble_super_glyph_copy","path":"scripts/scribble_super_glyph_copy/scribble_super_glyph_copy.yy",},},
     {"id":{"name":"__shd_scribble_bake_outline_4dir","path":"shaders/__shd_scribble_bake_outline_4dir/__shd_scribble_bake_outline_4dir.yy",},},
     {"id":{"name":"scribble_font_force_bilinear_filtering","path":"scripts/scribble_font_force_bilinear_filtering/scribble_font_force_bilinear_filtering.yy",},},
-    {"id":{"name":"shd_selected_benchmark_test","path":"shaders/shd_selected_benchmark_test/shd_selected_benchmark_test.yy",},},
+    {"id":{"name":"shd_dither","path":"shaders/shd_dither/shd_dither.yy",},},
     {"id":{"name":"__scribble_class_font","path":"scripts/__scribble_class_font/__scribble_class_font.yy",},},
     {"id":{"name":"spr_emu_nineslice","path":"sprites/spr_emu_nineslice/spr_emu_nineslice.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},

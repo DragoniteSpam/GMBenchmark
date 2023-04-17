@@ -92,7 +92,7 @@ Tests contained: {2}
         })
 ]);
 
-self.DrawPieChart = function(x, y, r) {
+self.DrawPieChart = function(w, h, r) {
     var current_benchmark = self.container.GetChild("BENCHMARK LIST").GetSelectedItem();
     if (!current_benchmark) return;
     
@@ -108,7 +108,7 @@ self.DrawPieChart = function(x, y, r) {
         var slice_end = 360 * test.runtime / current_benchmark.runtime + angle;
         
         if (test == selected_benchmark_test) {
-            shader_set(shd_selected_benchmark_test);
+            shader_set(shd_dither);
         }
         
         draw_primitive_begin(pr_trianglefan);
