@@ -20,6 +20,7 @@
   "resources": [
     {"id":{"name":"benchmark","path":"scripts/benchmark/benchmark.yy",},},
     {"id":{"name":"obj_benchmark","path":"objects/obj_benchmark/obj_benchmark.yy",},},
+    {"id":{"name":"obj_benchmark_growable","path":"objects/obj_benchmark_growable/obj_benchmark_growable.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "RoomOrderNodes": [
