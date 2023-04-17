@@ -42,12 +42,20 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     new EmuRadioArray(c1, EMU_AUTO, ew, eh, "Sort by:", self.sort_type, function() {
         if (obj_main.sort_type != self.value) {
             obj_main.sort_type = self.value;
+            var selected_benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
+            var test_list = self.GetSibling("BENCHMARK TEST LIST");
+            var selected = test_list.GetSelectedItem();
             for (var i = 0, n = array_length(Benchmarks); i < n; i++) {
                 switch (self.value) {
                     case ESortTypes.BEST_TO_WORST: Benchmarks[i].SortBestToWorst(); break;
                     case ESortTypes.WORST_TO_BEST: Benchmarks[i].SortWorstToBest(); break;
                     case ESortTypes.ALPHABETICAL: Benchmarks[i].SortAlphabetical(); break;
                 }
+            }
+            
+            if (selected) {
+                test_list.ClearSelection();
+                test_list.Select(array_get_index(selected_benchmark.tests, selected));
             }
         }
     })
