@@ -39,6 +39,8 @@ function Benchmark() constructor {
             return b.name < a.name;
         });
     };
+    
+    self.SortBestToWorst();
 }
 
 function TestCase(name, fn) constructor {
