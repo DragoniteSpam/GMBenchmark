@@ -69,10 +69,10 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
                 self.text = string(@"[c_aqua]{0}[/c]
 Total runtime: {1}
 
-[c_aqua]{2}[/c]
-Test {3} of {4}
-Test runtime: {5} ({6}% of total)
-", benchmark.source_name, benchmark.runtime, test.source_name, test_index, array_length(benchmark.tests), test.runtime, test.runtime / benchmark.runtime * 100);
+[c_aqua]{2}[/c] ([#{3}]#{3}[/c])
+Test {4} of {5}
+Test runtime: {6} ({7}% of total)
+", benchmark.source_name, benchmark.runtime, test.source_name, colour_to_hex(test.color), test_index, array_length(benchmark.tests), test.runtime, test.runtime / benchmark.runtime * 100);
             } else if (benchmark) {
                 self.text = string(@"[c_aqua]{0}[/c]
 Total runtime: {1}
@@ -89,13 +89,7 @@ self.DrawPieChart = function(x, y, r) {
     if (!current_benchmark) return;
     
     var selected_benchmark_test = self.container.GetChild("BENCHMARK TEST LIST").GetSelectedItem();
-    
-    static color_offset = random(255);
     var benchmark_count = array_length(current_benchmark.tests);
-    var colors = array_create(benchmark_count);
-    for (var i = 0; i < benchmark_count; i++) {
-        colors[i] = make_colour_hsv((color_offset + i / benchmark_count * 255) % 255, 255, 255);
-    }
     
     static resolution = 2;          // degrees
     
@@ -110,11 +104,11 @@ self.DrawPieChart = function(x, y, r) {
         }
         
         draw_primitive_begin(pr_trianglefan);
-        draw_vertex_colour(x, y, colors[i], 1);
-        draw_vertex_colour(x + r * dcos(angle), y - r * dsin(angle), colors[i], 1);
+        draw_vertex_colour(x, y, test.color, 1);
+        draw_vertex_colour(x + r * dcos(angle), y - r * dsin(angle), test.color, 1);
         while (angle <= slice_end) {
             angle += resolution;
-            draw_vertex_colour(x + r * dcos(angle), y - r * dsin(angle), colors[i], 1);
+            draw_vertex_colour(x + r * dcos(angle), y - r * dsin(angle), test.color, 1);
         }
         draw_primitive_end();
         

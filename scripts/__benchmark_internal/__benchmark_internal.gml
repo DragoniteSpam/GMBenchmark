@@ -2,6 +2,9 @@ function Benchmark() constructor {
     self.source_name = argument[0];
     self.tests = [];
     self.runtime = 0;
+    
+    var color_offset = random(255);
+    
     for (var i = 1; i < argument_count; i++) {
         var test = argument[i];
         if (!is_instanceof(test, TestCase)) {
@@ -11,8 +14,9 @@ function Benchmark() constructor {
         var t_start = get_timer();
         test.fn();
         test.runtime = (get_timer() - t_start) / 1000;
-        test.name = string("{0}: {1} ms", test.source_name, test.runtime);
-        show_debug_message(test.name);
+        
+        test.color = make_colour_hsv((color_offset + (i - 1) / (argument_count - 1) * 255) % 255, 255, 255);
+        test.name = string("[#{0}]o[/c] {1}: {2} ms", colour_to_hex(test.color), test.source_name, test.runtime);
         self.runtime += test.runtime;
         array_push(self.tests, test);
     }
@@ -42,6 +46,12 @@ function TestCase(name, fn) constructor {
     self.source_name = name;
     self.fn = fn;
     self.runtime = 0;
+    self.color = c_white;
 }
+
+function colour_to_hex(color) {
+    color = make_colour_rgb(colour_get_blue(color), colour_get_green(color), colour_get_red(color));
+    return string_copy(string(ptr(color)), 11, 6);
+};
 
 #macro Benchmarks global.__benchmarks__
