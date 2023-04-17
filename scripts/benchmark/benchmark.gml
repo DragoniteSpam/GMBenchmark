@@ -20,15 +20,3 @@ function TestCase(name, fn) constructor {
     self.fn = fn;
     self.runtime = 0;
 }
-
-benchmark(new TestCase("array_push", function() {
-    var array = [];
-    repeat (100_000) {
-        array_push(array, 0);
-    }
-}), new TestCase("ds_list_add", function() {
-    var list = ds_list_create();
-    repeat (100_000) {
-        ds_list_add(list, 0);
-    }
-}));
