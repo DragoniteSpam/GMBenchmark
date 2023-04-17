@@ -1,10 +1,13 @@
 randomize();
 
-var ew = 320;
+var ew = 360;
 var eh = 32;
 
+var c1 = 32;
+var c2 = c1 + 32 + ew;
+
 self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddContent([
-    new EmuList(32, EMU_AUTO, ew, eh, "Benchmarks:", eh, 12, function() {
+    new EmuList(c1, EMU_AUTO, ew, eh, "Benchmarks:", eh, 12, function() {
         var bench = self.GetSelectedItem();
         var item_list = self.GetSibling("BENCHMARK TEST LIST");
         if (item_list) {
@@ -22,11 +25,31 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         .SetList(Benchmarks)
         .SetEntryTypes(E_ListEntryTypes.STRUCTS)
         .SetID("BENCHMARK LIST"),
-    new EmuList(32, EMU_AUTO, ew, eh, "Results:", eh, 8, function() {
+    new EmuList(c1, EMU_AUTO, ew, eh, "Results:", eh, 8, function() {
     })
         .SetVacantText("Select a benchmark")
         .SetEntryTypes(E_ListEntryTypes.STRUCTS)
-        .SetID("BENCHMARK TEST LIST")
+        .SetID("BENCHMARK TEST LIST"),
+    new EmuRenderSurface(c2, 32, 360, 360, function(mx, my) {
+        // render
+        draw_clear_alpha(c_black, 0);
+        obj_main.DrawPieChart(self.width / 2, self.height / 2, min(self.width, self.height) / 2);
+    }, function(mx, my) {
+        // step
+    }),
+    new EmuText(c2, EMU_AUTO, ew, ew, "")
+        .SetUpdate(function() {
+            var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
+            var test = self.GetSibling("BENCHMARK TEST LIST").GetSelectedItem();
+            
+            if (test) {
+                
+            } else if (benchmark) {
+                
+            } else {
+                self.text = "";
+            }
+        })
 ]);
 
 self.DrawPieChart = function(x, y, r, colors = undefined) {
