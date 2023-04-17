@@ -75,15 +75,15 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             if (test) {
                 var test_index = array_get_index(benchmark.tests, test);
                 self.text = string(@"[c_aqua]{0}[/c]
-Total runtime: {1}
+Total runtime: {1} ms
 
 [c_aqua]{2}[/c] ([#{3}]#{3}[/c])
 Test {4} of {5}
-Test runtime: {6} ({7}% of total)
+Test runtime: {6} ms ({7}% of total)
 ", benchmark.source_name, benchmark.runtime, test.source_name, colour_to_hex(test.color), test_index, array_length(benchmark.tests), test.runtime, test.runtime / benchmark.runtime * 100);
             } else if (benchmark) {
                 self.text = string(@"[c_aqua]{0}[/c]
-Total runtime: {1}
+Total runtime: {1} ms
 Tests contained: {2}
 ", benchmark.source_name, benchmark.runtime, array_length(benchmark.tests));
             } else {
