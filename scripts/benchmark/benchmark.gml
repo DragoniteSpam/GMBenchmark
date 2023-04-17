@@ -1,4 +1,5 @@
 function benchmark() {
+    var tests = [];
     for (var i = 0; i < argument_count; i++) {
         var test = argument[i];
         if (!is_instanceof(test, TestCase)) {
@@ -9,7 +10,9 @@ function benchmark() {
         test.fn();
         test.runtime = (get_timer() - t_start) / 1000;
         show_debug_message("{0} took {1} ms", test.name, test.runtime);
+        array_push(tests, test);
     }
+    return tests;
 }
 
 function TestCase(name, fn) constructor {
