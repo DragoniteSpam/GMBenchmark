@@ -17,6 +17,10 @@ function Benchmark() constructor {
         array_push(self.tests, test);
     }
     self.name = string("{0}: {1} ms", self.source_name, self.runtime);
+    
+    array_sort(self.tests, function(a, b) {
+        return sign(a.runtime - b.runtime);
+    });
 }
 
 function TestCase(name, fn) constructor {
