@@ -55,7 +55,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             
             if (selected) {
                 test_list.ClearSelection();
-                test_list.Select(array_get_index(selected_benchmark.tests, selected));
+                test_list.Select(array_get_index(selected_benchmark.tests, selected), true);
             }
         }
     })
@@ -63,7 +63,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     new EmuRenderSurface(c2, 32, 360, 360, function(mx, my) {
         // render
         draw_clear_alpha(c_black, 0);
-        obj_main.DrawPieChart(self.width, self.height, min(self.width, self.height) / 2);
+        obj_main.DrawPieChart(self.width, self.height, min(self.width, self.height) / 2, mx, my);
     }, function(mx, my) {
         // step
     }),
@@ -92,7 +92,7 @@ Tests contained: {2}
         })
 ]);
 
-self.DrawPieChart = function(w, h, r) {
+self.DrawPieChart = function(w, h, r, mx, my) {
     // draw the pie chart centered in the middle of the canvas
     var xx = w div 2;
     var yy = h div 2;
@@ -110,6 +110,17 @@ self.DrawPieChart = function(w, h, r) {
         var test = current_benchmark.tests[i];
         var slice_start = angle;
         var slice_end = 360 * test.runtime / current_benchmark.runtime + angle;
+        
+        if (point_distance(xx, yy, mx, my) < r) {
+            var md = point_direction(xx, yy, mx, my);
+            if (md >= slice_start && md < slice_end) {
+                if (mouse_check_button_pressed(mb_left)) {
+                    var test_list = obj_main.container.GetChild("BENCHMARK TEST LIST");
+                    test_list.ClearSelection();
+                    test_list.Select(i, true);
+                }
+            }
+        }
         
         if (test == selected_benchmark_test) {
             shader_set(shd_dither);
