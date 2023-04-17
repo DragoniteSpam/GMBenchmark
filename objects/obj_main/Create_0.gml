@@ -43,9 +43,19 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             var test = self.GetSibling("BENCHMARK TEST LIST").GetSelectedItem();
             
             if (test) {
-                
+                var test_index = array_get_index(benchmark.tests, test);
+                self.text = string(@"[c_aqua]{0}[/c]
+Total runtime: {1}
+
+[c_aqua]{2}[/c]
+Test {3} of {4}
+Test runtime: {5} ({6}% of total)
+", benchmark.source_name, benchmark.runtime, test.source_name, test_index, array_length(benchmark.tests), test.runtime, test.runtime / benchmark.runtime);
             } else if (benchmark) {
-                
+                self.text = string(@"[c_aqua]{0}[/c]
+Total runtime: {1}
+Tests contained: {2}
+", benchmark.source_name, benchmark.runtime, array_length(benchmark.tests));
             } else {
                 self.text = "";
             }
