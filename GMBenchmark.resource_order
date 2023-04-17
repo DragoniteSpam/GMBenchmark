@@ -49,6 +49,7 @@
     {"name":"EmuRenderSurface","order":12,"path":"scripts/EmuRenderSurface/EmuRenderSurface.yy",},
     {"name":"scribble_anim_wobble","order":9,"path":"scripts/scribble_anim_wobble/scribble_anim_wobble.yy",},
     {"name":"__scribble_gen_4_build_words","order":3,"path":"scripts/__scribble_gen_4_build_words/__scribble_gen_4_build_words.yy",},
+    {"name":"obj_main","order":7,"path":"objects/obj_main/obj_main.yy",},
     {"name":"scribble_external_sound_add","order":2,"path":"scripts/scribble_external_sound_add/scribble_external_sound_add.yy",},
     {"name":"EmuTab","order":13,"path":"scripts/EmuTab/EmuTab.yy",},
     {"name":"__scribble_class_model","order":3,"path":"scripts/__scribble_class_model/__scribble_class_model.yy",},

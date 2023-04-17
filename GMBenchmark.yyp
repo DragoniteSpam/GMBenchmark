@@ -68,6 +68,7 @@
     {"id":{"name":"EmuRenderSurface","path":"scripts/EmuRenderSurface/EmuRenderSurface.yy",},},
     {"id":{"name":"scribble_anim_wobble","path":"scripts/scribble_anim_wobble/scribble_anim_wobble.yy",},},
     {"id":{"name":"__scribble_gen_4_build_words","path":"scripts/__scribble_gen_4_build_words/__scribble_gen_4_build_words.yy",},},
+    {"id":{"name":"obj_main","path":"objects/obj_main/obj_main.yy",},},
     {"id":{"name":"scribble_external_sound_add","path":"scripts/scribble_external_sound_add/scribble_external_sound_add.yy",},},
     {"id":{"name":"EmuTab","path":"scripts/EmuTab/EmuTab.yy",},},
     {"id":{"name":"__scribble_class_model","path":"scripts/__scribble_class_model/__scribble_class_model.yy",},},
