@@ -10,13 +10,15 @@ function Benchmark() constructor {
         var t_start = get_timer();
         test.fn();
         test.runtime = (get_timer() - t_start) / 1000;
-        show_debug_message("{0} took {1} ms", test.name, test.runtime);
+        test.name = string("{0}: {1} ms", test.source_name, test.runtime);
+        show_debug_message(test.name);
         array_push(self.tests, test);
     }
 }
 
 function TestCase(name, fn) constructor {
     self.name = name;
+    self.source_name = name;
     self.fn = fn;
     self.runtime = 0;
 }
