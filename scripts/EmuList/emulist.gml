@@ -32,6 +32,11 @@ function EmuList(x, y, width, header_height, text, element_height, content_slots
     self.entries = [];
 	self.dragging = false;
     
+    self.SetAllowDeselect = function(allow_deselect) {
+        self.allow_deselect = allow_deselect;
+        return self;
+    };
+    
     self.At = function(index) {
         return (index < 0 || index >= array_length(self.entries)) ? undefined : self.entries[index];
     };
