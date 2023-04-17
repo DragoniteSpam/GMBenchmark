@@ -2,6 +2,7 @@
   "FolderOrderSettings": [],
   "ResourceOrderSettings": [
     {"name":"benchmark","order":2,"path":"scripts/benchmark/benchmark.yy",},
+    {"name":"obj_benchmark","order":3,"path":"objects/obj_benchmark/obj_benchmark.yy",},
     {"name":"Room1","order":1,"path":"rooms/Room1/Room1.yy",},
   ],
 }
