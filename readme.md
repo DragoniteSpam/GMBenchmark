@@ -4,7 +4,7 @@ Hi, I made a tool for benchmarking code in [GameMaker](https://gamemaker.io/en).
 
 ## Using it
 
-Clone the repository, open the GameMaker project, and run it. You'll see a pretty little UI and some data relatingn to the performance of different bits of code.
+Clone the repository, open the GameMaker project, and run it. You'll see a pretty little UI and some data relating to the performance of different bits of code.
 
 To add your own tests, go into the `GM_Benchmarks` and edit (or add to) the list of items in the `Benchmarks` array.
 
