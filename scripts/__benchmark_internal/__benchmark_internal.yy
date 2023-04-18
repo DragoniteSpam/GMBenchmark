@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "GMBenchmark",
-    "path": "GMBenchmark.yyp",
+    "name": "Internals",
+    "path": "folders/Internals.yy",
   },
 }

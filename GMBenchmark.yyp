@@ -26,6 +26,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Fonts","folderPath":"folders/Scribble/Fonts.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Miscellaneous","folderPath":"folders/Scribble/Miscellaneous.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Superfonts","folderPath":"folders/Scribble/Superfonts.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Internals","folderPath":"folders/Internals.yy",},
   ],
   "IncludedFiles": [],
   "isEcma": false,

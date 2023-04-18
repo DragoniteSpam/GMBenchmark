@@ -3,8 +3,8 @@
   "resourceVersion": "1.0",
   "name": "shd_dither",
   "parent": {
-    "name": "GMBenchmark",
-    "path": "GMBenchmark.yyp",
+    "name": "Internals",
+    "path": "folders/Internals.yy",
   },
   "type": 1,
 }

@@ -9,8 +9,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "GMBenchmark",
-    "path": "GMBenchmark.yyp",
+    "name": "Internals",
+    "path": "folders/Internals.yy",
   },
   "parentObjectId": null,
   "persistent": false,
