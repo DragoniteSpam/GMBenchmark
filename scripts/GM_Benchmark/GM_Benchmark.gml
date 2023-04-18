@@ -47,7 +47,7 @@ Benchmarks = [
     }), new TestCase("while over cached array size", function() {
         var i = 0;
         var n = array_length(global.__test_array);
-        repeat (n) {
+        while (i < n) {
             var val = global.__test_array[i];
             i++;
         }
