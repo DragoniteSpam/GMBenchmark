@@ -15,6 +15,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Core","folderPath":"folders/Emu/Core.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Graphics","folderPath":"folders/Emu/Graphics.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"slices","folderPath":"folders/Emu/Graphics/slices.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Internals","folderPath":"folders/Internals.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Scribble","folderPath":"folders/Scribble.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"(System - don't call these functions)","folderPath":"folders/Scribble/(System - don't call these functions).yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Classes","folderPath":"folders/Scribble/(System - don't call these functions)/Classes.yy",},
@@ -26,13 +27,12 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Fonts","folderPath":"folders/Scribble/Fonts.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Miscellaneous","folderPath":"folders/Scribble/Miscellaneous.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Superfonts","folderPath":"folders/Scribble/Superfonts.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Internals","folderPath":"folders/Internals.yy",},
   ],
   "IncludedFiles": [],
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.2.1.75",
+    "IDEVersion": "2023.400.0.321",
   },
   "resources": [
     {"id":{"name":"__scribble_font_add_from_project","path":"scripts/__scribble_font_add_from_project/__scribble_font_add_from_project.yy",},},
