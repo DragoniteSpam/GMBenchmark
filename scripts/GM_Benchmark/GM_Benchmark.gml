@@ -71,5 +71,18 @@ Benchmarks = [
         repeat (1_000_000) {
             var val = struct_get_from_hash(struct, hash);
         }
+    })),
+    
+    // recycling matrices
+    new Benchmark("Identity matrix x 100,000", new TestCase("like a normal person", function() {
+        repeat (100_000) {
+            matrix_set(matrix_world, matrix_build_identity());
+        }
+    }),
+    new TestCase("caching it globally", function() {
+        global.identity = matrix_build_identity();
+        repeat (100_000) {
+            matrix_set(matrix_world, global.identity);
+        }
     }))
 ];
