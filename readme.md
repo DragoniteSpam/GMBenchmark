@@ -59,6 +59,14 @@ I'll probably add a few more data visualizations to the UI eventually. For now, 
 
 This should work on GMS2023.2 or later. It might work on earlier versions back to 2022.11, haven't tried. I use a few features added in 2022.11 so it won't work in anything earlier than that.
 
+### To do
+
+Whenever I have other work that I don't feel like doing, I'll probably add:
+
+ - Other chart types (at least a bar chart, maybe others)
+ - A "Run test x times" button
+ - Don't automatically run all tests on startup (to make the program load faster)
+
 ## Credits
 
 The UI is based on [Emu](https://dragonite.itch.io/emu), which I made, which in turn uses Juju's [Scribble 8.0.1b1](https://github.com/JujuAdams/Scribble) to render text in the UI. There isn't anyting else that's very exciting in here.
