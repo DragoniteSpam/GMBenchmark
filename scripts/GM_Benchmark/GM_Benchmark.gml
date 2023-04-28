@@ -84,5 +84,32 @@ Benchmarks = [
         repeat (1_000_000) {
             matrix_set(matrix_world, global.identity);
         }
-    }))
+    })),
+    
+    // array FP
+    new Benchmark("Array iteration x 1,000,000", new TestCase("for loop, the not stupid way", function() {
+        var t = 0;
+        for (var i = 0, n = array_length(global.__test_array); i < n; i++) {
+            t += global.__test_array[i];
+        }
+    }),
+    new TestCase("for loop, the stupid way", function() {
+        var t = 0;
+        for (var i = 0; i < array_length(global.__test_array); i++) {
+            t += global.__test_array[i];
+        }
+    }),
+    new TestCase("repeat loop", function() {
+        var t = 0;
+        var i = 0;
+        repeat (array_length(global.__test_array)) {
+            t += global.__test_array[i];
+            i++;
+        }
+    }),
+    new TestCase("array_reduce", function() {
+        var t = array_reduce(global.__test_array, function(previous, current) {
+            return previous + current;
+        });
+    })),
 ];
