@@ -141,6 +141,7 @@
     {"id":{"name":"scribble_rgb_to_bgr","path":"scripts/scribble_rgb_to_bgr/scribble_rgb_to_bgr.yy",},},
     {"id":{"name":"EmuRadioArray","path":"scripts/EmuRadioArray/EmuRadioArray.yy",},},
     {"id":{"name":"EmuDialog","path":"scripts/EmuDialog/EmuDialog.yy",},},
+    {"id":{"name":"benchmark_helper_code","path":"scripts/benchmark_helper_code/benchmark_helper_code.yy",},},
     {"id":{"name":"EmuText","path":"scripts/EmuText/EmuText.yy",},},
     {"id":{"name":"scribble_anim_rainbow","path":"scripts/scribble_anim_rainbow/scribble_anim_rainbow.yy",},},
     {"id":{"name":"scribble_font_bake_outline_8dir_2px","path":"scripts/scribble_font_bake_outline_8dir_2px/scribble_font_bake_outline_8dir_2px.yy",},},

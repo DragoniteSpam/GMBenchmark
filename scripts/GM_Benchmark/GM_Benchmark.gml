@@ -139,4 +139,18 @@ Benchmarks = [
             ];
         }
     })),
+    
+    // string splitting
+    new Benchmark("String splitting x 10,000 (moderate)", new TestCase("built-in split function", function() {
+        var str = "The quick brown fox jumped over the lazy dog";
+        repeat (10_000) {
+            var results = string_split(str, " ");
+        }
+    }),
+    new TestCase("doing it yourself", function() {
+        var str = "The quick brown fox jumped over the lazy dog";
+        repeat (10_000) {
+            var results = split(str, " ");
+        }
+    })),
 ];

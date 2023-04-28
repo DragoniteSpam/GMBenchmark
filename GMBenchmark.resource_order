@@ -113,6 +113,7 @@
     {"name":"scribble_rgb_to_bgr","order":8,"path":"scripts/scribble_rgb_to_bgr/scribble_rgb_to_bgr.yy",},
     {"name":"EmuRadioArray","order":11,"path":"scripts/EmuRadioArray/EmuRadioArray.yy",},
     {"name":"EmuDialog","order":5,"path":"scripts/EmuDialog/EmuDialog.yy",},
+    {"name":"benchmark_helper_code","order":11,"path":"scripts/benchmark_helper_code/benchmark_helper_code.yy",},
     {"name":"EmuText","order":15,"path":"scripts/EmuText/EmuText.yy",},
     {"name":"scribble_anim_rainbow","order":4,"path":"scripts/scribble_anim_rainbow/scribble_anim_rainbow.yy",},
     {"name":"scribble_font_bake_outline_8dir_2px","order":2,"path":"scripts/scribble_font_bake_outline_8dir_2px/scribble_font_bake_outline_8dir_2px.yy",},
