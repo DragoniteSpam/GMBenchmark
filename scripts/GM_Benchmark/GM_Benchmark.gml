@@ -112,4 +112,31 @@ Benchmarks = [
             return previous + current;
         });
     })),
+    
+    // matrix math
+    new Benchmark("Matrix by vector x 10,000", new TestCase("matrix_transform_vertex", function() {
+        var matrix = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        var xx = 1;
+        var yy = 2;
+        var zz = 3;
+        var ww = 4;
+        repeat (100_000) {
+            var value = matrix_transform_vertex(matrix, xx, yy, zz, ww);
+        }
+    }),
+    new TestCase("doing it yourself", function() {
+        var matrix = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        var xx = 1;
+        var yy = 2;
+        var zz = 3;
+        var ww = 4;
+        repeat (100_000) {
+            var value = [
+                matrix[0] * xx + matrix[4] * yy + matrix[8] * zz + matrix[12] * ww,
+                matrix[1] * xx + matrix[5] * yy + matrix[9] * zz + matrix[13] * ww,
+                matrix[2] * xx + matrix[6] * yy + matrix[10] * zz + matrix[14] * ww,
+                matrix[3] * xx + matrix[7] * yy + matrix[11] * zz + matrix[15] * ww
+            ];
+        }
+    })),
 ];
