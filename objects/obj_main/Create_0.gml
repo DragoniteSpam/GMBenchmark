@@ -84,7 +84,14 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     new EmuRenderSurface(c2, EMU_AUTO, 360, 360, function(mx, my) {
         // render
         draw_clear_alpha(c_black, 0);
-        obj_main.DrawPieChart(self.width * self.scale, self.height * self.scale, min(self.width, self.height) / 2 * self.scale, mx * self.scale, my * self.scale);
+        switch (obj_main.chart_type) {
+            case EChartTypes.PIE:
+                obj_main.DrawPieChart(self.width * self.scale, self.height * self.scale, min(self.width, self.height) / 2 * self.scale, mx * self.scale, my * self.scale);
+                break;
+            case EChartTypes.BAR:
+                obj_main.DrawBarChart(self.width * self.scale, self.height * self.scale, mx * self.scale, my * self.scale);
+                break;
+        }
     }, function(mx, my) {
         // step
     })
@@ -114,6 +121,49 @@ Tests contained: {2}
             }
         })
 ]);
+
+self.DrawBarChart = function(w, h, mx, my) {
+    var bench_list = self.container.GetChild("BENCHMARK LIST");
+    var current_benchmark = bench_list.GetSelectedItem();
+    if (!current_benchmark) return;
+    
+    var test_list = self.container.GetChild("BENCHMARK TEST LIST");
+    var selected_benchmark_test = test_list.GetSelectedItem();
+    var test_count = array_length(current_benchmark.tests);
+    
+    static bar_spacing = 4;         // pixels
+    
+    var max_value = array_reduce(current_benchmark.tests, function(value, item) {
+        return max(value, item.runtime);
+    }, 0);
+    var mclick = mouse_check_button_pressed(mb_left);
+    
+    for (var i = 0; i < test_count; i++) {
+        var test = current_benchmark.tests[i];
+        
+        if (test == selected_benchmark_test) {
+            shader_set(shd_dither);
+        }
+        
+        var x1 = 32 + 32 * i;
+        var y1 = h - h * test.runtime / max_value;
+        var x2 =  32 + 32 * i + 24;
+        var y2 = h;
+        
+        draw_rectangle_colour(x1, y1,x2, y2, test.color, test.color, test.color, test.color, false);
+        
+        if (point_in_rectangle(mx, my, x1, y1, x2, y2)) {
+            if (mclick) {
+                test_list.ClearSelection();
+                test_list.Select(i, true);
+            }
+        }
+        
+        if (test == selected_benchmark_test) {
+            shader_reset();
+        }
+    }
+};
 
 self.DrawPieChart = function(w, h, r, mx, my) {
     // draw the pie chart centered in the middle of the canvas
