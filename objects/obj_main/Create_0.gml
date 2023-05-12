@@ -63,10 +63,11 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     new EmuRenderSurface(c2, 32, 360, 360, function(mx, my) {
         // render
         draw_clear_alpha(c_black, 0);
-        obj_main.DrawPieChart(self.width, self.height, min(self.width, self.height) / 2, mx, my);
+        obj_main.DrawPieChart(self.width * self.scale, self.height * self.scale, min(self.width, self.height) / 2 * self.scale, mx * self.scale, my * self.scale);
     }, function(mx, my) {
         // step
-    }),
+    })
+        .SetScale(4),
     new EmuText(c2, EMU_AUTO, ew, ew, "")
         .SetUpdate(function() {
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();

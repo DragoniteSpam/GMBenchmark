@@ -11,7 +11,9 @@ function EmuRenderSurface(x, y, width, height, render, step, create = function()
         return self;
     };
     
-    self.surface = self.surfaceVerify(-1, self.width, self.height).surface;
+    self.scale = 1;
+    
+    self.surface = self.surfaceVerify(-1, self.width * self.scale, self.height * self.scale).surface;
     surface_set_target(self.surface);
     draw_clear(c_black);
     method(self, create)();
@@ -30,6 +32,11 @@ function EmuRenderSurface(x, y, width, height, render, step, create = function()
     
     self.SetRecreate = function(recreate) {
         self.callback_recreate = method(self, recreate);
+        return self;
+    };
+    
+    self.SetScale = function(scale) {
+        self.scale = scale;
         return self;
     };
     #endregion
@@ -53,7 +60,7 @@ function EmuRenderSurface(x, y, width, height, render, step, create = function()
         var mx = device_mouse_x_to_gui(0) - x1;
         var my = device_mouse_y_to_gui(0) - y1;
         
-        var verify = self.surfaceVerify(self.surface, self.width, self.height);
+        var verify = self.surfaceVerify(self.surface, self.width * self.scale, self.height * self.scale);
         self.surface = verify.surface;
         
         if (verify.changed) {
@@ -84,7 +91,10 @@ function EmuRenderSurface(x, y, width, height, render, step, create = function()
         ds_map_destroy(old_state);
         surface_reset_target();
         
-        draw_surface(self.surface, x1, y1);
+        var tf = gpu_get_tex_filter();
+        gpu_set_texfilter(true);
+        draw_surface_stretched(self.surface, x1, y1, self.width, self.height);
+        gpu_set_texfilter(tf);
         
         if (debug_render) self.renderDebugBounds(x1, y1, x2, y2);
     };
