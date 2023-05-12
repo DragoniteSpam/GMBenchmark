@@ -18,6 +18,8 @@ self.chart_type = EChartTypes.PIE;
 
 var ew = 360;
 var eh = 32;
+var chartw = 400;
+var charth = 360;
 
 var c1 = 32;
 var c2 = c1 + 32 + ew;
@@ -81,7 +83,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     })
         .SetColumns(1, ew / 2)
         .AddOptions(["Pie", "Bar"]),
-    new EmuRenderSurface(c2, EMU_AUTO, 360, 360, function(mx, my) {
+    new EmuRenderSurface(c2, EMU_AUTO, chartw, charth, function(mx, my) {
         // render
         draw_clear_alpha(c_black, 0);
         switch (obj_main.chart_type) {
@@ -131,12 +133,21 @@ self.DrawBarChart = function(w, h, mx, my) {
     var selected_benchmark_test = test_list.GetSelectedItem();
     var test_count = array_length(current_benchmark.tests);
     
-    static bar_spacing = 4;         // pixels
+    static bar_default_spacing = 8;         // pixels
+    static bar_max_width = 48;
     
     var max_value = array_reduce(current_benchmark.tests, function(value, item) {
         return max(value, item.runtime);
     }, 0);
     var mclick = mouse_check_button_pressed(mb_left);
+    
+    var bar_spacing = bar_default_spacing;
+    var bar_start_x = 16;
+    var bar_finish_x = w - 64;
+    var bar_start_y = 32;
+    var bar_finish_y = h - 16;
+    
+    var bar_width = max(bar_max_width, (bar_finish_x - bar_start_x - test_count * bar_spacing) / test_count);
     
     for (var i = 0; i < test_count; i++) {
         var test = current_benchmark.tests[i];
@@ -145,10 +156,10 @@ self.DrawBarChart = function(w, h, mx, my) {
             shader_set(shd_dither);
         }
         
-        var x1 = 32 + 32 * i;
-        var y1 = h - h * test.runtime / max_value;
-        var x2 =  32 + 32 * i + 24;
-        var y2 = h;
+        var x1 = bar_start_x + (bar_width + bar_spacing) * i;
+        var y1 = bar_finish_y - (bar_finish_y - bar_start_y) * test.runtime / max_value;
+        var x2 =  x1 + bar_width;
+        var y2 = bar_finish_y;
         
         draw_rectangle_colour(x1, y1,x2, y2, test.color, test.color, test.color, test.color, false);
         
