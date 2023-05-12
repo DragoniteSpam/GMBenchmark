@@ -1,7 +1,44 @@
 // initialize the for loop over the array down here so it doesn't take up time in the tests
 global.__test_array = array_create(1_000_000);
 
+var n = 1_000;
+global.array_1k = array_create(n);
+for (var i = 0; i < n; i++) {
+    global.array_1k[i] = random(1000);
+}
+
+n = 100;
+global.array_100 = array_create(n);
+for (var i = 0; i < n; i++) {
+    global.array_100[i] = random(1000);
+}
+
+n = 10_000;
+global.array_10k = array_create(n);
+for (var i = 0; i < n; i++) {
+    global.array_10k[i] = random(1000);
+}
+
+n = 100_000;
+global.array_100k = array_create(n);
+for (var i = 0; i < n; i++) {
+    global.array_100k[i] = random(1000);
+}
+
+n = 1_000_000;
+global.array_1m = array_create(n);
+for (var i = 0; i < n; i++) {
+    global.array_1m[i] = random(1000);
+}
+
+n = 10_000_000;
+global.array_10m = array_create(n);
+for (var i = 0; i < n; i++) {
+    global.array_10m[i] = random(1000);
+}
+
 Benchmarks = [
+/*
     // growable collections
     new Benchmark("Growable Collections x 100,000", new TestCase("array_push", function() {
         var array = [];
@@ -21,7 +58,7 @@ Benchmarks = [
         }
         buffer_delete(buffer)
     })),
-    
+    */
     // loop iterations
     new Benchmark("Fast Loops x 1,000,000", new TestCase("for over array size", function() {
         for (var i = 0; i < array_length(global.__test_array); i++) {
@@ -152,5 +189,25 @@ Benchmarks = [
         repeat (10_000) {
             var results = split(str, " ");
         }
+    })),
+    
+    // array sorting scaling
+    new Benchmark("Scaling Array Sort", new TestCase("100 elements", function() {
+        array_sort(global.array_100, true);
+    }),
+    new TestCase("1,000 elements", function() {
+        array_sort(global.array_1k, true);
+    }),
+    new TestCase("10,000 elements", function() {
+        array_sort(global.array_10k, true);
+    }),
+    new TestCase("100,000 elements", function() {
+        array_sort(global.array_100k, true);
+    }),
+    new TestCase("1,000,000 elements", function() {
+        array_sort(global.array_1m, true);
+    }),
+    new TestCase("10,000,000 elements", function() {
+        array_sort(global.array_10m, true);
     })),
 ];
