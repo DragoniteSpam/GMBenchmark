@@ -4,6 +4,7 @@
     {"name":"Core","order":1,"path":"folders/Emu/Core.yy",},
     {"name":"Graphics","order":2,"path":"folders/Emu/Graphics.yy",},
     {"name":"slices","order":1,"path":"folders/Emu/Graphics/slices.yy",},
+    {"name":"Internals","order":10,"path":"folders/Internals.yy",},
     {"name":"Scribble","order":6,"path":"folders/Scribble.yy",},
     {"name":"(System - don't call these functions)","order":1,"path":"folders/Scribble/(System - don't call these functions).yy",},
     {"name":"Classes","order":1,"path":"folders/Scribble/(System - don't call these functions)/Classes.yy",},
@@ -15,7 +16,6 @@
     {"name":"Fonts","order":4,"path":"folders/Scribble/Fonts.yy",},
     {"name":"Miscellaneous","order":5,"path":"folders/Scribble/Miscellaneous.yy",},
     {"name":"Superfonts","order":6,"path":"folders/Scribble/Superfonts.yy",},
-    {"name":"Internals","order":10,"path":"folders/Internals.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"__scribble_font_add_from_project","order":5,"path":"scripts/__scribble_font_add_from_project/__scribble_font_add_from_project.yy",},
@@ -113,6 +113,7 @@
     {"name":"scribble_rgb_to_bgr","order":8,"path":"scripts/scribble_rgb_to_bgr/scribble_rgb_to_bgr.yy",},
     {"name":"EmuRadioArray","order":11,"path":"scripts/EmuRadioArray/EmuRadioArray.yy",},
     {"name":"EmuDialog","order":5,"path":"scripts/EmuDialog/EmuDialog.yy",},
+    {"name":"benchmark_helper_code","order":11,"path":"scripts/benchmark_helper_code/benchmark_helper_code.yy",},
     {"name":"EmuText","order":15,"path":"scripts/EmuText/EmuText.yy",},
     {"name":"scribble_anim_rainbow","order":4,"path":"scripts/scribble_anim_rainbow/scribble_anim_rainbow.yy",},
     {"name":"scribble_font_bake_outline_8dir_2px","order":2,"path":"scripts/scribble_font_bake_outline_8dir_2px/scribble_font_bake_outline_8dir_2px.yy",},

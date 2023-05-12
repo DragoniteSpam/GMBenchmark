@@ -63,10 +63,11 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     new EmuRenderSurface(c2, 32, 360, 360, function(mx, my) {
         // render
         draw_clear_alpha(c_black, 0);
-        obj_main.DrawPieChart(self.width, self.height, min(self.width, self.height) / 2, mx, my);
+        obj_main.DrawPieChart(self.width * self.scale, self.height * self.scale, min(self.width, self.height) / 2 * self.scale, mx * self.scale, my * self.scale);
     }, function(mx, my) {
         // step
-    }),
+    })
+        .SetScale(4),
     new EmuText(c2, EMU_AUTO, ew, ew, "")
         .SetUpdate(function() {
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
@@ -97,13 +98,18 @@ self.DrawPieChart = function(w, h, r, mx, my) {
     var xx = w div 2;
     var yy = h div 2;
     
-    var current_benchmark = self.container.GetChild("BENCHMARK LIST").GetSelectedItem();
+    var test_list = obj_main.container.GetChild("BENCHMARK TEST LIST");
+    var current_benchmark = test_list.GetSelectedItem();
     if (!current_benchmark) return;
     
-    var selected_benchmark_test = self.container.GetChild("BENCHMARK TEST LIST").GetSelectedItem();
+    var selected_benchmark_test = test_list.GetSelectedItem();
     var benchmark_count = array_length(current_benchmark.tests);
     
     static resolution = 2;          // degrees
+    
+    var mdist = point_distance(xx, yy, mx, my);
+    var mdir = point_direction(xx, yy, mx, my);
+    var mclick = mouse_check_button_pressed(mb_left);
     
     var angle = 0;
     for (var i = 0; i < benchmark_count; i++) {
@@ -111,11 +117,9 @@ self.DrawPieChart = function(w, h, r, mx, my) {
         var slice_start = angle;
         var slice_end = 360 * test.runtime / current_benchmark.runtime + angle;
         
-        if (point_distance(xx, yy, mx, my) < r) {
-            var md = point_direction(xx, yy, mx, my);
-            if (md >= slice_start && md < slice_end) {
-                if (mouse_check_button_pressed(mb_left)) {
-                    var test_list = obj_main.container.GetChild("BENCHMARK TEST LIST");
+        if (mdist < r) {
+            if (mdir >= slice_start && mdir < slice_end) {
+                if (mclick) {
                     test_list.ClearSelection();
                     test_list.Select(i, true);
                 }
