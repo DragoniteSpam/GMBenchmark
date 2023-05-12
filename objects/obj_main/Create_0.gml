@@ -98,10 +98,11 @@ self.DrawPieChart = function(w, h, r, mx, my) {
     var xx = w div 2;
     var yy = h div 2;
     
-    var test_list = obj_main.container.GetChild("BENCHMARK TEST LIST");
-    var current_benchmark = test_list.GetSelectedItem();
+    var bench_list = self.container.GetChild("BENCHMARK LIST");
+    var current_benchmark = bench_list.GetSelectedItem();
     if (!current_benchmark) return;
     
+    var test_list = self.container.GetChild("BENCHMARK TEST LIST");
     var selected_benchmark_test = test_list.GetSelectedItem();
     var benchmark_count = array_length(current_benchmark.tests);
     
