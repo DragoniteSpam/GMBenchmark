@@ -1,12 +1,20 @@
 randomize();
 
+#macro PIE_SUPERSAMPLING 4
+
 enum ESortTypes {
     BEST_TO_WORST,
     WORST_TO_BEST,
     ALPHABETICAL
 }
 
+enum EChartTypes {
+    PIE,
+    BAR
+}
+
 self.sort_type = ESortTypes.BEST_TO_WORST;
+self.chart_type = EChartTypes.PIE;
 
 var ew = 360;
 var eh = 32;
@@ -60,14 +68,28 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         }
     })
         .AddOptions(["Best to Worst", "Worst to Best", "Alphabetical"]),
-    new EmuRenderSurface(c2, 32, 360, 360, function(mx, my) {
+    new EmuRadioArray(c2, 32, ew, eh, "Chart:", self.chart_type, function() {
+        obj_main.chart_type = self.value;
+        switch (self.value) {
+            case EChartTypes.PIE:
+                self.GetSibling("CHART").SetScale(PIE_SUPERSAMPLING);
+                break;
+            case EChartTypes.BAR:
+                self.GetSibling("CHART").SetScale(1);
+                break;
+        }
+    })
+        .SetColumns(1, ew / 2)
+        .AddOptions(["Pie", "Bar"]),
+    new EmuRenderSurface(c2, EMU_AUTO, 360, 360, function(mx, my) {
         // render
         draw_clear_alpha(c_black, 0);
         obj_main.DrawPieChart(self.width * self.scale, self.height * self.scale, min(self.width, self.height) / 2 * self.scale, mx * self.scale, my * self.scale);
     }, function(mx, my) {
         // step
     })
-        .SetScale(4),
+        .SetID("CHART")
+        .SetScale(PIE_SUPERSAMPLING),
     new EmuText(c2, EMU_AUTO, ew, ew, "")
         .SetUpdate(function() {
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
