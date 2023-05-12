@@ -18,7 +18,7 @@ self.chart_type = EChartTypes.PIE;
 
 var ew = 360;
 var eh = 32;
-var chartw = 400;
+var chartw = 440;
 var charth = 360;
 
 var c1 = 32;
@@ -99,7 +99,9 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     })
         .SetID("CHART")
         .SetScale(PIE_SUPERSAMPLING),
-    new EmuText(c2, EMU_AUTO, ew, ew, "")
+    new EmuText(c2, EMU_AUTO, ew, eh, "Lower values are better"),
+    
+    new EmuText(c2, EMU_AUTO, ew, eh * 6, "")
         .SetUpdate(function() {
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
             var test = self.GetSibling("BENCHMARK TEST LIST").GetSelectedItem();
@@ -133,7 +135,7 @@ self.DrawBarChart = function(w, h, mx, my) {
     var selected_benchmark_test = test_list.GetSelectedItem();
     var test_count = array_length(current_benchmark.tests);
     
-    static bar_default_spacing = 8;         // pixels
+    static bar_default_spacing = 16;        // pixels
     static bar_max_width = 48;
     
     var max_value = array_reduce(current_benchmark.tests, function(value, item) {
@@ -141,11 +143,17 @@ self.DrawBarChart = function(w, h, mx, my) {
     }, 0);
     var mclick = mouse_check_button_pressed(mb_left);
     
+    var max_value_log = power(10, floor(log10(max_value)));
+    max_value = ceil(max_value / max_value_log) * max_value_log;
+    
     var bar_spacing = bar_default_spacing;
     var bar_start_x = 16;
-    var bar_finish_x = w - 64;
+    var bar_finish_x = w - 96;
     var bar_start_y = 32;
     var bar_finish_y = h - 16;
+    
+    var bar_line_spacing_main = 16;
+    var bar_line_spacing_sub = 8;
     
     var bar_width = max(bar_max_width, (bar_finish_x - bar_start_x - test_count * bar_spacing) / test_count);
     
@@ -174,6 +182,38 @@ self.DrawBarChart = function(w, h, mx, my) {
             shader_reset();
         }
     }
+    
+    draw_line_colour(bar_finish_x, 0, bar_finish_x, bar_finish_y, c_white, c_white);
+    draw_line_colour(0, bar_finish_y, bar_finish_x, bar_finish_y, c_white, c_white);
+    
+    draw_set_font(-1);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_middle);
+    var label_spacing = (bar_finish_y - bar_start_y) div 4;
+    var label_4 = bar_finish_y - label_spacing * 4;
+    var label_3 = bar_finish_y - label_spacing * 3;
+    var label_2 = bar_finish_y - label_spacing * 2;
+    var label_1 = bar_finish_y - label_spacing * 1;
+    draw_text(bar_finish_x + 16, label_4, string(max_value) + " ms");
+    draw_text(bar_finish_x + 16, label_3, string((max_value div 4) * 3) + " ms");
+    draw_text(bar_finish_x + 16, label_2, string(max_value div 2) + " ms");
+    draw_text(bar_finish_x + 16, label_1, string(max_value div 4) + " ms");
+    
+    draw_set_alpha(0.9);
+    
+    for (var i = 0; i < bar_finish_x; i += bar_line_spacing_main * 2) {
+        draw_line_colour(i, label_4, i + bar_line_spacing_main, label_4, c_white, c_white);
+        draw_line_colour(i, label_2, i + bar_line_spacing_main, label_2, c_white, c_white);
+    }
+    
+    draw_set_alpha(0.75);
+    
+    for (var i = 0; i < bar_finish_x; i += bar_line_spacing_sub * 2) {
+        draw_line_colour(i, label_3, i + bar_line_spacing_sub, label_3, c_white, c_white);
+        draw_line_colour(i, label_1, i + bar_line_spacing_sub, label_1, c_white, c_white);
+    }
+    
+    draw_set_alpha(1);
 };
 
 self.DrawPieChart = function(w, h, r, mx, my) {
