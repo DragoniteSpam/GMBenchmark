@@ -1,12 +1,12 @@
-function Benchmark() constructor {
-    self.source_name = argument[0];
-    self.tests = [];
+function Benchmark(source_name, tests) constructor {
+    self.source_name = source_name;
+    self.tests = tests;
     self.runtime = 0;
     
     var color_offset = random(255);
     
-    for (var i = 1; i < argument_count; i++) {
-        var test = argument[i];
+    for (var i = 0, n = array_length(tests); i < n; i++) {
+        var test = tests[i];
         if (!is_instanceof(test, TestCase)) {
             show_debug_message("Benchmark {0} is not a testable case", i);
             continue;
@@ -20,10 +20,9 @@ function Benchmark() constructor {
         };
         test.runtime.per_ms = 0;    // todo
         
-        test.color = make_colour_hsv((color_offset + (i - 1) / (argument_count - 1) * 255) % 255, 255, 255);
+        test.color = make_colour_hsv((color_offset + (i - 1) / array_length(tests) * 255) % 255, 255, 255);
         test.name = string("[#{0}]o[/c] {1}: {2} ms", colour_to_hex(test.color), test.source_name, test.runtime.ms);
         self.runtime += test.runtime.ms;
-        array_push(self.tests, test);
     }
     self.name = string("{0}: {1} ms", self.source_name, self.runtime);
     
