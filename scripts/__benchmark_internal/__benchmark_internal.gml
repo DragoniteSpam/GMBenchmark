@@ -13,24 +13,29 @@ function Benchmark() constructor {
         }
         var t_start = get_timer();
         test.fn();
-        test.runtime = (get_timer() - t_start) / 1000;
+        test.runtime = {
+            ms: (get_timer() - t_start) / 1000,
+            per_ms: 0,
+            percentage: 0
+        };
+        test.runtime.per_ms = 0;    // todo
         
         test.color = make_colour_hsv((color_offset + (i - 1) / (argument_count - 1) * 255) % 255, 255, 255);
-        test.name = string("[#{0}]o[/c] {1}: {2} ms", colour_to_hex(test.color), test.source_name, test.runtime);
-        self.runtime += test.runtime;
+        test.name = string("[#{0}]o[/c] {1}: {2} ms", colour_to_hex(test.color), test.source_name, test.runtime.ms);
+        self.runtime += test.runtime.ms;
         array_push(self.tests, test);
     }
     self.name = string("{0}: {1} ms", self.source_name, self.runtime);
     
     self.SortBestToWorst = function() {
         array_sort(self.tests, function(a, b) {
-            return sign(a.runtime - b.runtime);
+            return sign(a.runtime.ms - b.runtime.ms);
         });
     };
     
     self.SortWorstToBest = function() {
         array_sort(self.tests, function(a, b) {
-            return sign(b.runtime - a.runtime);
+            return sign(b.runtime.ms - a.runtime.ms);
         });
     };
     
@@ -47,7 +52,7 @@ function TestCase(name, fn) constructor {
     self.name = name;
     self.source_name = name;
     self.fn = fn;
-    self.runtime = 0;
+    self.runtime = undefined;
     self.color = c_white;
 }
 

@@ -134,7 +134,7 @@ Total runtime: {1} ms
 [c_aqua]{2}[/c] ([#{3}]#{3}[/c])
 Test {4} of {5}
 Test runtime: {6} ms ({7}% of total)
-", benchmark.source_name, benchmark.runtime, test.source_name, colour_to_hex(test.color), test_index, array_length(benchmark.tests), test.runtime, test.runtime / benchmark.runtime * 100);
+", benchmark.source_name, benchmark.runtime, test.source_name, colour_to_hex(test.color), test_index, array_length(benchmark.tests), test.runtime.ms, test.runtime.ms / benchmark.runtime * 100);
             } else if (benchmark) {
                 self.text = string(@"[c_aqua]{0}[/c]
 Total runtime: {1} ms
@@ -159,7 +159,7 @@ self.DrawBarChart = function(w, h, mx, my) {
     static bar_max_width = 48;
     
     var max_value = array_reduce(current_benchmark.tests, function(value, item) {
-        return max(value, item.runtime);
+        return max(value, item.runtime.ms);
     }, 0);
     var mclick = mouse_check_button_pressed(mb_left);
     
@@ -185,7 +185,7 @@ self.DrawBarChart = function(w, h, mx, my) {
         }
         
         var x1 = bar_start_x + (bar_width + bar_spacing) * i;
-        var y1 = bar_finish_y - (bar_finish_y - bar_start_y) * test.runtime / max_value;
+        var y1 = bar_finish_y - (bar_finish_y - bar_start_y) * test.runtime.ms / max_value;
         var x2 =  x1 + bar_width;
         var y2 = bar_finish_y;
         
@@ -259,7 +259,7 @@ self.DrawPieChart = function(w, h, r, mx, my) {
     for (var i = 0; i < benchmark_count; i++) {
         var test = current_benchmark.tests[i];
         var slice_start = angle;
-        var slice_end = 360 * test.runtime / current_benchmark.runtime + angle;
+        var slice_end = 360 * test.runtime.ms / current_benchmark.runtime + angle;
         
         if (mdist < r) {
             if (mdir >= slice_start && mdir < slice_end) {
