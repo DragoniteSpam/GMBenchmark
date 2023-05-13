@@ -127,7 +127,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         // step
     })
         .SetID("CHART")
-        .SetScale(PIE_SUPERSAMPLING),
+        .SetScale(1),
     new EmuText(c2, EMU_AUTO, ew, eh, "Lower values are better")
         .SetID("READOUT"),
     
@@ -168,13 +168,21 @@ self.DrawBarChart = function(w, h, mx, my) {
     static bar_default_spacing = 16;        // pixels
     static bar_max_width = 48;
     
-    var max_value = array_reduce(current_benchmark.tests, function(value, item) {
-        return max(value, item.runtime.ms);
-    }, 0);
+    var max_value = 0;
+    switch (obj_main.display_type) {
+        case EDisplayTypes.TIME:
+            max_value = array_reduce(current_benchmark.tests, function(value, item) {
+                return max(value, item.runtime.ms);
+            }, 0);
+            var max_value_log = power(10, floor(log10(max_value)));
+            max_value = ceil(max_value / max_value_log) * max_value_log;
+            break;
+        case EDisplayTypes.PERCENT:
+            break;
+        case EDisplayTypes.OPS_PER_MS:
+            break;
+    }
     var mclick = mouse_check_button_pressed(mb_left);
-    
-    var max_value_log = power(10, floor(log10(max_value)));
-    max_value = ceil(max_value / max_value_log) * max_value_log;
     
     var bar_spacing = bar_default_spacing;
     var bar_start_x = 16;
@@ -195,9 +203,19 @@ self.DrawBarChart = function(w, h, mx, my) {
         }
         
         var x1 = bar_start_x + (bar_width + bar_spacing) * i;
-        var y1 = bar_finish_y - (bar_finish_y - bar_start_y) * test.runtime.ms / max_value;
+        var y1 = 0;
         var x2 =  x1 + bar_width;
         var y2 = bar_finish_y;
+        
+        switch (obj_main.display_type) {
+            case EDisplayTypes.TIME:
+                y1 = y2 - (bar_finish_y - bar_start_y) * test.runtime.ms / max_value;
+                break;
+            case EDisplayTypes.PERCENT:
+                break;
+            case EDisplayTypes.OPS_PER_MS:
+                break;
+        }
         
         draw_rectangle_colour(x1, y1,x2, y2, test.color, test.color, test.color, test.color, false);
         
@@ -224,10 +242,29 @@ self.DrawBarChart = function(w, h, mx, my) {
     var label_3 = bar_finish_y - label_spacing * 3;
     var label_2 = bar_finish_y - label_spacing * 2;
     var label_1 = bar_finish_y - label_spacing * 1;
-    draw_text(bar_finish_x + 16, label_4, string(max_value) + " ms");
-    draw_text(bar_finish_x + 16, label_3, string((max_value div 4) * 3) + " ms");
-    draw_text(bar_finish_x + 16, label_2, string(max_value div 2) + " ms");
-    draw_text(bar_finish_x + 16, label_1, string(max_value div 4) + " ms");
+    
+    var label_4_text = "---";
+    var label_3_text = "---";
+    var label_2_text = "---";
+    var label_1_text = "---";
+    
+    switch (obj_main.display_type) {
+        case EDisplayTypes.TIME:
+            label_4_text = string("{0} ms", max_value);
+            label_3_text = string("{0} ms", (max_value div 4) * 3);
+            label_2_text = string("{0} ms", (max_value div 4) * 2);
+            label_1_text = string("{0} ms", (max_value div 4));
+            break;
+        case EDisplayTypes.PERCENT:
+            break;
+        case EDisplayTypes.OPS_PER_MS:
+            break;
+    }
+    
+    draw_text(bar_finish_x + 16, label_4, label_4_text);
+    draw_text(bar_finish_x + 16, label_3, label_4_text);
+    draw_text(bar_finish_x + 16, label_2, label_4_text);
+    draw_text(bar_finish_x + 16, label_1, label_4_text);
     
     draw_set_alpha(0.9);
     
