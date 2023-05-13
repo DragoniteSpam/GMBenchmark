@@ -13,13 +13,20 @@ enum EChartTypes {
     BAR
 }
 
+enum EDisplayTypes {
+    TIME,
+    PERCENT,
+    OPS_PER_MS
+}
+
 self.sort_type = ESortTypes.BEST_TO_WORST;
 self.chart_type = EChartTypes.PIE;
+self.display_type = EDisplayTypes.TIME;
 
 var ew = 360;
 var eh = 32;
 var chartw = 440;
-var charth = 360;
+var charth = 320;
 
 var c1 = 32;
 var c2 = c1 + 32 + ew;
@@ -81,8 +88,21 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
                 break;
         }
     })
-        .SetColumns(1, ew / 2)
+        .SetColumns(1, chartw / 3)
         .AddOptions(["Pie", "Bar"]),
+    new EmuRadioArray(c2, EMU_AUTO, ew, eh, "Data display:", self.display_type, function() {
+        obj_main.display_type = self.value;
+        switch (self.value) {
+            case EChartTypes.PIE:
+                
+                break;
+            case EChartTypes.BAR:
+                
+                break;
+        }
+    })
+        .SetColumns(1, chartw / 3)
+        .AddOptions(["Time", "Percent", "Ops/Ms"]),
     new EmuRenderSurface(c2, EMU_AUTO, chartw, charth, function(mx, my) {
         // render
         draw_clear_alpha(c_black, 0);
