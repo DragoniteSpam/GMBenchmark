@@ -125,6 +125,7 @@
     {"id":{"name":"__scribble_gen_3_devanagari","path":"scripts/__scribble_gen_3_devanagari/__scribble_gen_3_devanagari.yy",},},
     {"id":{"name":"spr_emu_close","path":"sprites/spr_emu_close/spr_emu_close.yy",},},
     {"id":{"name":"scribble_anim_jitter","path":"scripts/scribble_anim_jitter/scribble_anim_jitter.yy",},},
+    {"id":{"name":"spr_quack","path":"sprites/spr_quack/spr_quack.yy",},},
     {"id":{"name":"__shd_scribble","path":"shaders/__shd_scribble/__shd_scribble.yy",},},
     {"id":{"name":"spr_emu_nineslice_tab","path":"sprites/spr_emu_nineslice_tab/spr_emu_nineslice_tab.yy",},},
     {"id":{"name":"__scribble_system_glyph_data","path":"scripts/__scribble_system_glyph_data/__scribble_system_glyph_data.yy",},},

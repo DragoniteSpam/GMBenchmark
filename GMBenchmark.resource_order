@@ -100,6 +100,7 @@
     {"name":"__scribble_gen_3_devanagari","order":2,"path":"scripts/__scribble_gen_3_devanagari/__scribble_gen_3_devanagari.yy",},
     {"name":"spr_emu_close","order":7,"path":"sprites/spr_emu_close/spr_emu_close.yy",},
     {"name":"scribble_anim_jitter","order":2,"path":"scripts/scribble_anim_jitter/scribble_anim_jitter.yy",},
+    {"name":"spr_quack","order":12,"path":"sprites/spr_quack/spr_quack.yy",},
     {"name":"spr_emu_nineslice_tab","order":1,"path":"sprites/spr_emu_nineslice_tab/spr_emu_nineslice_tab.yy",},
     {"name":"__scribble_system_glyph_data","order":10,"path":"scripts/__scribble_system_glyph_data/__scribble_system_glyph_data.yy",},
     {"name":"scribble_external_sound_remove","order":4,"path":"scripts/scribble_external_sound_remove/scribble_external_sound_remove.yy",},

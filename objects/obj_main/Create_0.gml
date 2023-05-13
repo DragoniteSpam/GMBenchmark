@@ -168,12 +168,21 @@ self.DrawBarChart = function(w, h, mx, my) {
     static bar_default_spacing = 16;        // pixels
     static bar_max_width = 48;
     
+    var best_trial = array_reduce(current_benchmark.tests, function(winner, item) {
+        if (winner == undefined) return item;
+        if (item.runtime.ms < winner.runtime.ms) return item;
+        return winner;
+    }, undefined);
+    var worst_trial = array_reduce(current_benchmark.tests, function(winner, item) {
+        if (winner == undefined) return item;
+        if (item.runtime.ms < winner.runtime.ms) return winner;
+        return item;
+    }, undefined);
+    
     var max_value = 0;
     switch (obj_main.display_type) {
         case EDisplayTypes.TIME:
-            max_value = array_reduce(current_benchmark.tests, function(value, item) {
-                return max(value, item.runtime.ms);
-            }, 0);
+            max_value = worst_trial.runtime.ms;
             var max_value_log = power(10, floor(log10(max_value)));
             max_value = ceil(max_value / max_value_log) * max_value_log;
             break;
@@ -230,6 +239,11 @@ self.DrawBarChart = function(w, h, mx, my) {
         
         if (test == selected_benchmark_test) {
             shader_reset();
+        }
+        
+        if (test == best_trial) {
+            var quack_highest_limit = bar_start_y + 32;
+            draw_sprite(spr_quack, 0, mean(x1, x2), max(y1 - sprite_get_height(spr_quack) / 2, quack_highest_limit));
         }
     }
     
