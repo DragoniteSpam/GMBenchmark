@@ -178,6 +178,7 @@ self.DrawBarChart = function(w, h, mx, my) {
             max_value = ceil(max_value / max_value_log) * max_value_log;
             break;
         case EDisplayTypes.PERCENT:
+            // not relevant
             break;
         case EDisplayTypes.OPS_PER_MS:
             break;
@@ -212,6 +213,7 @@ self.DrawBarChart = function(w, h, mx, my) {
                 y1 = y2 - (bar_finish_y - bar_start_y) * test.runtime.ms / max_value;
                 break;
             case EDisplayTypes.PERCENT:
+                y1 = y2 - (bar_finish_y - bar_start_y) * test.runtime.percentage;
                 break;
             case EDisplayTypes.OPS_PER_MS:
                 break;
@@ -256,15 +258,19 @@ self.DrawBarChart = function(w, h, mx, my) {
             label_1_text = string("{0} ms", (max_value div 4));
             break;
         case EDisplayTypes.PERCENT:
+            label_4_text = "100%";
+            label_3_text = "75%";
+            label_2_text = "50%";
+            label_1_text = "25%";
             break;
         case EDisplayTypes.OPS_PER_MS:
             break;
     }
     
     draw_text(bar_finish_x + 16, label_4, label_4_text);
-    draw_text(bar_finish_x + 16, label_3, label_4_text);
-    draw_text(bar_finish_x + 16, label_2, label_4_text);
-    draw_text(bar_finish_x + 16, label_1, label_4_text);
+    draw_text(bar_finish_x + 16, label_3, label_3_text);
+    draw_text(bar_finish_x + 16, label_2, label_2_text);
+    draw_text(bar_finish_x + 16, label_1, label_1_text);
     
     draw_set_alpha(0.9);
     
