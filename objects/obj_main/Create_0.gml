@@ -9,8 +9,8 @@ enum ESortTypes {
 }
 
 enum EChartTypes {
-    PIE,
-    BAR
+    BAR,
+    PIE
 }
 
 enum EDisplayTypes {
@@ -20,7 +20,7 @@ enum EDisplayTypes {
 }
 
 self.sort_type = ESortTypes.BEST_TO_WORST;
-self.chart_type = EChartTypes.PIE;
+self.chart_type = EChartTypes.BAR;
 self.display_type = EDisplayTypes.TIME;
 
 var ew = 360;
@@ -82,25 +82,34 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         switch (self.value) {
             case EChartTypes.PIE:
                 self.GetSibling("CHART").SetScale(PIE_SUPERSAMPLING);
+                self.GetSibling("DISPLAY").SetEnabled(false);
+                self.GetSibling("READOUT").SetText("Lower is better");
                 break;
             case EChartTypes.BAR:
                 self.GetSibling("CHART").SetScale(1);
+                self.GetSibling("DISPLAY")
+                    .SetEnabled(true)
+                    .callback();
                 break;
         }
     })
         .SetColumns(1, chartw / 3)
-        .AddOptions(["Pie", "Bar"]),
+        .AddOptions(["Bar", "Pie"]),
     new EmuRadioArray(c2, EMU_AUTO, ew, eh, "Data display:", self.display_type, function() {
         obj_main.display_type = self.value;
         switch (self.value) {
-            case EChartTypes.PIE:
-                
+            case EDisplayTypes.TIME:
+                self.GetSibling("READOUT").SetText("Lower is better");
                 break;
-            case EChartTypes.BAR:
-                
+            case EDisplayTypes.PERCENT:
+                self.GetSibling("READOUT").SetText("Higher is better");
+                break;
+            case EDisplayTypes.OPS_PER_MS:
+                self.GetSibling("READOUT").SetText("Higher is better");
                 break;
         }
     })
+        .SetID("DISPLAY")
         .SetColumns(1, chartw / 3)
         .AddOptions(["Time", "Percent", "Ops/Ms"]),
     new EmuRenderSurface(c2, EMU_AUTO, chartw, charth, function(mx, my) {
@@ -119,7 +128,8 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     })
         .SetID("CHART")
         .SetScale(PIE_SUPERSAMPLING),
-    new EmuText(c2, EMU_AUTO, ew, eh, "Lower values are better"),
+    new EmuText(c2, EMU_AUTO, ew, eh, "Lower values are better")
+        .SetID("READOUT"),
     
     new EmuText(c2, EMU_AUTO, ew, eh * 6, "")
         .SetUpdate(function() {
