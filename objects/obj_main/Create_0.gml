@@ -158,9 +158,28 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         obj_main.iteration_count = int64(self.value);
     })
         .SetRealNumberBounds(10, 10_000_000_000)
+        .SetID("ITERATIONS")
         .SetUpdate(function() {
         }),
-    new EmuButton(c2, EMU_AUTO, ew2, eh, "Run Benchmark", function() {
+    new EmuButton(c2, EMU_AUTO, ew2 / 2 - 4, eh, "Suggest Iterations", function() {
+        var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
+        
+        var t_start = get_timer();
+        benchmark.Run(1, 100, false);
+        var short_trial_ms = max(0.001, (get_timer() - t_start) / 1000);
+        
+        static ideal_runtime = 1000;                    // ms
+        var trial_iterations_per_ms = 10 / short_trial_ms;
+        var trial_iterations_per_runtime = trial_iterations_per_ms * ideal_runtime;
+        
+        obj_main.iteration_count = benchmark_log_ceil(trial_iterations_per_runtime);
+        self.GetSibling("ITERATIONS").SetValue(obj_main.iteration_count);
+    })
+        .SetUpdate(function() {
+            var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
+            self.SetInteractive(!!benchmark);
+        }),
+    new EmuButton(c2 + ew2 / 2 + 4, EMU_INLINE, ew2 / 2, eh, "Run Benchmark", function() {
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
             benchmark.Run(obj_main.run_count, obj_main.iteration_count);
     })

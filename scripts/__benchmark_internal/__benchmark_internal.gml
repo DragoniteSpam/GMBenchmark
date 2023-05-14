@@ -4,31 +4,33 @@ function Benchmark(source_name, tests) constructor {
     self.name = string("[c_gray]{0}: Not yet run", source_name);
     self.runtime = undefined;
     
-    self.Run = function(trials, iterations) {
+    self.Run = function(trials, iterations, record_results = true) {
         var color_offset = random(255);
         var best_time = infinity;
         var order = undefined;
         
-        self.runtime = {
-            trials: trials,
-            iterations: iterations,
-            ms: 0
-        };
-        
-        for (var i = 0, n = array_length(self.tests); i < n; i++) {
-            var test = self.tests[i];
-            if (!is_instanceof(test, TestCase)) {
-                show_debug_message("Benchmark {0} is not a testable case", i);
-                continue;
-            }
-            
-            test.runtime = {
-                ms: 0,
-                per_ms: 0,
-                percentage: 0
+        if (record_results) {
+            self.runtime = {
+                trials: trials,
+                iterations: iterations,
+                ms: 0
             };
             
-            test.color = make_colour_hsv((color_offset + (i - 1) / array_length(self.tests) * 255) % 255, 255, 255);
+            for (var i = 0, n = array_length(self.tests); i < n; i++) {
+                var test = self.tests[i];
+                if (!is_instanceof(test, TestCase)) {
+                    show_debug_message("Benchmark {0} is not a testable case", i);
+                    continue;
+                }
+            
+                test.runtime = {
+                    ms: 0,
+                    per_ms: 0,
+                    percentage: 0
+                };
+            
+                test.color = make_colour_hsv((color_offset + (i - 1) / array_length(self.tests) * 255) % 255, 255, 255);
+            }
         }
         
         var indices = array_create_ext(array_length(self.tests), function(index) {
@@ -61,38 +63,42 @@ function Benchmark(source_name, tests) constructor {
                 if (!is_instanceof(test, TestCase)) {
                     continue;
                 }
-            
+                
                 var t_start = get_timer();
                 test.fn(iterations);
-                test.runtime.ms += (get_timer() - t_start) / 1000;
-                test.runtime.per_ms = 0;
+                
+                if (record_results) {
+                    test.runtime.ms += (get_timer() - t_start) / 1000;
+                }
             }
         }
         
-        // divide the timings by the trial count
-        for (var i = 0, n = array_length(self.tests); i < n; i++) {
-            var test = self.tests[i];
-            if (!is_instanceof(test, TestCase)) {
-                continue;
+        if (record_results) {
+            // divide the timings by the trial count
+            for (var i = 0, n = array_length(self.tests); i < n; i++) {
+                var test = self.tests[i];
+                if (!is_instanceof(test, TestCase)) {
+                    continue;
+                }
+                
+                test.runtime.ms /= trials;
+                test.runtime.per_ms = iterations / test.runtime.ms;
+                best_time = min(best_time, test.runtime.ms);
+                
+                test.name = string("[#{0}]o[/c] {1}: {2} ms", colour_to_hex(test.color), test.source_name, test.runtime.ms);
+                self.runtime.ms += test.runtime.ms;
             }
             
-            test.runtime.ms /= trials;
-            test.runtime.per_ms = iterations / test.runtime.ms;
-            best_time = min(best_time, test.runtime.ms);
+            // once you have the best time, you can evaluate everything else relative to it
+            for (var i = 0, n = array_length(self.tests); i < n; i++) {
+                var test = self.tests[i];
+                test.runtime.percentage = best_time / test.runtime.ms;
+            }
             
-            test.name = string("[#{0}]o[/c] {1}: {2} ms", colour_to_hex(test.color), test.source_name, test.runtime.ms);
-            self.runtime.ms += test.runtime.ms;
+            self.SortBestToWorst();
+            
+            self.name = self.source_name;
         }
-        
-        // once you have the best time, you can evaluate everything else relative to it
-        for (var i = 0, n = array_length(self.tests); i < n; i++) {
-            var test = self.tests[i];
-            test.runtime.percentage = best_time / test.runtime.ms;
-        }
-        
-        self.SortBestToWorst();
-        
-        self.name = self.source_name;
     };
     
     self.Reset = function() {
@@ -152,7 +158,7 @@ function benchmark_format(value) {
 
 function benchmark_log_ceil(value) {
     var value_log = power(10, floor(log10(value)));
-    return ceil(value / value) * value_log;
+    return ceil(value / value_log) * value_log;
 }
     
 #macro Benchmarks global.__benchmarks__
