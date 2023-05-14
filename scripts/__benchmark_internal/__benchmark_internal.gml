@@ -95,6 +95,19 @@ function Benchmark(source_name, tests) constructor {
         self.name = self.source_name;
     };
     
+    self.Reset = function() {
+        for (var i = 0, n = array_length(self.tests); i < n; i++) {
+            var test = self.tests[i];
+            if (!is_instanceof(test, TestCase))
+                continue;
+            test.name = string("[c_gray]{0}", test.source_name);
+            test.runtime = undefined;
+        }
+        self.runtime = undefined;
+        self.name = self.source_name;
+        self.name = string("[c_gray]{0}: Not yet run", source_name);
+    };
+    
     self.SortBestToWorst = function() {
         array_sort(self.tests, function(a, b) {
             return sign(a.runtime.ms - b.runtime.ms);
