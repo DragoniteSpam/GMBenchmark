@@ -15,20 +15,24 @@ function Benchmark(source_name, tests) constructor {
                 iterations: iterations,
                 ms: 0
             };
+        }
+        
+        for (var i = 0, n = array_length(self.tests); i < n; i++) {
+            var test = self.tests[i];
+            if (!is_instanceof(test, TestCase)) {
+                show_debug_message("Benchmark {0} is not a testable case", i);
+                continue;
+            }
             
-            for (var i = 0, n = array_length(self.tests); i < n; i++) {
-                var test = self.tests[i];
-                if (!is_instanceof(test, TestCase)) {
-                    show_debug_message("Benchmark {0} is not a testable case", i);
-                    continue;
-                }
+            test.init(iterations);
             
+            if (record_results) {
                 test.runtime = {
                     ms: 0,
                     per_ms: 0,
                     percentage: 0
                 };
-            
+                
                 test.color = make_colour_hsv((color_offset + (i - 1) / array_length(self.tests) * 255) % 255, 255, 255);
             }
         }
@@ -133,10 +137,11 @@ function Benchmark(source_name, tests) constructor {
     };
 }
 
-function TestCase(name, fn) constructor {
+function TestCase(name, fn, init = function() { }) constructor {
     self.name = string("[c_gray]{0}", name);
     self.source_name = name;
-    self.fn = fn;
+    self.fn = method(self, fn);
+    self.init = method(self, init);
     self.runtime = undefined;
     self.color = c_white;
 }

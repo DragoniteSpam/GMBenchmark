@@ -1,44 +1,5 @@
-// initialize the for loop over the array down here so it doesn't take up time in the tests
-global.__test_array = array_create(1_000_000);
-
-var n = 1_000;
-global.array_1k = array_create(n);
-for (var i = 0; i < n; i++) {
-    global.array_1k[i] = random(1000);
-}
-
-n = 100;
-global.array_100 = array_create(n);
-for (var i = 0; i < n; i++) {
-    global.array_100[i] = random(1000);
-}
-
-n = 10_000;
-global.array_10k = array_create(n);
-for (var i = 0; i < n; i++) {
-    global.array_10k[i] = random(1000);
-}
-
-n = 100_000;
-global.array_100k = array_create(n);
-for (var i = 0; i < n; i++) {
-    global.array_100k[i] = random(1000);
-}
-
-n = 1_000_000;
-global.array_1m = array_create(n);
-for (var i = 0; i < n; i++) {
-    global.array_1m[i] = random(1000);
-}
-
-n = 10_000_000;
-global.array_10m = array_create(n);
-for (var i = 0; i < n; i++) {
-    global.array_10m[i] = random(1000);
-}
-
 Benchmarks = [
-    // growable collections
+    #region growable collections
     new Benchmark("Growable Collections", [
         new TestCase("array_push", function(iterations) {
             var array = [];
@@ -59,40 +20,63 @@ Benchmarks = [
             buffer_delete(buffer)
         })
     ]),
+    #endregion
     
-    // loop iterations
+    #region loop iterations
     new Benchmark("Fast Loops", [
         new TestCase("for over array size", function(iterations) {
-            for (var i = 0; i < array_length(global.__test_array); i++) {
-                var val = global.__test_array[i];
+            var test_array = self.test_array;
+            for (var i = 0; i < array_length(test_array); i++) {
+                var val = test_array[i];
             }
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
         }),
+        
         new TestCase("for over cached array size", function(iterations) {
-            for (var i = 0, n = array_length(global.__test_array); i < n; i++) {
-                var val = global.__test_array[i];
+            var test_array = self.test_array;
+            for (var i = 0, n = array_length(test_array); i < n; i++) {
+                var val = test_array[i];
             }
-        }), new TestCase("repeat over array", function(iterations) {
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
+        }),
+        
+        new TestCase("repeat over array", function(iterations) {
+            var test_array = self.test_array;
             var i = 0;
-            repeat (array_length(global.__test_array)) {
-                var val = global.__test_array[i];
+            repeat (array_length(test_array)) {
+                var val = test_array[i];
                 i++;
             }
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
         }), new TestCase("while over array", function(iterations) {
+            var test_array = self.test_array;
             var i = 0;
-            while (i < array_length(global.__test_array)) {
-                var val = global.__test_array[i];
+            while (i < array_length(test_array)) {
+                var val = test_array[i];
                 i++;
             }
-        }), new TestCase("while over cached array size", function(iterations) {
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
+        }),
+        
+        new TestCase("while over cached array size", function(iterations) {
+            var test_array = self.test_array;
             var i = 0;
-            var n = array_length(global.__test_array);
+            var n = array_length(test_array);
             while (i < n) {
-                var val = global.__test_array[i];
+                var val = test_array[i];
                 i++;
             }
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
         })
     ]),
-    // variable access
+    #endregion
+    
+    #region variable access
     new Benchmark("Variable access", [
         new TestCase("dot operator", function(iterations) {
             var struct = { x: 0 };
@@ -113,9 +97,10 @@ Benchmarks = [
             }
         })
     ]),
+    #endregion
     
-    // recycling matrices
-    new Benchmark("Identity matrix", [
+    #region recycling matrices
+    new Benchmark("Recycling the identity matrix", [
         new TestCase("like a normal person", function(iterations) {
             repeat (iterations) {
                 matrix_set(matrix_world, matrix_build_identity());
@@ -134,37 +119,54 @@ Benchmarks = [
             }
         })
     ]),
+    #endregion
     
-    // array FP
+    #region array FP
     new Benchmark("Array iteration", [
         new TestCase("for loop, the not stupid way", function(iterations) {
+            var test_array = self.test_array;
             var t = 0;
-            for (var i = 0, n = array_length(global.__test_array); i < n; i++) {
-                t += global.__test_array[i];
+            for (var i = 0, n = array_length(test_array); i < n; i++) {
+                t += test_array[i];
             }
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
         }),
+        
         new TestCase("for loop, the stupid way", function(iterations) {
+            var test_array = self.test_array;
             var t = 0;
-            for (var i = 0; i < array_length(global.__test_array); i++) {
-                t += global.__test_array[i];
+            for (var i = 0; i < array_length(test_array); i++) {
+                t += test_array[i];
             }
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
         }),
+        
         new TestCase("repeat loop", function(iterations) {
+            var test_array = self.test_array;
             var t = 0;
             var i = 0;
-            repeat (array_length(global.__test_array)) {
-                t += global.__test_array[i];
+            repeat (array_length(test_array)) {
+                t += test_array[i];
                 i++;
             }
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
         }),
+        
         new TestCase("array_reduce", function(iterations) {
-            var t = array_reduce(global.__test_array, function(previous, current) {
+            var test_array = self.test_array;
+            var t = array_reduce(test_array, function(previous, current) {
                 return previous + current;
             });
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
         })
     ]),
+    #endregion
     
-    // matrix math
+    #region matrix math
     new Benchmark("Matrix by vector", [
         new TestCase("matrix_transform_vertex", function(iterations) {
             var matrix = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
@@ -192,8 +194,9 @@ Benchmarks = [
             }
         })
     ]),
+    #endregion
     
-    // string splitting
+    #region string splitting
     new Benchmark("String splitting (moderate strings)", [
         new TestCase("built-in split function", function(iterations) {
             var str = "The quick brown fox jumped over the lazy dog";
@@ -208,26 +211,49 @@ Benchmarks = [
             }
         })
     ]),
+    #endregion
     
-    // array sorting scaling
+    #region array sorting scaling
     new Benchmark("Scaling Array Sort", [
         new TestCase("100 elements", function(iterations) {
-            array_sort(global.array_100, true);
+            array_sort(self.test_array, true);
+        }, function() {
+            self.test_array = array_create_ext(100, function() {
+                return random(1000);
+            });
         }),
+        
         new TestCase("1,000 elements", function(iterations) {
-            array_sort(global.array_1k, true);
+            array_sort(self.test_array, true);
+        }, function() {
+            self.test_array = array_create_ext(1000, function() {
+                return random(1000);
+            });
         }),
+        
         new TestCase("10,000 elements", function(iterations) {
-            array_sort(global.array_10k, true);
+            array_sort(self.test_array, true);
+        }, function() {
+            self.test_array = array_create_ext(10_000, function() {
+                return random(1000);
+            });
         }),
+        
         new TestCase("100,000 elements", function(iterations) {
-            array_sort(global.array_100k, true);
+            array_sort(self.test_array, true);
+        }, function() {
+            self.test_array = array_create_ext(100_000, function() {
+                return random(1000);
+            });
         }),
+        
         new TestCase("1,000,000 elements", function(iterations) {
-            array_sort(global.array_1m, true);
-        }),
-        new TestCase("10,000,000 elements", function(iterations) {
-            array_sort(global.array_10m, true);
+            array_sort(self.test_array, true);
+        }, function() {
+            self.test_array = array_create_ext(1_000_000, function() {
+                return random(1000);
+            });
         })
     ])
+    #endregion
 ];
