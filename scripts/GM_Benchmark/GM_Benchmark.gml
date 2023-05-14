@@ -22,6 +22,51 @@ Benchmarks = [
     ]),
     #endregion
     
+    #region dot products
+    new Benchmark("Dot Products", [
+        new TestCase("2D, manually", function(iterations) {
+            var x1 = 1;
+            var y1 = 2;
+            var x2 = 3;
+            var y2 = 4;
+            repeat (iterations) {
+                var result = x1 * x2 + y1 * y2;
+            }
+        }),
+        new TestCase("2D, runtime", function(iterations) {
+            var x1 = 1;
+            var y1 = 2;
+            var x2 = 3;
+            var y2 = 4;
+            repeat (iterations) {
+                var result = dot_product(x1, y1, x2, y2);
+            }
+        }),
+        new TestCase("3D, manually", function(iterations) {
+            var x1 = 1;
+            var y1 = 2;
+            var z1 = 3;
+            var x2 = 4;
+            var y2 = 5;
+            var z2 = 6;
+            repeat (iterations) {
+                var result = x1 * x2 + y1 * y2 + z1 * z2;
+            }
+        }),
+        new TestCase("3D, runtime", function(iterations) {
+            var x1 = 1;
+            var y1 = 2;
+            var z1 = 3;
+            var x2 = 4;
+            var y2 = 5;
+            var z2 = 6;
+            repeat (iterations) {
+                var result = dot_product_3d(x1, y1, z1, x2, y2, z2);
+            }
+        })
+    ]),
+    #endregion
+    
     #region loop iterations
     new Benchmark("Fast Loops", [
         new TestCase("for over array size", function(iterations) {
