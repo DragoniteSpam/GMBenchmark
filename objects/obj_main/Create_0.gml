@@ -356,10 +356,18 @@ self.DrawBarChart = function(w, h, mx, my) {
     
     switch (obj_main.display_type) {
         case EDisplayTypes.TIME:
-            label_4_text = string("{0} ms", max_value);
-            label_3_text = string("{0} ms", (max_value div 4) * 3);
-            label_2_text = string("{0} ms", (max_value div 4) * 2);
-            label_1_text = string("{0} ms", (max_value div 4));
+            if (max_value >= 4) {
+                label_4_text = string("{0} ms", max_value);
+                label_3_text = string("{0} ms", (max_value div 4) * 3);
+                label_2_text = string("{0} ms", (max_value div 4) * 2);
+                label_1_text = string("{0} ms", (max_value div 4));
+            } else {
+                max_value = ((max_value * 1000) div 10) * 10;
+                label_4_text = string("{0} us", max_value);
+                label_3_text = string("{0} us", (max_value div 4) * 3);
+                label_2_text = string("{0} us", (max_value div 4) * 2);
+                label_1_text = string("{0} us", (max_value div 4));
+            }
             break;
         case EDisplayTypes.PERCENT:
             label_4_text = "100%";
@@ -368,10 +376,17 @@ self.DrawBarChart = function(w, h, mx, my) {
             label_1_text = "25%";
             break;
         case EDisplayTypes.OPS_PER_MS:
-            label_4_text = string("{0}/ms", benchmark_format(max_value));
-            label_3_text = string("{0}/ms", benchmark_format((max_value div 4) * 3));
-            label_2_text = string("{0}/ms", benchmark_format((max_value div 4) * 2));
-            label_1_text = string("{0}/ms", benchmark_format((max_value div 4)));
+            if (max_value >= 4) {
+                label_4_text = string("{0}/ms", benchmark_format(max_value));
+                label_3_text = string("{0}/ms", benchmark_format((max_value div 4) * 3));
+                label_2_text = string("{0}/ms", benchmark_format((max_value div 4) * 2));
+                label_1_text = string("{0}/ms", benchmark_format((max_value div 4)));
+            } else {
+                label_4_text = string("{0}/ms", benchmark_format(max_value));
+                label_3_text = string("{0}/ms", benchmark_format((max_value / 4) * 3));
+                label_2_text = string("{0}/ms", benchmark_format((max_value / 4) * 2));
+                label_1_text = string("{0}/ms", benchmark_format((max_value / 4)));
+            }
             break;
     }
     
