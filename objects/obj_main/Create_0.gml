@@ -206,7 +206,7 @@ Tests contained: {1}
             // general case: benchmark selected and run, test selected
             var test_index = array_get_index(benchmark.tests, test);
             self.text = string(@"[c_aqua]{0}[/c] ([#{1}]#{1}[/c])
-Test runtime: {2} ms ({3}% relative performance)
+{2} ms ({3}% relative performance)
 ", test.source_name, colour_to_hex(test.color), test.runtime.ms, test.runtime.percentage * 100);
         })
 ]);
@@ -249,16 +249,20 @@ self.DrawBarChart = function(w, h, mx, my) {
     }, undefined);
     
     var max_value = 0;
+    var max_value_log = 1;          // feather shut up
     switch (obj_main.display_type) {
         case EDisplayTypes.TIME:
             max_value = worst_trial.runtime.ms;
-            var max_value_log = power(10, floor(log10(max_value)));
+            max_value_log = power(10, floor(log10(max_value)));
             max_value = ceil(max_value / max_value_log) * max_value_log;
             break;
         case EDisplayTypes.PERCENT:
             // not relevant
             break;
         case EDisplayTypes.OPS_PER_MS:
+            max_value = best_trial.runtime.per_ms;
+            max_value_log = power(10, floor(log10(max_value)));
+            max_value = ceil(max_value / max_value_log) * max_value_log;
             break;
     }
     var mclick = mouse_check_button_pressed(mb_left);
@@ -294,6 +298,7 @@ self.DrawBarChart = function(w, h, mx, my) {
                 y1 = y2 - (bar_finish_y - bar_start_y) * test.runtime.percentage;
                 break;
             case EDisplayTypes.OPS_PER_MS:
+                y1 = y2 - (bar_finish_y - bar_start_y) * test.runtime.per_ms / max_value;
                 break;
         }
         
@@ -347,6 +352,10 @@ self.DrawBarChart = function(w, h, mx, my) {
             label_1_text = "25%";
             break;
         case EDisplayTypes.OPS_PER_MS:
+            label_4_text = string("{0}/ms", max_value);
+            label_3_text = string("{0}/ms", (max_value div 4) * 3);
+            label_2_text = string("{0}/ms", (max_value div 4) * 2);
+            label_1_text = string("{0}/ms", (max_value div 4));
             break;
     }
     
