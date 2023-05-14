@@ -4,7 +4,7 @@ function Benchmark(source_name, tests) constructor {
     self.name = string("[c_gray]{0}: Not yet run", source_name);
     self.runtime = undefined;
     
-    static Run = function(trials) {
+    self.Run = function(trials, iterations) {
         var color_offset = random(255);
         var best_time = infinity;
         
@@ -20,21 +20,37 @@ function Benchmark(source_name, tests) constructor {
                 continue;
             }
             
-            var t_start = get_timer();
-            test.fn();
             test.runtime = {
-                ms: (get_timer() - t_start) / 1000,
+                ms: 0,
                 per_ms: 0,
                 percentage: 0
             };
-            test.runtime.per_ms = 0;    // todo
             
             test.color = make_colour_hsv((color_offset + (i - 1) / array_length(self.tests) * 255) % 255, 255, 255);
-            test.name = string("[#{0}]o[/c] {1}: {2} ms", colour_to_hex(test.color), test.source_name, test.runtime.ms);
-            self.runtime.ms += test.runtime.ms;
-            best_time = min(best_time, test.runtime.ms);
         }
-        self.name = string("{0}: {1} ms", self.source_name, self.runtime);
+        
+        repeat (trials) {
+            // todo: randomize the list (and make sure that it's at least different from the last one)
+            for (var i = 0, n = array_length(self.tests); i < n; i++) {
+                var test = self.tests[i];
+                if (!is_instanceof(test, TestCase)) {
+                    show_debug_message("Benchmark {0} is not a testable case", i);
+                    continue;
+                }
+            
+                var t_start = get_timer();
+                test.fn();
+                test.runtime.ms += (get_timer() - t_start) / 1000;
+                test.runtime.per_ms = 0;    // todo
+                
+                self.runtime.ms += test.runtime.ms;
+                best_time = min(best_time, test.runtime.ms);
+            }
+        }
+        
+        // afterwards: divide all runtime.ms by the trial count, print the names, and evaluate some other things
+        // test.name = string("[#{0}]o[/c] {1}: {2} ms", colour_to_hex(test.color), test.source_name, test.runtime.ms);
+        //self.name = string("{0}: {1} ms", self.source_name, self.runtime);
         
         for (var i = 0, n = array_length(self.tests); i < n; i++) {
             var test = self.tests[i];

@@ -161,8 +161,12 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         .SetUpdate(function() {
         }),
     new EmuButton(c2, EMU_AUTO, ew2, eh, "Run Benchmark", function() {
+            var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
+            benchmark.Run(obj_main.run_count, obj_main.iteration_count);
     })
         .SetUpdate(function() {
+            var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
+            self.SetInteractive(!!benchmark);
         }),
     new EmuText(c2, EMU_AUTO, ew2, eh * 6, "")
         .SetUpdate(function() {
