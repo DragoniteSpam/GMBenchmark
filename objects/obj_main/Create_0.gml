@@ -27,6 +27,7 @@ var ew = 360;
 var eh = 32;
 var chartw = 440;
 var charth = 320;
+var ew2 = chartw;
 
 var c1 = 32;
 var c2 = c1 + 32 + ew;
@@ -92,13 +93,12 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             self.SetInteractive(true);
         })
         .AddOptions(["Best to Worst", "Worst to Best", "Alphabetical"]),
-    new EmuRadioArray(c2, 32, ew, eh, "Chart:", self.chart_type, function() {
+    new EmuRadioArray(c2, 32, ew2, eh, "Chart:", self.chart_type, function() {
         obj_main.chart_type = self.value;
         switch (self.value) {
             case EChartTypes.PIE:
                 self.GetSibling("CHART").SetScale(PIE_SUPERSAMPLING);
                 self.GetSibling("DISPLAY").SetEnabled(false);
-                self.GetSibling("READOUT").SetText("Lower is better");
                 break;
             case EChartTypes.BAR:
                 self.GetSibling("CHART").SetScale(1);
@@ -110,17 +110,17 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     })
         .SetColumns(1, chartw / 3)
         .AddOptions(["Bar", "Pie"]),
-    new EmuRadioArray(c2, EMU_AUTO, ew, eh, "Data display:", self.display_type, function() {
+    new EmuRadioArray(c2, EMU_AUTO, ew2, eh, "Data display:", self.display_type, function() {
         obj_main.display_type = self.value;
         switch (self.value) {
             case EDisplayTypes.TIME:
-                self.GetSibling("READOUT").SetText("Lower is better");
+                //self.GetSibling("READOUT").SetText("Lower is better");
                 break;
             case EDisplayTypes.PERCENT:
-                self.GetSibling("READOUT").SetText("Higher is better");
+                //self.GetSibling("READOUT").SetText("Higher is better");
                 break;
             case EDisplayTypes.OPS_PER_MS:
-                self.GetSibling("READOUT").SetText("Higher is better");
+                //self.GetSibling("READOUT").SetText("Higher is better");
                 break;
         }
     })
@@ -143,10 +143,21 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     })
         .SetID("CHART")
         .SetScale(1),
-    new EmuText(c2, EMU_AUTO, ew, eh, "Lower values are better")
-        .SetID("READOUT"),
-    
-    new EmuText(c2, EMU_AUTO, ew, eh * 6, "")
+    new EmuInput(c2, EMU_AUTO, ew2 / 2, eh, "Trials: ", "4", "Number of independant runs", 4, E_InputTypes.INT, function() {
+    })
+        .SetRealNumberBounds(1, 100)
+        .SetUpdate(function() {
+        }),
+    new EmuInput(c2 + ew2 / 2, EMU_INLINE, ew2 / 2, eh, "Iterations: ", "100_000", "Iterations per run", 9, E_InputTypes.INT, function() {
+    })
+        .SetRealNumberBounds(10, 10_000_000_000)
+        .SetUpdate(function() {
+        }),
+    new EmuButton(c2, EMU_AUTO, ew2, eh, "Run Benchmark", function() {
+    })
+        .SetUpdate(function() {
+        }),
+    new EmuText(c2, EMU_AUTO, ew2, eh * 6, "")
         .SetUpdate(function() {
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
             var test = self.GetSibling("BENCHMARK TEST LIST").GetSelectedItem();
