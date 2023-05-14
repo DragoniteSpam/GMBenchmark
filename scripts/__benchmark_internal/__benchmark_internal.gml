@@ -33,7 +33,24 @@ function Benchmark(source_name, tests) constructor {
                     percentage: 0
                 };
                 
-                test.color = make_colour_hsv((color_offset + (i - 1) / array_length(self.tests) * 255) % 255, 255, 255);
+                // pick a random color but if it's dark, brighten it a little
+                var color = make_colour_hsv((color_offset + (i - 1) / array_length(self.tests) * 255) % 255, 255, 255);
+                var rr = colour_get_red(color);
+                var gg = colour_get_green(color);
+                var bb = colour_get_blue(color);
+                
+                var luma = (rr / 0xff * 0.21) + (gg / 0xff * 0.71) + (bb / 0xff * 0.08);
+                // lowering the exponent will mean colors are brightened more
+                luma = lerp(1, luma, power(luma, 0.96));
+                rr = lerp(0xff, rr, luma);
+                gg = lerp(0xff, gg, luma);
+                bb = lerp(0xff, bb, luma);
+                
+                // blue just kinda sucks
+                var blueness = bb / 0xff;
+                rr = lerp(rr, 0xff, blueness * 0.15);
+                gg = lerp(gg, 0xff, blueness * 0.15);
+                test.color = make_colour_rgb(rr, gg, bb);
             }
         }
         
