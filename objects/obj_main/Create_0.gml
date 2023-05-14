@@ -409,7 +409,7 @@ self.DrawPieChart = function(w, h, r, mx, my) {
     for (var i = 0; i < benchmark_count; i++) {
         var test = current_benchmark.tests[i];
         var slice_start = angle;
-        var slice_end = 360 * test.runtime.ms / current_benchmark.runtime + angle;
+        var slice_end = 360 * test.runtime.ms / current_benchmark.runtime.ms + angle;
         
         if (mdist < r) {
             if (mdir >= slice_start && mdir < slice_end) {
