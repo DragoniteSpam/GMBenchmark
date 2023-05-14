@@ -51,7 +51,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         .SetList(Benchmarks)
         .SetEntryTypes(E_ListEntryTypes.STRUCTS)
         .SetID("BENCHMARK LIST"),
-    new EmuList(c1, EMU_AUTO, ew, eh, "Results:", eh, 8, function() {
+    new EmuList(c1, EMU_AUTO, ew, eh, "Tests:", eh, 8, function() {
     })
         .SetVacantText("Select a benchmark")
         .SetEntryTypes(E_ListEntryTypes.STRUCTS)
@@ -76,6 +76,21 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             }
         }
     })
+        .SetUpdate(function() {
+            var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
+            
+            if (!benchmark) {
+                self.SetInteractive(false);
+                return;
+            }
+            
+            if (!benchmark.runtime) {
+                self.SetInteractive(false);
+                return;
+            }
+            
+            self.SetInteractive(true);
+        })
         .AddOptions(["Best to Worst", "Worst to Best", "Alphabetical"]),
     new EmuRadioArray(c2, 32, ew, eh, "Chart:", self.chart_type, function() {
         obj_main.chart_type = self.value;
@@ -136,30 +151,60 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
             var test = self.GetSibling("BENCHMARK TEST LIST").GetSelectedItem();
             
-            if (test) {
-                var test_index = array_get_index(benchmark.tests, test);
+            // early exit: no benchmark selected
+            if (!benchmark) {
+                self.text = "";
+                return;
+            }
+            
+            // early exit: benchmark selected but not run
+            if (!benchmark.runtime) {
                 self.text = string(@"[c_aqua]{0}[/c]
+Tests contained: {1}
+Not run yet!
+", benchmark.source_name, array_length(benchmark.tests));
+                return;
+            }
+            
+            // early exit: benchmark selected and run but no test selected
+            if (!test) {
+                self.text = string(@"[c_aqua]{0}[/c]
+Tests contained: {1}
+Total runtime: {2} ms
+", benchmark.source_name, array_length(benchmark.tests), benchmark.runtime);
+                return;
+            }
+            
+            // general case: benchmark selected and run, test selected
+            var test_index = array_get_index(benchmark.tests, test);
+            self.text = string(@"[c_aqua]{0}[/c]
 Total runtime: {1} ms
 
 [c_aqua]{2}[/c] ([#{3}]#{3}[/c])
 Test {4} of {5}
-Test runtime: {6} ms ({7}% of total)
-", benchmark.source_name, benchmark.runtime, test.source_name, colour_to_hex(test.color), test_index, array_length(benchmark.tests), test.runtime.ms, test.runtime.ms / benchmark.runtime * 100);
-            } else if (benchmark) {
-                self.text = string(@"[c_aqua]{0}[/c]
-Total runtime: {1} ms
-Tests contained: {2}
-", benchmark.source_name, benchmark.runtime, array_length(benchmark.tests));
-            } else {
-                self.text = "";
-            }
+Test runtime: {6} ms ({7}% relative performance)
+", benchmark.source_name, benchmark.runtime, test.source_name, colour_to_hex(test.color), test_index, array_length(benchmark.tests), test.runtime.ms, "N/A"/*test.runtime.ms / benchmark.runtime * 100*/);
         })
 ]);
 
 self.DrawBarChart = function(w, h, mx, my) {
+    draw_rectangle_colour(1, 1, w - 2, h - 2, c_white, c_white, c_white, c_white, true);
+    
     var bench_list = self.container.GetChild("BENCHMARK LIST");
     var current_benchmark = bench_list.GetSelectedItem();
-    if (!current_benchmark) return;
+    if (!current_benchmark) {
+        scribble("Select a benchmark to see the results")
+            .align(fa_center, fa_middle)
+            .draw(w div 2, h div 2);
+        return;
+    }
+    
+    if (!current_benchmark.runtime) {
+        scribble("Benchmark not yet run")
+            .align(fa_center, fa_middle)
+            .draw(w div 2, h div 2);
+        return;
+    }
     
     var test_list = self.container.GetChild("BENCHMARK TEST LIST");
     var selected_benchmark_test = test_list.GetSelectedItem();
@@ -304,13 +349,27 @@ self.DrawBarChart = function(w, h, mx, my) {
 };
 
 self.DrawPieChart = function(w, h, r, mx, my) {
+    draw_rectangle_colour(1, 1, w - 2, h - 2, c_white, c_white, c_white, c_white, true);
+    
     // draw the pie chart centered in the middle of the canvas
     var xx = w div 2;
     var yy = h div 2;
     
     var bench_list = self.container.GetChild("BENCHMARK LIST");
     var current_benchmark = bench_list.GetSelectedItem();
-    if (!current_benchmark) return;
+    if (!current_benchmark) {
+        scribble("Select a benchmark to see the results")
+            .align(fa_center, fa_middle)
+            .draw(w div 2, h div 2);
+        return;
+    }
+    
+    if (!current_benchmark.runtime) {
+        scribble("Benchmark not yet run")
+            .align(fa_center, fa_middle)
+            .draw(w div 2, h div 2);
+        return;
+    }
     
     var test_list = self.container.GetChild("BENCHMARK TEST LIST");
     var selected_benchmark_test = test_list.GetSelectedItem();
