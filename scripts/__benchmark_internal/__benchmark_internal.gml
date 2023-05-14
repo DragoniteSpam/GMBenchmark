@@ -103,4 +103,14 @@ function colour_to_hex(color) {
     return string_copy(string(ptr(color)), 11, 6);
 };
 
+function benchmark_format(value) {
+    if (value < 1000) {
+        return string(floor(value));
+    }
+    //if (value < 1_000_000) {
+        return string("{0}k", floor(value div 1000));
+    //}
+    //return string("{0}m", floor(value div 1_000_000));
+}
+    
 #macro Benchmarks global.__benchmarks__

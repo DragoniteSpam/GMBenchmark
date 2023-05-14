@@ -207,7 +207,8 @@ Tests contained: {1}
             var test_index = array_get_index(benchmark.tests, test);
             self.text = string(@"[c_aqua]{0}[/c] ([#{1}]#{1}[/c])
 {2} ms ({3}% relative performance)
-", test.source_name, colour_to_hex(test.color), test.runtime.ms, test.runtime.percentage * 100);
+Expect to afford {4} per ms
+", test.source_name, colour_to_hex(test.color), test.runtime.ms, test.runtime.percentage * 100, benchmark_format(test.runtime.per_ms));
         })
 ]);
 
@@ -352,10 +353,10 @@ self.DrawBarChart = function(w, h, mx, my) {
             label_1_text = "25%";
             break;
         case EDisplayTypes.OPS_PER_MS:
-            label_4_text = string("{0}/ms", max_value);
-            label_3_text = string("{0}/ms", (max_value div 4) * 3);
-            label_2_text = string("{0}/ms", (max_value div 4) * 2);
-            label_1_text = string("{0}/ms", (max_value div 4));
+            label_4_text = string("{0}/ms", benchmark_format(max_value));
+            label_3_text = string("{0}/ms", benchmark_format((max_value div 4) * 3));
+            label_2_text = string("{0}/ms", benchmark_format((max_value div 4) * 2));
+            label_1_text = string("{0}/ms", benchmark_format((max_value div 4)));
             break;
     }
     
