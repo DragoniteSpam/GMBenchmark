@@ -1,6 +1,8 @@
 randomize();
 
-#macro PIE_SUPERSAMPLING 4
+#macro PIE_SUPERSAMPLING        4
+#macro DEFAULT_RUN_COUNT        4
+#macro DEFAULT_ITERATION_COUNT  100_000
 
 enum ESortTypes {
     BEST_TO_WORST,
@@ -22,6 +24,9 @@ enum EDisplayTypes {
 self.sort_type = ESortTypes.BEST_TO_WORST;
 self.chart_type = EChartTypes.BAR;
 self.display_type = EDisplayTypes.TIME;
+
+self.run_count = DEFAULT_RUN_COUNT;
+self.iteration_count = DEFAULT_ITERATION_COUNT;
 
 var ew = 360;
 var eh = 32;
@@ -143,12 +148,14 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     })
         .SetID("CHART")
         .SetScale(1),
-    new EmuInput(c2, EMU_AUTO, ew2 / 2, eh, "Trials: ", "4", "Number of independant runs", 4, E_InputTypes.INT, function() {
+    new EmuInput(c2, EMU_AUTO, ew2 / 2, eh, "Trials: ", DEFAULT_RUN_COUNT, "Number of independant runs", 4, E_InputTypes.INT, function() {
+        obj_main.run_count = int64(self.value);
     })
         .SetRealNumberBounds(1, 100)
         .SetUpdate(function() {
         }),
-    new EmuInput(c2 + ew2 / 2, EMU_INLINE, ew2 / 2, eh, "Iterations: ", "100_000", "Iterations per run", 9, E_InputTypes.INT, function() {
+    new EmuInput(c2 + ew2 / 2, EMU_INLINE, ew2 / 2, eh, "Iterations: ", DEFAULT_ITERATION_COUNT, "Iterations per run", 9, E_InputTypes.INT, function() {
+        obj_main.iteration_count = int64(self.value);
     })
         .SetRealNumberBounds(10, 10_000_000_000)
         .SetUpdate(function() {
