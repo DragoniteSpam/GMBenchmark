@@ -10,6 +10,7 @@ function Benchmark(source_name, tests) constructor {
         
         self.runtime = {
             trials: trials,
+            iterations: iterations,
             ms: 0
         };
         

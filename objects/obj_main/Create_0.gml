@@ -168,7 +168,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
             self.SetInteractive(!!benchmark);
         }),
-    new EmuText(c2, EMU_AUTO, ew2, eh * 3, "")
+    new EmuText(c2, EMU_AUTO, ew2, eh * 2.5, "")
         .SetUpdate(function() {
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
             
@@ -189,8 +189,8 @@ Not run yet!
             
             self.text = string(@"[c_aqua]{0}[/c]
 Tests contained: {1}
-Total runtime: {2} ms
-", benchmark.source_name, array_length(benchmark.tests), benchmark.runtime.ms);
+{2} ms ({3} trials of {4} iterations)
+", benchmark.source_name, array_length(benchmark.tests), benchmark.runtime.ms * benchmark.runtime.trials, benchmark.runtime.trials, benchmark.runtime.iterations);
         }),
     new EmuText(c2, EMU_AUTO, ew2, eh * 3, "")
         .SetUpdate(function() {
