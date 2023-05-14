@@ -7,6 +7,7 @@ function Benchmark(source_name, tests) constructor {
     self.Run = function(trials, iterations) {
         var color_offset = random(255);
         var best_time = infinity;
+        var order = undefined;
         
         self.runtime = {
             trials: trials,
@@ -30,10 +31,33 @@ function Benchmark(source_name, tests) constructor {
             test.color = make_colour_hsv((color_offset + (i - 1) / array_length(self.tests) * 255) % 255, 255, 255);
         }
         
+        var indices = array_create_ext(array_length(self.tests), function(index) {
+            return index;
+        });
+        
         repeat (trials) {
-            // todo: randomize the list (and make sure that it's at least different from the last one)
-            for (var i = 0, n = array_length(self.tests); i < n; i++) {
-                var test = self.tests[i];
+            // interleave the tests
+            if (order == undefined || array_length(self.tests) < 2) {
+                order = array_shuffle(indices);
+            } else {
+                while (true) {
+                    var clone = array_shuffle(indices);
+                    var failed = false;
+                    for (var i = 0, n = array_length(indices); i < n; i++) {
+                        if (clone[i] == order[i]) {
+                            failed = true;
+                            break;
+                        }
+                    }
+                    if (!failed) {
+                        order = clone;
+                        break;
+                    }
+                }
+            }
+            
+            for (var i = 0, n = array_length(order); i < n; i++) {
+                var test = self.tests[order[i]];
                 if (!is_instanceof(test, TestCase)) {
                     continue;
                 }
