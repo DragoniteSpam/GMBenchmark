@@ -51,7 +51,9 @@ Benchmarks = [
             }
         }, function(iterations) {
             self.test_array = array_create(iterations);
-        }), new TestCase("while over array", function(iterations) {
+        }),
+        
+        new TestCase("while over array", function(iterations) {
             var test_array = self.test_array;
             var i = 0;
             while (i < array_length(test_array)) {

@@ -8,36 +8,77 @@ Clone the repository, open the GameMaker project, and run it. You'll see a prett
 
 To add your own tests, go into the `GM_Benchmarks` and edit (or add to) the list of items in the `Benchmarks` array.
 
-A `Benchmark` object is a constructor which takes a name as a string, and a series of `TestCase` instances. The `Benchmark` constructor is variadic and will accept as many test cases as you feel like giving it.
+A `Benchmark` object is a constructor which takes a name as a string, and an array of `TestCase` instances.
 
-A `TestCase` object is a constructor which takes a name as a string, and a function containing the code you want to time. I recommend putting the relevant bits of code in a repeat loop of several thousand (or more) iterations to get a good average and smooth out random performance fluctuations caused by your OS's tasks scheduler.
+A `TestCase` object is a constructor which takes a name as a string, and a function containing the code you want to time. The function will accept a number of iterations for it to be run.
 
 For example:
 
-    new Benchmark("Growable Collections x 10,000",
-        new TestCase("array_push", function() {
-            var array = [];
-            repeat (10_000) {
-                array_push(array, 0);
+    #region variable access
+    new Benchmark("Variable access", [
+        new TestCase("dot operator", function(iterations) {
+            var struct = { x: 0 };
+            repeat (iterations) {
+                var val = struct.x;
             }
-        }), new TestCase("ds_list_add", function() {
-            var list = ds_list_create();
-            repeat (10_000) {
-                ds_list_add(list, 0);
+        }),
+        new TestCase("struct accessor", function(iterations) {
+            var struct = { x: 0 };
+            repeat (iterations) {
+                var val = struct[$ "x"];
             }
-            ds_list_destroy(list);
-        }), new TestCase("buffer_grow", function() {
-            var buffer = buffer_create(1, buffer_grow, 1);
-            repeat (10_000) {
-                buffer_write(buffer, buffer_u32, 0);
+        }), new TestCase("variable hash", function(iterations) {
+            var struct = { x: 0 };
+            var hash = variable_get_hash("x");
+            repeat (iterations) {
+                var val = struct_get_from_hash(struct, hash);
             }
-            buffer_delete(buffer)
         })
-    )
+    ]),
+    #endregion
 
-If your tests require any additional setup you may consider tossing a few global variables in the `GM_Benchmark_Setup` code file so that it doesn't bog down the results of the actual test. Don't worry, I won't tell the GameMaker police.
+If your tests require any additional setup you can also pass an `init` function to the TestCase constructor. The `init` function also takes the iteration count in case you need that for setup.
+
+    #region loop iterations
+    new Benchmark("Fast Loops", [
+        new TestCase("for over array size", function(iterations) {
+            var test_array = self.test_array;
+            for (var i = 0; i < array_length(test_array); i++) {
+                var val = test_array[i];
+            }
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
+        }),
+        
+        new TestCase("for over cached array size", function(iterations) {
+            var test_array = self.test_array;
+            for (var i = 0, n = array_length(test_array); i < n; i++) {
+                var val = test_array[i];
+            }
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
+        }),
+        
+        new TestCase("repeat over array", function(iterations) {
+            var test_array = self.test_array;
+            var i = 0;
+            repeat (array_length(test_array)) {
+                var val = test_array[i];
+                i++;
+            }
+        }, function(iterations) {
+            self.test_array = array_create(iterations);
+        }),
+    #endregion
+    
 
 ![image](https://user-images.githubusercontent.com/7087495/232585003-00a37367-fc97-4250-b349-f0774bf216b9.png)
+
+## Data
+
+You can decide how many trials of how many iterations you want to run in the tool's GUI. I recommend having at least 4 or 5 trials. The number of iterations you should use will vary depending on how expensive the code you're benchmarking is. The Suggest Iterations button will run a brief trial of the benchmark and try to extrapolate how many iterations you can reasonably expect to give a useful result. **This will not work well for benchmarking algorithms that scale in non-linear time, particularly in tests where you use the iteration value as the size of the data set.**
+
+You can view the results as a bar chart or a pie chart. The bar chart also allows you to show the raw timings, the timings relative to the best performer, and the average number of times you'll be able to run a single iteration per millisecond.
 
 ## Contributing
 
@@ -51,21 +92,19 @@ Feel free to use this to benchmark other extensions or libraries, but I won't be
 
 ### Charts
 
-I'll probably add a few more data visualizations to the UI eventually. For now, if you want to add your own, have a look at `obj_main::DrawPieChart()` to see how that one's drawn.
+If you're bored you can add some other chart types, but the bar chart and pie chart are probably the main ones you'd want. Have a look at `obj_main::DrawPieChart()` to see how that one's drawn.
 
 `shd_dither` is a useful shader for dithering a 2D colored primitive.
 
 ## GameMaker version
 
-This should work on GMS2023.2 or later. It might work on earlier versions back to 2022.11, haven't tried. I use a few features added in 2022.11 so it won't work in anything earlier than that.
+This should work on GMS2023.4 or later. It might work on earlier versions back to 2022.11, haven't tried. I use a few features added in 2022.11 so it won't work in anything earlier than that.
 
 ### To do
 
 Whenever I have other work that I don't feel like doing, I'll probably add:
 
- - Other chart types (at least a bar chart, maybe others)
- - A "Run test x times" button
- - Don't automatically run all tests on startup (to make the program load faster)
+ - An Export Results button
 
 ## Credits
 
