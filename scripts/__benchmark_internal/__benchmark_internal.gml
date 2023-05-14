@@ -65,7 +65,7 @@ function Benchmark(source_name, tests) constructor {
                 var t_start = get_timer();
                 test.fn(iterations);
                 test.runtime.ms += (get_timer() - t_start) / 1000;
-                test.runtime.per_ms = 0;    // todo
+                test.runtime.per_ms = 0;
             }
         }
         
@@ -148,6 +148,11 @@ function benchmark_format(value) {
         return string("{0}k", floor(value div 1000));
     //}
     //return string("{0}m", floor(value div 1_000_000));
+}
+
+function benchmark_log_ceil(value) {
+    var value_log = power(10, floor(log10(value)));
+    return ceil(value / value) * value_log;
 }
     
 #macro Benchmarks global.__benchmarks__

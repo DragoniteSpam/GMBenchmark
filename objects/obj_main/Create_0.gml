@@ -253,17 +253,13 @@ self.DrawBarChart = function(w, h, mx, my) {
     var max_value_log = 1;          // feather shut up
     switch (obj_main.display_type) {
         case EDisplayTypes.TIME:
-            max_value = worst_trial.runtime.ms;
-            max_value_log = power(10, floor(log10(max_value)));
-            max_value = ceil(max_value / max_value_log) * max_value_log;
+            max_value = benchmark_log_ceil(worst_trial.runtime.ms);
             break;
         case EDisplayTypes.PERCENT:
             // not relevant
             break;
         case EDisplayTypes.OPS_PER_MS:
-            max_value = best_trial.runtime.per_ms;
-            max_value_log = power(10, floor(log10(max_value)));
-            max_value = ceil(max_value / max_value_log) * max_value_log;
+            max_value = benchmark_log_ceil(best_trial.runtime.per_ms);
             break;
     }
     var mclick = mouse_check_button_pressed(mb_left);
