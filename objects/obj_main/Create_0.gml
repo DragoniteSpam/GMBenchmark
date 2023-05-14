@@ -207,7 +207,7 @@ Total runtime: {2} ms
             var test_index = array_get_index(benchmark.tests, test);
             self.text = string(@"[c_aqua]{0}[/c] ([#{1}]#{1}[/c])
 Test runtime: {2} ms ({3}% relative performance)
-", test.source_name, colour_to_hex(test.color), test.runtime.ms, "N/A"/*test.runtime.ms / benchmark.runtime * 100*/);
+", test.source_name, colour_to_hex(test.color), test.runtime.ms, test.runtime.percentage * 100);
         })
 ]);
 

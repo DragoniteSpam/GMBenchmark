@@ -34,7 +34,6 @@ function Benchmark(source_name, tests) constructor {
             for (var i = 0, n = array_length(self.tests); i < n; i++) {
                 var test = self.tests[i];
                 if (!is_instanceof(test, TestCase)) {
-                    show_debug_message("Benchmark {0} is not a testable case", i);
                     continue;
                 }
             
@@ -42,22 +41,32 @@ function Benchmark(source_name, tests) constructor {
                 test.fn(iterations);
                 test.runtime.ms += (get_timer() - t_start) / 1000;
                 test.runtime.per_ms = 0;    // todo
-                
-                self.runtime.ms += test.runtime.ms;
-                best_time = min(best_time, test.runtime.ms);
             }
         }
         
-        // afterwards: divide all runtime.ms by the trial count, print the names, and evaluate some other things
-        // test.name = string("[#{0}]o[/c] {1}: {2} ms", colour_to_hex(test.color), test.source_name, test.runtime.ms);
-        //self.name = string("{0}: {1} ms", self.source_name, self.runtime);
+        // divide the timings by the trial count
+        for (var i = 0, n = array_length(self.tests); i < n; i++) {
+            var test = self.tests[i];
+            if (!is_instanceof(test, TestCase)) {
+                continue;
+            }
+            
+            test.runtime.ms /= trials;
+            best_time = min(best_time, test.runtime.ms);
+            
+            test.name = string("[#{0}]o[/c] {1}: {2} ms", colour_to_hex(test.color), test.source_name, test.runtime.ms);
+            self.runtime.ms += test.runtime.ms;
+        }
         
+        // once you have the best time, you can evaluate everything else relative to it
         for (var i = 0, n = array_length(self.tests); i < n; i++) {
             var test = self.tests[i];
             test.runtime.percentage = best_time / test.runtime.ms;
         }
         
         self.SortBestToWorst();
+        
+        self.name = self.source_name;
     };
     
     self.SortBestToWorst = function() {

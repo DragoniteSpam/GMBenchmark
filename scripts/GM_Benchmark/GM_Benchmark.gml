@@ -126,6 +126,12 @@ Benchmarks = [
             repeat (iterations) {
                 matrix_set(matrix_world, global.identity);
             }
+        }),
+        new TestCase("caching it in a static", function(iterations) {
+            static identity = matrix_build_identity();
+            repeat (iterations) {
+                matrix_set(matrix_world, identity);
+            }
         })
     ]),
     
