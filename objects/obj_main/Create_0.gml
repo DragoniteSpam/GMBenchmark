@@ -168,10 +168,9 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
             self.SetInteractive(!!benchmark);
         }),
-    new EmuText(c2, EMU_AUTO, ew2, eh * 6, "")
+    new EmuText(c2, EMU_AUTO, ew2, eh * 3, "")
         .SetUpdate(function() {
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
-            var test = self.GetSibling("BENCHMARK TEST LIST").GetSelectedItem();
             
             // early exit: no benchmark selected
             if (!benchmark) {
@@ -188,24 +187,27 @@ Not run yet!
                 return;
             }
             
-            // early exit: benchmark selected and run but no test selected
-            if (!test) {
-                self.text = string(@"[c_aqua]{0}[/c]
+            self.text = string(@"[c_aqua]{0}[/c]
 Tests contained: {1}
 Total runtime: {2} ms
-", benchmark.source_name, array_length(benchmark.tests), benchmark.runtime);
+", benchmark.source_name, array_length(benchmark.tests), benchmark.runtime.ms);
+        }),
+    new EmuText(c2, EMU_AUTO, ew2, eh * 3, "")
+        .SetUpdate(function() {
+            var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
+            var test = self.GetSibling("BENCHMARK TEST LIST").GetSelectedItem();
+            
+            // early exit: no appropriate test selected
+            if (!benchmark || !benchmark.runtime || !test) {
+                self.text = "";
                 return;
             }
             
             // general case: benchmark selected and run, test selected
             var test_index = array_get_index(benchmark.tests, test);
-            self.text = string(@"[c_aqua]{0}[/c]
-Total runtime: {1} ms
-
-[c_aqua]{2}[/c] ([#{3}]#{3}[/c])
-Test {4} of {5}
-Test runtime: {6} ms ({7}% relative performance)
-", benchmark.source_name, benchmark.runtime, test.source_name, colour_to_hex(test.color), test_index, array_length(benchmark.tests), test.runtime.ms, "N/A"/*test.runtime.ms / benchmark.runtime * 100*/);
+            self.text = string(@"[c_aqua]{0}[/c] ([#{1}]#{1}[/c])
+Test runtime: {2} ms ({3}% relative performance)
+", test.source_name, colour_to_hex(test.color), test.runtime.ms, "N/A"/*test.runtime.ms / benchmark.runtime * 100*/);
         })
 ]);
 
