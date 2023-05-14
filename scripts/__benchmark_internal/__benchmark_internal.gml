@@ -39,7 +39,7 @@ function Benchmark(source_name, tests) constructor {
                 }
             
                 var t_start = get_timer();
-                test.fn();
+                test.fn(iterations);
                 test.runtime.ms += (get_timer() - t_start) / 1000;
                 test.runtime.per_ms = 0;    // todo
                 
