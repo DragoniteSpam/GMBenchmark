@@ -136,12 +136,20 @@ function Benchmark(source_name, tests) constructor {
     };
     
     self.SortBestToWorst = function() {
+        if (self.runtime == undefined)
+            // did not store any results, so just ignore sorting
+            return;
+        
         array_sort(self.tests, function(a, b) {
             return sign(a.runtime.ms - b.runtime.ms);
         });
     };
     
     self.SortWorstToBest = function() {
+        if (self.runtime == undefined)
+            // did not store any results, so just ignore sorting
+            return;
+        
         array_sort(self.tests, function(a, b) {
             return sign(b.runtime.ms - a.runtime.ms);
         });

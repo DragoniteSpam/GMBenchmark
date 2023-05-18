@@ -301,6 +301,64 @@ Benchmarks = [
                 return random(1000);
             });
         })
+    ]),
+    #endregion
+    
+    #region OOP style calls vs procedural style calls
+    new Benchmark("OOP vs Procedural", [
+        new TestCase("OOP Static", function(iterations) {
+            var test_inst = self.test_inst;
+            repeat (iterations) {
+                test_inst.Add();
+            }
+        }, function() {
+            function Benchmark_OOPvsProcedural() constructor {
+                a = random(1000);
+                b = random(1000);
+                
+                static Add = function() { return a + b; };
+            }
+            self.test_inst = new Benchmark_OOPvsProcedural();
+        }),
+        new TestCase("OOP Non-static", function(iterations) {
+            var test_inst = self.test_inst;
+            repeat (iterations) {
+                test_inst.Add();
+            }
+        }, function() {
+            function Benchmark_OOPvsProcedural_NonStatic() constructor {
+                a = random(1000);
+                b = random(1000);
+                
+                Add = function() { return a + b; };
+            }
+            self.test_inst = new Benchmark_OOPvsProcedural_NonStatic();
+        }),
+        new TestCase("OOP + Procedural Hybrid", function(iterations) {
+            var test_inst = self.test_inst;
+            var b = random(1000);
+            repeat (iterations) {
+                test_inst.Add(b);
+            }
+        }, function() {
+            function Benchmark_OOPvsProcedural_Hybrid() constructor {
+                a = random(1000);
+                
+                static Add = function(b) { return a + b; };
+            }
+            self.test_inst = new Benchmark_OOPvsProcedural_Hybrid();
+        }),
+        new TestCase("Procedural", function(iterations) {
+            var a = random(1000);
+            var b = random(1000);
+            repeat (iterations) {
+                benchmark_oopvsprocedural_pureprocedural(a, b);
+            }
+        }, function() {
+            function benchmark_oopvsprocedural_pureprocedural(a, b) {
+                return a + b;
+            }
+        })
     ])
     #endregion
 ];
