@@ -1,6 +1,6 @@
 randomize();
 
-#macro PIE_SUPERSAMPLING        4
+#macro PIE_SUPERSAMPLING        1               // alynne really wanted this but it messes up a bunch of things
 #macro DEFAULT_RUN_COUNT        4
 #macro DEFAULT_ITERATION_COUNT  100_000
 
@@ -137,7 +137,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         draw_clear_alpha(c_black, 0);
         switch (obj_main.chart_type) {
             case EChartTypes.PIE:
-                obj_main.DrawPieChart(self.width * self.scale, self.height * self.scale, min(self.width, self.height) / 2 * self.scale, mx * self.scale, my * self.scale);
+                obj_main.DrawPieChart(self.width * self.scale, self.height * self.scale, min(self.width, self.height) / 2 * self.scale * 0.9, mx * self.scale, my * self.scale);
                 break;
             case EChartTypes.BAR:
                 obj_main.DrawBarChart(self.width * self.scale, self.height * self.scale, mx * self.scale, my * self.scale);
@@ -424,14 +424,14 @@ self.DrawPieChart = function(w, h, r, mx, my) {
     if (!current_benchmark) {
         scribble("Select a benchmark to see the results")
             .align(fa_center, fa_middle)
-            .draw(w div 2, h div 2);
+            .draw(xx, yy);
         return;
     }
     
     if (!current_benchmark.runtime) {
         scribble("Benchmark not yet run")
             .align(fa_center, fa_middle)
-            .draw(w div 2, h div 2);
+            .draw(xx, yy);
         return;
     }
     
