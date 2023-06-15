@@ -359,6 +359,124 @@ Benchmarks = [
                 return a + b;
             }
         })
+    ]),
+    #endregion
+    
+    #region Struct vec2s vs two floats in a trench coat
+    new Benchmark("Vector allocation", [
+        new TestCase("Struct", function(iterations) {
+            repeat (iterations) {
+                var vector = new Vector2(100, 100);
+            }
+        }),
+        new TestCase("Byte-packed", function(iterations) {
+            repeat (iterations) {
+                var vector = svec2(100, 100);
+            }
+        })
+    ]),
+    new Benchmark("Vector addition", [
+        new TestCase("Struct", function(iterations) {
+            var a = new Vector2(100, 100);
+            var b = new Vector2(200, 200);
+            repeat (iterations) {
+                var result = a.Add(b);
+            }
+        }),
+        new TestCase("Byte-packed", function(iterations) {
+            var a = svec2(100, 100);
+            var b = svec2(200, 200);
+            repeat (iterations) {
+                var result = svec2_add(a, b);
+            }
+        }),
+        new TestCase("A jumble of floats", function(iterations) {
+            var ax = 100;
+            var ay = 100;
+            var bx = 200;
+            var by = 200;
+            repeat (iterations) {
+                var rx = ax + bx;
+                var ry = ay + by;
+            }
+        })
+    ]),
+    new Benchmark("Vector dot product", [
+        new TestCase("Struct", function(iterations) {
+            var a = new Vector2(100, 100);
+            var b = new Vector2(200, 200);
+            repeat (iterations) {
+                var result = a.Dot(b);
+            }
+        }),
+        new TestCase("Byte-packed", function(iterations) {
+            var a = svec2(100, 100);
+            var b = svec2(200, 200);
+            repeat (iterations) {
+                var result = svec2_dot(a, b);
+            }
+        }),
+        new TestCase("A jumble of floats", function(iterations) {
+            var ax = 100;
+            var ay = 100;
+            var bx = 200;
+            var by = 200;
+            repeat (iterations) {
+                var result = dot_product(ax, ay, bx, by);
+            }
+        })
     ])
     #endregion
 ];
+
+#region definitions
+function Vector2(x, y) constructor {
+    self.x = x;
+    self.y = y;
+    static Add = function(vec) {
+        return new Vector2(self.x + vec.x, self.y + vec.y);
+    };
+    static Dot = function(vec) {
+        return dot_product(vec.x, vec.y, self.x, self.y);
+    };
+}
+
+function svec2(x, y) {
+    static buffer = buffer_create(8, buffer_fixed, 4);
+    buffer_poke(buffer, 0, buffer_f32, x);
+    buffer_poke(buffer, 4, buffer_f32, y);
+    return buffer_peek(buffer, 0, buffer_u64);
+}
+function svec2_add(v1, v2) {
+    static buffer = buffer_create(16, buffer_fixed, 4);
+    buffer_poke(buffer, 0, buffer_u64, v1);
+    buffer_poke(buffer, 8, buffer_u64, v2);
+    return svec2(
+        buffer_peek(buffer, 0, buffer_f32) + buffer_peek(buffer, 8, buffer_f32),
+        buffer_peek(buffer, 4, buffer_f32) + buffer_peek(buffer, 12, buffer_f32)
+    );
+}
+function svec2_dot(v1, v2) {
+    static buffer = buffer_create(16, buffer_fixed, 4);
+    buffer_poke(buffer, 0, buffer_u64, v1);
+    buffer_poke(buffer, 8, buffer_u64, v2);
+    return dot_product(
+        buffer_peek(buffer, 0, buffer_f32),
+        buffer_peek(buffer, 4, buffer_f32),
+        buffer_peek(buffer, 8, buffer_f32),
+        buffer_peek(buffer, 12, buffer_f32)
+    );
+}
+
+function svec2_x(vec) {
+    static buffer = buffer_create(8, buffer_fixed, 4);
+    buffer_poke(buffer, 0, buffer_u64, vec);
+    return buffer_peek(buffer, 0, buffer_f32);
+}
+
+function svec2_y(vec) {
+    static buffer = buffer_create(8, buffer_fixed, 4);
+    buffer_poke(buffer, 0, buffer_u64, vec);
+    return buffer_peek(buffer, 4, buffer_f32);
+}
+#endregion
