@@ -135,6 +135,8 @@ function Benchmark(source_name, tests) constructor {
 				benchmark_export(self.name, test_names, timings);
 			}
         }
+		
+		window_set_cursor(cr_default);
     };
     
     self.Reset = function() {

@@ -185,6 +185,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             self.SetInteractive(!!benchmark);
         }),
     new EmuButton(c2 + ew2 / 2 + 4, EMU_INLINE, ew2 / 2, eh, "Run Benchmark", function() {
+			window_set_cursor(cr_hourglass);
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
             benchmark.Run(obj_main.run_count, obj_main.iteration_count);
     })
