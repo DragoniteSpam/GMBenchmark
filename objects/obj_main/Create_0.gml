@@ -218,6 +218,25 @@ Tests contained: {1}
 {2} ms ({3} trials of {4} iterations)
 ", benchmark.source_name, array_length(benchmark.tests), benchmark.runtime.ms * benchmark.runtime.trials, benchmark.runtime.trials, benchmark.runtime.iterations);
         }),
+	new EmuText(c2, EMU_AUTO, ew2, eh * 2.5, "")
+        .SetUpdate(function() {
+            var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
+            
+            // early exit: no benchmark selected
+            if (!benchmark) {
+                self.text = "";
+                return;
+            }
+            
+            // early exit: benchmark selected but not run
+            if (!benchmark.runtime) {
+                self.text = "";
+                return;
+            }
+            
+			var txt = obj_main.anova_result.critical_value == -1 ? "[c_red]Statistical test failed to run[/c]" : (obj_main.anova_result.reject_equality ? string("[c_lime]Measurements are statistically different![/c]\nF={0} Crit={3} df_num={1} df_den={2}", obj_main.anova_result.f_stat, obj_main.anova_result.df_ssr, obj_main.anova_result.df_sse, obj_main.anova_result.critical_value) : string("[c_orange]Measurements are NOT statistically different![/c]\nF={0} Crit={3} df_num={1} df_den={2}", obj_main.anova_result.f_stat, obj_main.anova_result.df_ssr, obj_main.anova_result.df_sse, obj_main.anova_result.critical_value));
+            self.text = txt;
+        }),
     new EmuText(c2, EMU_AUTO, ew2, eh * 3, "")
         .SetUpdate(function() {
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();

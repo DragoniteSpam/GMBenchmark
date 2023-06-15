@@ -134,6 +134,9 @@ function Benchmark(source_name, tests) constructor {
 			if (obj_main.export_results_checkbox.value) {				
 				benchmark_export(self.name, test_names, timings);
 			}
+			
+			// ANOVA test
+			obj_main.anova_result = anova_test(timings);
         }
 		
 		window_set_cursor(cr_default);
@@ -247,5 +250,94 @@ function benchmark_export(suite_name, test_names, timings) {
 		show_debug_message("WARNING: error exporting results to file.");
 	}
 }
+
+function anova_test(timings) {
+	// Compute average timings per test and global average
+	var global_average = 0;
+	var averages = [];
+	var tests = array_length(timings);
+	var trials = array_length(timings[0]);
+	
+	for (var test = 0; test < tests; test++) {
+		var avg = 0;
+		for (var trial = 0; trial < trials; trial++) {
+			global_average += timings[test][trial];
+			avg += timings[test][trial];
+		}
+		avg /= array_length(timings[0]);
+		array_push(averages, avg);		
+	}
+	global_average /= (tests*trials);
+	
+	// Compute SSR and SSE
+	var ssr = 0;
+	var sse = 0;
+	for (var test = 0; test < tests; test++) {
+		ssr += trials * power((averages[test] - global_average),2);
+		
+		for (var trial = 0; trial < trials; trial++) {
+			sse += power(timings[test][trial] - averages[test], 2);
+		}
+	}
+	
+	// Compute degrees of freedom
+	var df_ssr = tests - 1;
+	var df_sse = tests * (trials - 1);
+	
+	// Compute F statistic
+	var f_stat = ssr/sse;
+	
+	// Compare with critical value
+	var critical_value = f_critical_value(df_ssr, df_sse);
+	
+	return {
+		averages: averages,
+		global_average: global_average,
+		ssr: ssr,
+		sse: sse,
+		df_ssr: df_ssr,
+		df_sse: df_sse,
+		f_stat: f_stat,
+		critical_value: critical_value,
+		reject_equality: (f_stat > critical_value)		
+	};
+}
+
+function f_critical_value(df_num, df_den) {
+	var df_num_max = min(19, df_num); // maximum 20 tests
+	var df_den_max = df_den > 120 ? infinity : df_den;
+	var critical_value_idx = array_find_index(global.__F_table__, method({df_num: df_num_max, df_den: df_den_max}, function(item) {
+		return item.df_num == df_num && item.df_den == df_den;
+	}));
+	if (critical_value_idx == -1) {
+		show_debug_message("WARNING: values for df_num={0} and df_den={1} not found in F-table", df_num_max, df_den_max);
+		return -1;
+	}
+	return global.__F_table__[critical_value_idx].value;
+}
+
+#region F table
+
+	global.__F_table__ = [];
+	function F_critical_value(df_num, df_den, value) constructor {
+		self.df_num = df_num;
+		self.df_den = df_den;
+		self.value = value;
+	}
+	try {
+		var fid = file_text_open_read("f_table.dat");
+		while (!file_text_eof(fid))	{
+			var line = string_replace_all(file_text_readln(fid), "\n", "");
+			var str = string_split(line, ",");
+			array_push(global.__F_table__, new F_critical_value(real(str[0]), real(str[1]), real(str[2])));
+		}
+		file_text_close(fid);
+	}
+	catch(exception) {
+		throw("WARNING: Could not load F-table file");
+	}
+
+	
+#endregion
 
 #macro Benchmarks global.__benchmarks__

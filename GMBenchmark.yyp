@@ -28,7 +28,9 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Miscellaneous","folderPath":"folders/Scribble/Miscellaneous.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Superfonts","folderPath":"folders/Scribble/Superfonts.yy",},
   ],
-  "IncludedFiles": [],
+  "IncludedFiles": [
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"f_table.dat","CopyToMask":-1,"filePath":"datafiles",},
+  ],
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
