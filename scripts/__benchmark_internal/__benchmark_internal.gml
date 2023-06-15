@@ -8,7 +8,12 @@ function Benchmark(source_name, tests) constructor {
         var color_offset = random(255);
         var best_time = infinity;
         var order = undefined;
-        
+        // Store individual timings per test and trial for advanced statistics and exporting
+		var timings = array_create(array_length(self.tests), 0);
+		for (var i=0, n=array_length(timings); i<n; i++) {
+			timings[i] = array_create(trials, 0);
+		}
+		
         if (record_results) {
             self.runtime = {
                 trials: trials,
@@ -58,7 +63,7 @@ function Benchmark(source_name, tests) constructor {
             return index;
         });
         
-        repeat (trials) {
+        for (var t=0; t<trials; t++) {
             // interleave the tests
             if (order == undefined || array_length(self.tests) < 2) {
                 order = array_shuffle(indices);
@@ -89,7 +94,8 @@ function Benchmark(source_name, tests) constructor {
                 test.fn(iterations);
                 
                 if (record_results) {
-                    test.runtime.ms += (get_timer() - t_start) / 1000;
+					timings[order[i]][t] = (get_timer() - t_start) / 1000;
+                    test.runtime.ms += timings[order[i]][t];
                 }
             }
         }
