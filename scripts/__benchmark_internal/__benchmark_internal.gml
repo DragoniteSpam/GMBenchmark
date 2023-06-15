@@ -84,7 +84,11 @@ function Benchmark(source_name, tests) constructor {
                 }
             }
             
+			// Store test names for file export
+			var test_names = [];
             for (var i = 0, n = array_length(order); i < n; i++) {
+				array_push(test_names, self.tests[i].source_name);
+				
                 var test = self.tests[order[i]];
                 if (!is_instanceof(test, TestCase)) {
                     continue;
