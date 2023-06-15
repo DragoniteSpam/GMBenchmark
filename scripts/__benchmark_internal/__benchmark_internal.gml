@@ -129,6 +129,11 @@ function Benchmark(source_name, tests) constructor {
             self.SortBestToWorst();
             
             self.name = self.source_name;
+			
+			// Export timings to file
+			if (obj_main.export_results_checkbox.value) {				
+				benchmark_export(self.name, test_names, timings);
+			}
         }
     };
     
@@ -200,5 +205,45 @@ function benchmark_log_ceil(value) {
     var value_log = power(10, floor(log10(value)));
     return ceil(value / value_log) * value_log;
 }
-    
+
+function get_date_string() {
+	var yyyy = date_get_year(date_current_datetime());
+	var m = date_get_month(date_current_datetime());
+	var d = date_get_day(date_current_datetime());
+	return string("{0}{1}{2}{3}{4}", yyyy, m<10 ? "0" : "", m, d<10 ? "0" : "", d);
+}
+
+function get_time_string() {
+	var h = date_get_hour(date_current_datetime());
+	var m = date_get_minute(date_current_datetime());
+	var s = date_get_second(date_current_datetime());
+	return string("{0}{1}{2}{3}{4}{5}", h<10 ? "0" : "", h, m<10 ? "0" : "", m, s<10 ? "0" : "", s);
+}
+
+function benchmark_export(suite_name, test_names, timings) {
+	try {
+		var fid = file_text_open_write(string("GMBenchmark_{0}_{1}_{2}{3}", suite_name, get_date_string(), get_time_string(), FILE_EXTENSION));
+		
+		// Export header
+		var str = string_join(FILE_DELIMITER, "Trial #", string_join_ext(FILE_DELIMITER, test_names)+"\n");
+		file_text_write_string(fid, str);
+		
+		for (var trial = 0, m = array_length(timings[0]); trial < m; trial++) {
+			
+			str = string(trial+1);
+			
+			for (var test = 0, n = array_length(timings); test < n; test++) {				
+				str += string("{0}{1}", FILE_DELIMITER, timings[test][trial]);
+			}
+			
+			file_text_write_string(fid, str+"\n");
+		}
+		
+		file_text_close(fid);
+	}
+	catch (exception) {
+		show_debug_message("WARNING: error exporting results to file.");
+	}
+}
+
 #macro Benchmarks global.__benchmarks__

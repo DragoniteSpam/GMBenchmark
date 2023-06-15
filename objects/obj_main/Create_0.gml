@@ -3,6 +3,8 @@ randomize();
 #macro PIE_SUPERSAMPLING        1               // alynne really wanted this but it messes up a bunch of things
 #macro DEFAULT_RUN_COUNT        4
 #macro DEFAULT_ITERATION_COUNT  100_000
+#macro FILE_DELIMITER			"|"	
+#macro FILE_EXTENSION			".dat"			// .dat so Excel and the like do not automatically interpret commas as separators
 
 enum ESortTypes {
     BEST_TO_WORST,
