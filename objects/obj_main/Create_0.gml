@@ -37,6 +37,9 @@ var ew2 = chartw;
 var c1 = 32;
 var c2 = c1 + 32 + ew;
 
+self.export_results_checkbox = new EmuCheckbox(c2 + ew2 / 2 + 4, EMU_AUTO, ew2 / 2, eh, "Export timings to file", false, function() {		
+});
+
 self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddContent([
     new EmuText(c1, EMU_AUTO, ew, eh, string("[c_aqua]GameMaker Benchmark Tool[/c] ({0})", code_is_compiled() ? "YYC" : "VM")),
     new EmuList(c1, EMU_AUTO, ew, eh, "Benchmarks:", eh, 6, function() {
@@ -187,6 +190,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
             self.SetInteractive(!!benchmark);
         }),
+	self.export_results_checkbox,	
     new EmuText(c2, EMU_AUTO, ew2, eh * 2.5, "")
         .SetUpdate(function() {
             var benchmark = self.GetSibling("BENCHMARK LIST").GetSelectedItem();
