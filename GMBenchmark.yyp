@@ -32,7 +32,7 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.4.0.84",
+    "IDEVersion": "2023.6.0.89",
   },
   "resources": [
     {"id":{"name":"__scribble_font_add_from_project","path":"scripts/__scribble_font_add_from_project/__scribble_font_add_from_project.yy",},},
