@@ -67,6 +67,43 @@ Benchmarks = [
     ]),
     #endregion
     
+    #region math functions
+    new Benchmark("Math Functions", [
+        new TestCase("Multiplication", function(iterations) {
+            var a = 1.23;
+            var b = 4.56;
+            repeat (iterations) {
+                var result = a * b;
+            }
+        }),
+        new TestCase("Division", function(iterations) {
+            var a = 1.23;
+            var b = 4.56;
+            repeat (iterations) {
+                var result = a / b;
+            }
+        }),
+        new TestCase("Sine", function(iterations) {
+            var a = 1.23;
+            repeat (iterations) {
+                var result = sin(a);
+            }
+        }),
+        new TestCase("Sqare", function(iterations) {
+            var a = 1.23;
+            repeat (iterations) {
+                var result = sqr(a);
+            }
+        }),
+        new TestCase("Square root", function(iterations) {
+            var a = 1.23;
+            repeat (iterations) {
+                var result = sqrt(a);
+            }
+        })
+    ]),
+    #endregion
+    
     #region loop iterations
     new Benchmark("Fast Loops", [
         new TestCase("for over array size", function(iterations) {
