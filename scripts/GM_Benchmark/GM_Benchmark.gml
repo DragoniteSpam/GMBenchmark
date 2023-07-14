@@ -104,6 +104,31 @@ Benchmarks = [
     ]),
     #endregion
     
+    #region method types
+    new Benchmark("Method Types", [
+        new TestCase("Static", function(iterations) {
+            var t = new (function() constructor {
+                static m = function() {
+                };
+            })();
+            
+            repeat (iterations) {
+                t.m();
+            }
+        }),
+        new TestCase("Non-Static", function(iterations) {
+            var t = new (function() constructor {
+                self.m = function() {
+                };
+            })();
+            
+            repeat (iterations) {
+                t.m();
+            }
+        })
+    ]),
+    #endregion
+    
     #region loop iterations
     new Benchmark("Fast Loops", [
         new TestCase("for over array size", function(iterations) {
