@@ -1,4 +1,5 @@
 Benchmarks = [
+    /*
     #region growable collections
     new Benchmark("Growable Collections", [
         new TestCase("array_push", function(iterations) {
@@ -21,7 +22,7 @@ Benchmarks = [
         })
     ]),
     #endregion
-    
+    */
     #region dot products
     new Benchmark("Dot Products", [
         new TestCase("2D, manually", function(iterations) {
@@ -230,51 +231,6 @@ Benchmarks = [
     ]),
     #endregion
     
-    #region array FP
-    new Benchmark("Array iteration", [
-        new TestCase("for loop, the not stupid way", function(iterations) {
-            var test_array = self.test_array;
-            var t = 0;
-            for (var i = 0, n = array_length(test_array); i < n; i++) {
-                t += test_array[i];
-            }
-        }, function(iterations) {
-            self.test_array = array_create(iterations);
-        }),
-        
-        new TestCase("for loop, the stupid way", function(iterations) {
-            var test_array = self.test_array;
-            var t = 0;
-            for (var i = 0; i < array_length(test_array); i++) {
-                t += test_array[i];
-            }
-        }, function(iterations) {
-            self.test_array = array_create(iterations);
-        }),
-        
-        new TestCase("repeat loop", function(iterations) {
-            var test_array = self.test_array;
-            var t = 0;
-            var i = 0;
-            repeat (array_length(test_array)) {
-                t += test_array[i];
-                i++;
-            }
-        }, function(iterations) {
-            self.test_array = array_create(iterations);
-        }),
-        
-        new TestCase("array_reduce", function(iterations) {
-            var test_array = self.test_array;
-            var t = array_reduce(test_array, function(previous, current) {
-                return previous + current;
-            });
-        }, function(iterations) {
-            self.test_array = array_create(iterations);
-        })
-    ]),
-    #endregion
-    
     #region matrix math
     new Benchmark("Matrix by vector", [
         new TestCase("matrix_transform_vertex", function(iterations) {
@@ -304,7 +260,7 @@ Benchmarks = [
         })
     ]),
     #endregion
-    
+    /*
     #region string splitting
     new Benchmark("String splitting (moderate strings)", [
         new TestCase("built-in split function", function(iterations) {
@@ -321,7 +277,8 @@ Benchmarks = [
         })
     ]),
     #endregion
-    
+    */
+    /*
     #region array sorting scaling
     new Benchmark("Scaling Array Sort", [
         new TestCase("100 elements", function(iterations) {
@@ -365,65 +322,7 @@ Benchmarks = [
         })
     ]),
     #endregion
-    
-    #region OOP style calls vs procedural style calls
-    new Benchmark("OOP vs Procedural", [
-        new TestCase("OOP Static", function(iterations) {
-            var test_inst = self.test_inst;
-            repeat (iterations) {
-                test_inst.Add();
-            }
-        }, function() {
-            function Benchmark_OOPvsProcedural() constructor {
-                a = random(1000);
-                b = random(1000);
-                
-                static Add = function() { return a + b; };
-            }
-            self.test_inst = new Benchmark_OOPvsProcedural();
-        }),
-        new TestCase("OOP Non-static", function(iterations) {
-            var test_inst = self.test_inst;
-            repeat (iterations) {
-                test_inst.Add();
-            }
-        }, function() {
-            function Benchmark_OOPvsProcedural_NonStatic() constructor {
-                a = random(1000);
-                b = random(1000);
-                
-                Add = function() { return a + b; };
-            }
-            self.test_inst = new Benchmark_OOPvsProcedural_NonStatic();
-        }),
-        new TestCase("OOP + Procedural Hybrid", function(iterations) {
-            var test_inst = self.test_inst;
-            var b = random(1000);
-            repeat (iterations) {
-                test_inst.Add(b);
-            }
-        }, function() {
-            function Benchmark_OOPvsProcedural_Hybrid() constructor {
-                a = random(1000);
-                
-                static Add = function(b) { return a + b; };
-            }
-            self.test_inst = new Benchmark_OOPvsProcedural_Hybrid();
-        }),
-        new TestCase("Procedural", function(iterations) {
-            var a = random(1000);
-            var b = random(1000);
-            repeat (iterations) {
-                benchmark_oopvsprocedural_pureprocedural(a, b);
-            }
-        }, function() {
-            function benchmark_oopvsprocedural_pureprocedural(a, b) {
-                return a + b;
-            }
-        })
-    ]),
-    #endregion
-    
+    */
     #region Struct vec2s vs two floats in a trench coat
     new Benchmark("Vector allocation", [
         new TestCase("Struct", function(iterations) {
