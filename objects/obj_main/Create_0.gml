@@ -131,7 +131,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     })
         .SetID("DISPLAY")
         .SetColumns(1, chartw / 3)
-        .AddOptions(["Time", "Percent", "Ops/Ms"]),
+        .AddOptions(["Time", "Percent", "Ops/ms"]),
     new EmuRenderSurface(c2, EMU_AUTO, chartw, charth, function(mx, my) {
         // render
         draw_clear_alpha(c_black, 0);
