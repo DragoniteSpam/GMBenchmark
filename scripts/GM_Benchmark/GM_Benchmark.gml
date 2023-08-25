@@ -23,6 +23,47 @@ Benchmarks = [
     ]),
     #endregion
     */
+    
+    #region buffer access
+    new Benchmark("Buffer Access", [
+        new TestCase("array read", function(iterations) {
+            var array = array_create(iterations);
+            var i = 0;
+            repeat (iterations) {
+                var n = array[i++];
+            }
+        }), new TestCase("array write", function(iterations) {
+            var array = array_create(iterations);
+            var i = 0;
+            repeat (iterations) {
+                array[i++] = 10;
+            }
+        }), new TestCase("buffer_read", function(iterations) {
+            var buffer = buffer_create(iterations, buffer_fast, 1);
+            repeat (iterations) {
+                buffer_read(buffer, buffer_u8);
+            }
+        }), new TestCase("buffer_write", function(iterations) {
+            var buffer = buffer_create(iterations, buffer_fast, 1);
+            repeat (iterations) {
+                buffer_write(buffer, buffer_u8, 10);
+            }
+        }), new TestCase("buffer_peek", function(iterations) {
+            var buffer = buffer_create(iterations, buffer_fast, 1);
+            var i = 0;
+            repeat (iterations) {
+                buffer_peek(buffer, buffer_u8, i++);
+            }
+        }), new TestCase("buffer_poke", function(iterations) {
+            var buffer = buffer_create(iterations, buffer_fast, 1);
+            var i = 0;
+            repeat (iterations) {
+                buffer_poke(buffer, i++, buffer_u8, 10);
+            }
+        }),
+    ]),
+    #endregion
+    
     #region dot products
     new Benchmark("Dot Products", [
         new TestCase("2D, manually", function(iterations) {
