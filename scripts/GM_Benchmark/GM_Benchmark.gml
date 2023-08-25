@@ -30,13 +30,13 @@ Benchmarks = [
             var array = array_create(iterations);
             var i = 0;
             repeat (iterations) {
-                array_get(array, i++);
+                var n = array[i++];
             }
         }), new TestCase("array write", function(iterations) {
             var array = array_create(iterations);
             var i = 0;
             repeat (iterations) {
-                array_set(array, i++, 10);
+                array[i++] = 10;
             }
         }), new TestCase("buffer_read", function(iterations) {
             var buffer = buffer_create(iterations, buffer_fast, 1);
