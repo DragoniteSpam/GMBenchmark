@@ -108,6 +108,40 @@ Benchmarks = [
         })
     ]),
     #endregion
+    #region square roots products
+    new Benchmark("Squares and Roots", [
+        new TestCase("sqrt", function(iterations) {
+            var x1 = 0;
+            var y1 = 10;
+            var z1 = -45;
+            var x2 = 150;
+            var y2 = 200;
+            var z2 = -500;
+            var dist = 100;
+            repeat (iterations) {
+                var result = point_distance_3d(x1, y1, z1, x2, y2, z2) < dist;
+            }
+        }),
+        new TestCase("distance sqared", function(iterations) {
+            var x1 = 0;
+            var y1 = 10;
+            var z1 = -45;
+            var x2 = 150;
+            var y2 = 200;
+            var z2 = -500;
+            
+            var distX = x1-x2
+            var distY = y1-y2
+            var distZ = z1-z2
+            
+            var dist2 = sqr(100);
+            repeat (iterations) {
+                var result = dot_product_3d(distX, distY, distZ, distX, distY, distZ) < dist2;
+                //var result = sqr(distX) + sqr(distY) + sqr(distZ) < dist2;
+            }
+        })
+    ]),
+    #endregion
     
     #region math functions
     new Benchmark("Math Functions", [
