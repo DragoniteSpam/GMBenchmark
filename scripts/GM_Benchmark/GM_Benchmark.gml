@@ -405,6 +405,11 @@ Benchmarks = [
                 var vector = new Vector2(100, 100);
             }
         }),
+        new TestCase("Array", function(iterations) {
+            repeat (iterations) {
+                var vector = avec2(100, 200);
+            }
+        }),
         new TestCase("Byte-packed", function(iterations) {
             repeat (iterations) {
                 var vector = svec2(100, 100);
@@ -417,6 +422,13 @@ Benchmarks = [
             var b = new Vector2(200, 200);
             repeat (iterations) {
                 var result = a.Add(b);
+            }
+        }),
+        new TestCase("Array", function(iterations) {
+            var a = avec2(100, 100);
+            var b = avec2(200, 200);
+            repeat (iterations) {
+                var result = avec2_add(a, b);
             }
         }),
         new TestCase("Byte-packed", function(iterations) {
@@ -443,6 +455,13 @@ Benchmarks = [
             var b = new Vector2(200, 200);
             repeat (iterations) {
                 var result = a.Dot(b);
+            }
+        }),
+        new TestCase("Array", function(iterations) {
+            var a = avec2(100, 100);
+            var b = avec2(200, 200);
+            repeat (iterations) {
+                var result = avec2_dot(a, b);
             }
         }),
         new TestCase("Byte-packed", function(iterations) {
@@ -514,5 +533,17 @@ function svec2_y(vec) {
     static buffer = buffer_create(8, buffer_fixed, 4);
     buffer_poke(buffer, 0, buffer_u64, vec);
     return buffer_peek(buffer, 4, buffer_f32);
+}
+
+function avec2(x, y) {
+    return [x, y];
+}
+
+function avec2_add(v1, v2) {
+    return [v1[0] + v2[0], v1[1] + v2[1]];
+}
+
+function avec2_dot(v1, v2) {
+    return v1[0] * v2[0] + v1[1] * v2[1];
 }
 #endregion
