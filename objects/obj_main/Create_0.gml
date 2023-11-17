@@ -258,7 +258,7 @@ self.DrawBarChart = function(w, h, mx, my) {
     var test_count = array_length(current_benchmark.tests);
     
     static bar_default_spacing = 16;        // pixels
-    static bar_max_width = 48;
+    static bar_min_width = 12;
     
     var best_trial = array_reduce(current_benchmark.tests, function(winner, item) {
         if (winner == undefined) return item;
@@ -295,7 +295,7 @@ self.DrawBarChart = function(w, h, mx, my) {
     var bar_line_spacing_main = 16;
     var bar_line_spacing_sub = 8;
     
-    var bar_width = max(bar_max_width, (bar_finish_x - bar_start_x - test_count * bar_spacing) / test_count);
+    var bar_width = max(bar_min_width, (bar_finish_x - bar_start_x - test_count * bar_spacing) / test_count);
     
     for (var i = 0; i < test_count; i++) {
         var test = current_benchmark.tests[i];
