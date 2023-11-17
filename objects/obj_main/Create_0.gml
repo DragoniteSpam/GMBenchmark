@@ -98,6 +98,9 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
             self.SetInteractive(true);
         })
         .AddOptions(["Best to Worst", "Worst to Best", "Alphabetical"]),
+	new EmuButton(c1, EMU_AUTO, ew, eh, "Export CSV...", function() {
+		obj_main.ExportCSV();
+	}),
     new EmuRadioArray(c2, 32, ew2, eh, "Chart:", self.chart_type, function() {
         obj_main.chart_type = self.value;
         switch (self.value) {
@@ -477,4 +480,49 @@ self.DrawPieChart = function(w, h, r, mx, my) {
             shader_reset();
         }
     }
+};
+
+self.ExportCSV = function() {
+	var filename = get_save_filename("CSV files|*.csv", "results.csv");
+	if (filename == "") return;
+	
+	var output = buffer_create(1000, buffer_grow, 1);
+	
+	for (var i = 0, n = array_length(Benchmarks); i < n; i++) {
+		var benchmark = Benchmarks[i];
+		if (benchmark.runtime == undefined) continue;
+		
+		buffer_write(output, buffer_text, $"{string_replace_all(benchmark.source_name, ",", " ")},Trials:,{benchmark.runtime.trials},Iterations per trial:,{benchmark.runtime.iterations}");
+		
+		buffer_write(output, buffer_text, "\n");
+		buffer_write(output, buffer_text, "Total time");
+		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+			buffer_write(output, buffer_text, "," + string_replace_all(benchmark.tests[j].source_name, ",", " "));
+		}
+		buffer_write(output, buffer_text, "\n");
+		
+		buffer_write(output, buffer_text, string(benchmark.runtime.ms));
+		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+			var runtime = benchmark.tests[j].runtime;
+			buffer_write(output, buffer_text, "," + string(runtime.ms));
+		}
+		buffer_write(output, buffer_text, "\n");
+		
+		buffer_write(output, buffer_text, "Relative performance:");
+		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+			var runtime = benchmark.tests[j].runtime;
+			buffer_write(output, buffer_text, "," + string(runtime.percentage));
+		}
+		buffer_write(output, buffer_text, "\n");
+		
+		buffer_write(output, buffer_text, "Per ms:");
+		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+			var runtime = benchmark.tests[j].runtime;
+			buffer_write(output, buffer_text, "," + string(runtime.per_ms));
+		}
+		buffer_write(output, buffer_text, "\n\n");
+	}
+	
+	buffer_save_ext(output, filename, 0, buffer_tell(output));
+	buffer_delete(output);
 };

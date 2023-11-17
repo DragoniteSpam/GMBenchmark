@@ -1,29 +1,4 @@
 Benchmarks = [
-    /*
-    #region growable collections
-    new Benchmark("Growable Collections", [
-        new TestCase("array_push", function(iterations) {
-            var array = [];
-            repeat (iterations) {
-                array_push(array, 0);
-            }
-        }), new TestCase("ds_list_add", function(iterations) {
-            var list = ds_list_create();
-            repeat (iterations) {
-                ds_list_add(list, 0);
-            }
-            ds_list_destroy(list);
-        }), new TestCase("buffer_grow", function(iterations) {
-            var buffer = buffer_create(1, buffer_grow, 1);
-            repeat (iterations) {
-                buffer_write(buffer, buffer_u32, 0);
-            }
-            buffer_delete(buffer)
-        })
-    ]),
-    #endregion
-    */
-    
     #region buffer access
     new Benchmark("Buffer Access", [
         new TestCase("array read", function(iterations) {
@@ -280,6 +255,12 @@ Benchmarks = [
             repeat (iterations) {
                 var val = struct_get_from_hash(struct, hash);
             }
+        }), new TestCase("local", function(iterations) {
+            var local = 0;
+            var hash = variable_get_hash("x");
+            repeat (iterations) {
+                var val = local;
+            }
         })
     ]),
     #endregion
@@ -335,69 +316,6 @@ Benchmarks = [
         })
     ]),
     #endregion
-    /*
-    #region string splitting
-    new Benchmark("String splitting (moderate strings)", [
-        new TestCase("built-in split function", function(iterations) {
-            var str = "The quick brown fox jumped over the lazy dog";
-            repeat (iterations) {
-                var results = string_split(str, " ");
-            }
-        }),
-        new TestCase("doing it yourself", function(iterations) {
-            var str = "The quick brown fox jumped over the lazy dog";
-            repeat (iterations) {
-                var results = split(str, " ");
-            }
-        })
-    ]),
-    #endregion
-    */
-    /*
-    #region array sorting scaling
-    new Benchmark("Scaling Array Sort", [
-        new TestCase("100 elements", function(iterations) {
-            array_sort(self.test_array, true);
-        }, function() {
-            self.test_array = array_create_ext(100, function() {
-                return random(1000);
-            });
-        }),
-        
-        new TestCase("1,000 elements", function(iterations) {
-            array_sort(self.test_array, true);
-        }, function() {
-            self.test_array = array_create_ext(1000, function() {
-                return random(1000);
-            });
-        }),
-        
-        new TestCase("10,000 elements", function(iterations) {
-            array_sort(self.test_array, true);
-        }, function() {
-            self.test_array = array_create_ext(10_000, function() {
-                return random(1000);
-            });
-        }),
-        
-        new TestCase("100,000 elements", function(iterations) {
-            array_sort(self.test_array, true);
-        }, function() {
-            self.test_array = array_create_ext(100_000, function() {
-                return random(1000);
-            });
-        }),
-        
-        new TestCase("1,000,000 elements", function(iterations) {
-            array_sort(self.test_array, true);
-        }, function() {
-            self.test_array = array_create_ext(1_000_000, function() {
-                return random(1000);
-            });
-        })
-    ]),
-    #endregion
-    */
     #region Struct vec2s vs two floats in a trench coat
     new Benchmark("Vector allocation", [
         new TestCase("Struct", function(iterations) {
