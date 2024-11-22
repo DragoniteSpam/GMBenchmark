@@ -1,4 +1,125 @@
+function add_inline(a, b) {
+    gml_pragma("forceinline");
+    return a + b;
+}
+
+function add_nope(a, b) {
+    return a + b;
+}
+
+
+function validate_number(s) {
+    try {
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+function validate_number_dino(s) {
+    var n = string_length(string_digits(s));
+    var p = string_pos(".", s);
+    var e = string_pos("e", s);
+    switch (e) {
+        case 0: break; // ok!
+        case 1: return false; // "e#"
+        case 2: if (p > 0) return false; break; // ".e#" or "1e."
+        default: if (p > 0 && e < p) return false; break; // "1e3.3"
+    }
+    return n && n == string_length(s) - (string_char_at(s, 1) == "-") - (p != 0) - (e != 0);
+}
+
+function array_max_toolbox(_array, _offset = 0, _length = undefined) {
+    // resolving the offset and length
+    var _arrlength = array_length(_array);
+    _length ??= _arrlength;
+    
+    if (_offset < 0)
+        _offset = max(_arrlength + _offset, 0);
+    
+    if (_length < 0) {
+        _length = min(_offset + 1, -_length);
+        _offset -= _length - 1;
+    }
+    
+    _length = min(_arrlength - _offset, _length);
+    if (_length <= 0)
+        return 0;
+    
+    // performing the actual calculation
+    if (_length <= 10000)
+        return script_execute_ext(max, _array, _offset, _length);
+    
+    var _max = -infinity;
+    for (var i = 0; i < _length; i += 10000) {
+        var _partial_max = script_execute_ext(max, _array, _offset + i, min(10000, _length - i));
+        _max = max(_max, _partial_max);
+    }
+    return _max;
+}
+
+function array_max_fp(array, offset = 0, length = array_length(array)) {
+    return array_reduce(array, function(previous, val) {
+        return min(previous, val);
+    }, -infinity, offset, length);
+}
+
+var n = 100;
+global.big_test_array = array_create(n);
+global.big_test_queue = ds_queue_create();
+global.big_test_stack = ds_stack_create();
+global.big_test_array_stack = array_create(n);
+repeat (n) {
+    ds_queue_enqueue(global.big_test_queue, 0);
+    ds_stack_push(global.big_test_stack, 0);
+}
+
+function __vbm_mat4inverse(outmat4, msrc) {
+    // Source MESA GLu library: https://www.mesa3d.org/
+    
+    var d;	// Determinant
+    outmat4[@ 0] = msrc[ 5]*msrc[10]*msrc[15]-msrc[ 5]*msrc[11]*msrc[14]-msrc[ 9]*msrc[ 6]*msrc[15]+msrc[ 9]*msrc[ 7]*msrc[14]+msrc[13]*msrc[ 6]*msrc[11]-msrc[13]*msrc[ 7]*msrc[10];
+    outmat4[@ 4] =-msrc[ 4]*msrc[10]*msrc[15]+msrc[ 4]*msrc[11]*msrc[14]+msrc[ 8]*msrc[ 6]*msrc[15]-msrc[ 8]*msrc[ 7]*msrc[14]-msrc[12]*msrc[ 6]*msrc[11]+msrc[12]*msrc[ 7]*msrc[10];
+    outmat4[@ 8] = msrc[ 4]*msrc[ 9]*msrc[15]-msrc[ 4]*msrc[11]*msrc[13]-msrc[ 8]*msrc[ 5]*msrc[15]+msrc[ 8]*msrc[ 7]*msrc[13]+msrc[12]*msrc[ 5]*msrc[11]-msrc[12]*msrc[ 7]*msrc[ 9];
+    outmat4[@12] =-msrc[ 4]*msrc[ 9]*msrc[14]+msrc[ 4]*msrc[10]*msrc[13]+msrc[ 8]*msrc[ 5]*msrc[14]-msrc[ 8]*msrc[ 6]*msrc[13]-msrc[12]*msrc[ 5]*msrc[10]+msrc[12]*msrc[ 6]*msrc[ 9];
+    outmat4[@ 1] =-msrc[ 1]*msrc[10]*msrc[15]+msrc[ 1]*msrc[11]*msrc[14]+msrc[ 9]*msrc[ 2]*msrc[15]-msrc[ 9]*msrc[ 3]*msrc[14]-msrc[13]*msrc[ 2]*msrc[11]+msrc[13]*msrc[ 3]*msrc[10];
+    outmat4[@ 5] = msrc[ 0]*msrc[10]*msrc[15]-msrc[ 0]*msrc[11]*msrc[14]-msrc[ 8]*msrc[ 2]*msrc[15]+msrc[ 8]*msrc[ 3]*msrc[14]+msrc[12]*msrc[ 2]*msrc[11]-msrc[12]*msrc[ 3]*msrc[10];
+    outmat4[@ 9] =-msrc[ 0]*msrc[ 9]*msrc[15]+msrc[ 0]*msrc[11]*msrc[13]+msrc[ 8]*msrc[ 1]*msrc[15]-msrc[ 8]*msrc[ 3]*msrc[13]-msrc[12]*msrc[ 1]*msrc[11]+msrc[12]*msrc[ 3]*msrc[ 9];
+    outmat4[@13] = msrc[ 0]*msrc[ 9]*msrc[14]-msrc[ 0]*msrc[10]*msrc[13]-msrc[ 8]*msrc[ 1]*msrc[14]+msrc[ 8]*msrc[ 2]*msrc[13]+msrc[12]*msrc[ 1]*msrc[10]-msrc[12]*msrc[ 2]*msrc[ 9];
+    outmat4[@ 2] = msrc[ 1]*msrc[ 6]*msrc[15]-msrc[ 1]*msrc[ 7]*msrc[14]-msrc[ 5]*msrc[ 2]*msrc[15]+msrc[ 5]*msrc[ 3]*msrc[14]+msrc[13]*msrc[ 2]*msrc[ 7]-msrc[13]*msrc[ 3]*msrc[ 6];
+    outmat4[@ 6] =-msrc[ 0]*msrc[ 6]*msrc[15]+msrc[ 0]*msrc[ 7]*msrc[14]+msrc[ 4]*msrc[ 2]*msrc[15]-msrc[ 4]*msrc[ 3]*msrc[14]-msrc[12]*msrc[ 2]*msrc[ 7]+msrc[12]*msrc[ 3]*msrc[ 6];
+    outmat4[@10] = msrc[ 0]*msrc[ 5]*msrc[15]-msrc[ 0]*msrc[ 7]*msrc[13]-msrc[ 4]*msrc[ 1]*msrc[15]+msrc[ 4]*msrc[ 3]*msrc[13]+msrc[12]*msrc[ 1]*msrc[ 7]-msrc[12]*msrc[ 3]*msrc[ 5];
+    outmat4[@14] =-msrc[ 0]*msrc[ 5]*msrc[14]+msrc[ 0]*msrc[ 6]*msrc[13]+msrc[ 4]*msrc[ 1]*msrc[14]-msrc[ 4]*msrc[ 2]*msrc[13]-msrc[12]*msrc[ 1]*msrc[ 6]+msrc[12]*msrc[ 2]*msrc[ 5];
+    outmat4[@ 3] =-msrc[ 1]*msrc[ 6]*msrc[11]+msrc[ 1]*msrc[ 7]*msrc[10]+msrc[ 5]*msrc[ 2]*msrc[11]-msrc[ 5]*msrc[ 3]*msrc[10]-msrc[ 9]*msrc[ 2]*msrc[ 7]+msrc[ 9]*msrc[ 3]*msrc[ 6];
+    outmat4[@ 7] = msrc[ 0]*msrc[ 6]*msrc[11]-msrc[ 0]*msrc[ 7]*msrc[10]-msrc[ 4]*msrc[ 2]*msrc[11]+msrc[ 4]*msrc[ 3]*msrc[10]+msrc[ 8]*msrc[ 2]*msrc[ 7]-msrc[ 8]*msrc[ 3]*msrc[ 6];
+    outmat4[@11] =-msrc[ 0]*msrc[ 5]*msrc[11]+msrc[ 0]*msrc[ 7]*msrc[ 9]+msrc[ 4]*msrc[ 1]*msrc[11]-msrc[ 4]*msrc[ 3]*msrc[ 9]-msrc[ 8]*msrc[ 1]*msrc[ 7]+msrc[ 8]*msrc[ 3]*msrc[ 5];
+    outmat4[@15] = msrc[ 0]*msrc[ 5]*msrc[10]-msrc[ 0]*msrc[ 6]*msrc[ 9]-msrc[ 4]*msrc[ 1]*msrc[10]+msrc[ 4]*msrc[ 2]*msrc[ 9]+msrc[ 8]*msrc[ 1]*msrc[ 6]-msrc[ 8]*msrc[ 2]*msrc[ 5];
+
+    d = 1.0 / (msrc[0] * outmat4[0] + msrc[1] * outmat4[4] + msrc[2] * outmat4[8] + msrc[3] * outmat4[12] + 0.00001);	// Assumes determinant > 0. Error otherwise
+    outmat4[@ 0] = outmat4[ 0] * d; outmat4[@ 1] = outmat4[ 1] * d; outmat4[@ 2] = outmat4[ 2] * d; outmat4[@ 3] = outmat4[ 3] * d;
+    outmat4[@ 4] = outmat4[ 4] * d; outmat4[@ 5] = outmat4[ 5] * d; outmat4[@ 6] = outmat4[ 6] * d; outmat4[@ 7] = outmat4[ 7] * d;
+    outmat4[@ 8] = outmat4[ 8] * d; outmat4[@ 9] = outmat4[ 9] * d; outmat4[@10] = outmat4[10] * d; outmat4[@11] = outmat4[11] * d;
+    outmat4[@12] = outmat4[12] * d; outmat4[@13] = outmat4[13] * d; outmat4[@14] = outmat4[14] * d; outmat4[@15] = outmat4[15] * d;
+}
+
 Benchmarks = [
+    #region arrays and queues
+    new Benchmark("Matrix inverse", [
+        new TestCase("built-in", function(iterations) {
+            var M = matrix_build_identity();
+            repeat (iterations) {
+                var inv = matrix_inverse(M);
+            }
+        }), new TestCase("manual", function(iterations) {
+            var M = matrix_build_identity();
+            var out = array_create(16);
+            repeat (iterations) {
+                __vbm_mat4inverse(M, out);
+            }
+        })
+    ]),
+    #endregion
+    
     #region buffer access
     new Benchmark("Buffer Access", [
         new TestCase("array read", function(iterations) {
@@ -83,41 +204,7 @@ Benchmarks = [
         })
     ]),
     #endregion
-    #region square roots products
-    new Benchmark("Squares and Roots", [
-        new TestCase("sqrt", function(iterations) {
-            var x1 = 0;
-            var y1 = 10;
-            var z1 = -45;
-            var x2 = 150;
-            var y2 = 200;
-            var z2 = -500;
-            var dist = 100;
-            repeat (iterations) {
-                var result = point_distance_3d(x1, y1, z1, x2, y2, z2) < dist;
-            }
-        }),
-        new TestCase("distance sqared", function(iterations) {
-            var x1 = 0;
-            var y1 = 10;
-            var z1 = -45;
-            var x2 = 150;
-            var y2 = 200;
-            var z2 = -500;
-            
-            var distX = x1-x2
-            var distY = y1-y2
-            var distZ = z1-z2
-            
-            var dist2 = sqr(100);
-            repeat (iterations) {
-                var result = dot_product_3d(distX, distY, distZ, distX, distY, distZ) < dist2;
-                //var result = sqr(distX) + sqr(distY) + sqr(distZ) < dist2;
-            }
-        })
-    ]),
-    #endregion
-    
+
     #region math functions
     new Benchmark("Math Functions", [
         new TestCase("Multiplication", function(iterations) {
@@ -265,28 +352,6 @@ Benchmarks = [
     ]),
     #endregion
     
-    #region recycling matrices
-    new Benchmark("Recycling the identity matrix", [
-        new TestCase("like a normal person", function(iterations) {
-            repeat (iterations) {
-                matrix_set(matrix_world, matrix_build_identity());
-            }
-        }),
-        new TestCase("caching it globally", function(iterations) {
-            global.identity = matrix_build_identity();
-            repeat (iterations) {
-                matrix_set(matrix_world, global.identity);
-            }
-        }),
-        new TestCase("caching it in a static", function(iterations) {
-            static identity = matrix_build_identity();
-            repeat (iterations) {
-                matrix_set(matrix_world, identity);
-            }
-        })
-    ]),
-    #endregion
-    
     #region matrix math
     new Benchmark("Matrix by vector", [
         new TestCase("matrix_transform_vertex", function(iterations) {
@@ -317,85 +382,89 @@ Benchmarks = [
     ]),
     #endregion
     #region Struct vec2s vs two floats in a trench coat
-    new Benchmark("Vector allocation", [
+    new Benchmark("3D Vector allocation", [
         new TestCase("Struct", function(iterations) {
             repeat (iterations) {
-                var vector = new Vector2(100, 100);
+                var vector = new Vector3(100, 100, 100);
             }
         }),
         new TestCase("Array", function(iterations) {
             repeat (iterations) {
-                var vector = avec2(100, 200);
+                var vector = avec3(100, 200, 300);
             }
         }),
-        new TestCase("Byte-packed", function(iterations) {
+/*
+        new TestCase("C++", function(iterations) {
             repeat (iterations) {
-                var vector = svec2(100, 100);
+                var vector = v3_create(100, 100, 100);
             }
-        })
+        })*/
     ]),
-    new Benchmark("Vector addition", [
+    new Benchmark("3D Vector addition", [
         new TestCase("Struct", function(iterations) {
-            var a = new Vector2(100, 100);
-            var b = new Vector2(200, 200);
+            var a = new Vector3(100, 100, 300);
+            var b = new Vector3(200, 200, 300);
             repeat (iterations) {
                 var result = a.Add(b);
             }
         }),
         new TestCase("Array", function(iterations) {
-            var a = avec2(100, 100);
-            var b = avec2(200, 200);
+            var a = avec3(100, 200, 300);
+            var b = avec3(100, 200, 300);
             repeat (iterations) {
                 var result = avec2_add(a, b);
             }
         }),
-        new TestCase("Byte-packed", function(iterations) {
-            var a = svec2(100, 100);
-            var b = svec2(200, 200);
+/*        new TestCase("C++", function(iterations) {
+            var a = v3_create(100, 200, 300);
+            var b = v3_create(100, 200, 300);
             repeat (iterations) {
-                var result = svec2_add(a, b);
+                var result = v3_add(a, b);
             }
-        }),
-        new TestCase("A jumble of floats", function(iterations) {
-            var ax = 100;
-            var ay = 100;
-            var bx = 200;
-            var by = 200;
-            repeat (iterations) {
-                var rx = ax + bx;
-                var ry = ay + by;
-            }
-        })
+        })*/
     ]),
-    new Benchmark("Vector dot product", [
+    new Benchmark("3D Vector dot product", [
         new TestCase("Struct", function(iterations) {
-            var a = new Vector2(100, 100);
-            var b = new Vector2(200, 200);
+            var a = new Vector3(100, 100, 300);
+            var b = new Vector3(200, 200, 300);
             repeat (iterations) {
                 var result = a.Dot(b);
             }
         }),
         new TestCase("Array", function(iterations) {
-            var a = avec2(100, 100);
-            var b = avec2(200, 200);
+            var a = avec3(100, 100, 300);
+            var b = avec3(200, 200, 300);
             repeat (iterations) {
                 var result = avec2_dot(a, b);
             }
         }),
-        new TestCase("Byte-packed", function(iterations) {
-            var a = svec2(100, 100);
-            var b = svec2(200, 200);
+/*        new TestCase("C++", function(iterations) {
+            var a = v3_create(100, 100, 300);
+            var b = v3_create(200, 200, 300);
             repeat (iterations) {
-                var result = svec2_dot(a, b);
+                var result = v3_dot(a, b);
+            }
+        })*/
+    ]),
+    #endregion
+    #region Variable access
+    new Benchmark("Variable access", [
+        new TestCase("Global", function(iterations) {
+            global.some_value = 100;
+            repeat (iterations) {
+                var result = global.some_value;
             }
         }),
-        new TestCase("A jumble of floats", function(iterations) {
-            var ax = 100;
-            var ay = 100;
-            var bx = 200;
-            var by = 200;
+        new TestCase("Instance", function(iterations) {
+            self.some_value = 100;
             repeat (iterations) {
-                var result = dot_product(ax, ay, bx, by);
+                var result = self.some_value;
+            }
+        }),
+        new TestCase("Local", function(iterations) {
+            var some_value = 100;
+            repeat (iterations) {
+                var result = some_value;
             }
         })
     ])
@@ -414,6 +483,18 @@ function Vector2(x, y) constructor {
     };
 }
 
+function Vector3(x, y, z) constructor {
+    self.x = x;
+    self.y = y;
+    self.z = z;
+    static Add = function(vec) {
+        return new Vector3(self.x + vec.x, self.y + vec.y, self.z + vec.z);
+    };
+    static Dot = function(vec) {
+        return dot_product_3d(vec.x, vec.y, vec.z, self.x, self.y, self.z);
+    };
+}
+
 function svec2(x, y) {
     static buffer = buffer_create(8, buffer_fixed, 4);
     buffer_poke(buffer, 0, buffer_f32, x);
@@ -422,12 +503,12 @@ function svec2(x, y) {
 }
 function svec2_add(v1, v2) {
     static buffer = buffer_create(16, buffer_fixed, 4);
+    static buffer_out = buffer_create(8, buffer_fixed, 4);
     buffer_poke(buffer, 0, buffer_u64, v1);
     buffer_poke(buffer, 8, buffer_u64, v2);
-    return svec2(
-        buffer_peek(buffer, 0, buffer_f32) + buffer_peek(buffer, 8, buffer_f32),
-        buffer_peek(buffer, 4, buffer_f32) + buffer_peek(buffer, 12, buffer_f32)
-    );
+    buffer_poke(buffer_out, 0, buffer_f32, buffer_peek(buffer, 0, buffer_f32) + buffer_peek(buffer, 8, buffer_f32));
+    buffer_poke(buffer_out, 4, buffer_f32, buffer_peek(buffer, 4, buffer_f32) + buffer_peek(buffer, 12, buffer_f32));
+    return buffer_peek(buffer_out, 0, buffer_u64);
 }
 function svec2_dot(v1, v2) {
     static buffer = buffer_create(16, buffer_fixed, 4);
@@ -463,5 +544,17 @@ function avec2_add(v1, v2) {
 
 function avec2_dot(v1, v2) {
     return v1[0] * v2[0] + v1[1] * v2[1];
+}
+
+function avec3(x, y, z) {
+    return [x, y, z];
+}
+
+function avec3_add(v1, v2) {
+    return [v1[0] + v2[0], v1[1] + v2[1], v1[2] + v2[2]];
+}
+
+function avec3_dot(v1, v2) {
+    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 #endregion

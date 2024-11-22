@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "__benchmark_internal",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Internals",
-    "path": "folders/Internals.yy",
+  "$GMScript":"v1",
+  "%Name":"__benchmark_internal",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__benchmark_internal",
+  "parent":{
+    "name":"Internals",
+    "path":"folders/Internals.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

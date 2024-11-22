@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GM_Benchmark",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "GMBenchmark",
-    "path": "GMBenchmark.yyp",
+  "$GMScript":"v1",
+  "%Name":"GM_Benchmark",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GM_Benchmark",
+  "parent":{
+    "name":"GMBenchmark",
+    "path":"GMBenchmark.yyp",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }
