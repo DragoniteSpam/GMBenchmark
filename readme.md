@@ -98,6 +98,7 @@ You can view the results as a bar chart or a pie chart. The bar chart also allow
 If anyone has any fun benchmarks they want to add, I'll merge them in. Your own benchmarks should:
  - Run consistently - don't do anything that would cause the results to change dramatically between trials, or change the results of other trials
  - Run reasonably quickly - some code takes longer to run than others so the exact number of iterations you should use may vary, but try to have each complete in less than a second or so
+ - Avoid using this to test algorithms with runtimes of N squared or higher. Depending on the inputs and iteration count, these can take obnoxiously long to complete and the program could hang.
 
 Feel free to use this to benchmark other extensions or libraries, but I won't be merging in any changes that bring in anything external.
 
