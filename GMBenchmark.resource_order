@@ -22,7 +22,6 @@
     {"name":"Superfonts","order":9,"path":"folders/Scribble/Superfonts.yy",},
   ],
   "ResourceOrderSettings":[
-    {"name":"CPlusPlusVectors","order":13,"path":"extensions/CPlusPlusVectors/CPlusPlusVectors.yy",},
     {"name":"fnt_emu_default","order":2,"path":"fonts/fnt_emu_default/fnt_emu_default.yy",},
     {"name":"scribble_fallback_font","order":12,"path":"fonts/scribble_fallback_font/scribble_fallback_font.yy",},
     {"name":"readme_please","order":4,"path":"notes/readme_please/readme_please.yy",},
@@ -141,7 +140,6 @@
     {"name":"string_length_scribble","order":4,"path":"scripts/string_length_scribble/string_length_scribble.yy",},
     {"name":"string_width_scribble_ext","order":6,"path":"scripts/string_width_scribble_ext/string_width_scribble_ext.yy",},
     {"name":"string_width_scribble","order":5,"path":"scripts/string_width_scribble/string_width_scribble.yy",},
-    {"name":"vector_tests","order":14,"path":"scripts/vector_tests/vector_tests.yy",},
     {"name":"__shd_scribble_bake_outline_4dir","order":1,"path":"shaders/__shd_scribble_bake_outline_4dir/__shd_scribble_bake_outline_4dir.yy",},
     {"name":"__shd_scribble_bake_outline_8dir_2px","order":3,"path":"shaders/__shd_scribble_bake_outline_8dir_2px/__shd_scribble_bake_outline_8dir_2px.yy",},
     {"name":"__shd_scribble_bake_outline_8dir","order":2,"path":"shaders/__shd_scribble_bake_outline_8dir/__shd_scribble_bake_outline_8dir.yy",},

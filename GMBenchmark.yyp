@@ -37,11 +37,10 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.1100.0.688",
+    "IDEVersion":"2024.11.0.179",
   },
   "name":"GMBenchmark",
   "resources":[
-    {"id":{"name":"CPlusPlusVectors","path":"extensions/CPlusPlusVectors/CPlusPlusVectors.yy",},},
     {"id":{"name":"fnt_emu_default","path":"fonts/fnt_emu_default/fnt_emu_default.yy",},},
     {"id":{"name":"scribble_fallback_font","path":"fonts/scribble_fallback_font/scribble_fallback_font.yy",},},
     {"id":{"name":"readme_please","path":"notes/readme_please/readme_please.yy",},},
@@ -174,7 +173,6 @@
     {"id":{"name":"string_length_scribble","path":"scripts/string_length_scribble/string_length_scribble.yy",},},
     {"id":{"name":"string_width_scribble_ext","path":"scripts/string_width_scribble_ext/string_width_scribble_ext.yy",},},
     {"id":{"name":"string_width_scribble","path":"scripts/string_width_scribble/string_width_scribble.yy",},},
-    {"id":{"name":"vector_tests","path":"scripts/vector_tests/vector_tests.yy",},},
     {"id":{"name":"__shd_scribble_bake_outline_4dir","path":"shaders/__shd_scribble_bake_outline_4dir/__shd_scribble_bake_outline_4dir.yy",},},
     {"id":{"name":"__shd_scribble_bake_outline_8dir_2px","path":"shaders/__shd_scribble_bake_outline_8dir_2px/__shd_scribble_bake_outline_8dir_2px.yy",},},
     {"id":{"name":"__shd_scribble_bake_outline_8dir","path":"shaders/__shd_scribble_bake_outline_8dir/__shd_scribble_bake_outline_8dir.yy",},},
