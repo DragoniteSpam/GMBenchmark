@@ -152,7 +152,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     })
         .SetID("CHART")
         .SetScale(1),
-    new EmuText(c2, EMU_AUTO, ew2, eh * 3, "[c_orange]Individual operations that come in within about 5% of each other are highly subject to random noise and will generally be equivalent in the real world"),
+    new EmuText(c2, EMU_AUTO, ew2, eh * 3, "[c_orange]Small operations (eg math functions) that rank within about 5% are subject to random noise and will generally be equivalent in the real world."),
     new EmuInput(c2, EMU_AUTO, ew2 / 2, eh, "Trials: ", DEFAULT_RUN_COUNT, "Number of independant runs", 4, E_InputTypes.INT, function() {
         obj_main.run_count = int64(self.value);
     })

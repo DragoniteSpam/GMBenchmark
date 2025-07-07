@@ -83,8 +83,9 @@ You can view the results as a bar chart or a pie chart. The bar chart also allow
 ## Disclaimers and Best Practices
 
  - Unless you flush the draw pipeline, this will only count what happens on the CPU. Benchmarking the submitting of large vertex buffers or very weak hardware (mobile, etc) won't show very accurate results unless you flush the draw pipeline first. Calling `draw_flush()` is probably the easiest way to do that.
+ - **Small or individual operations,** eg math functions, that rank within about 5% of each other are highly subject to random noise and will generally be equivalent in the real world. This is not necessarily true of larger procedures or algortithms, as code that takes longer to run has more time to smooth out the noise and the runtime is usually more consistent.
  - Benchmarks that take less than about a millisecond or so probably won't be very reliable because at that point random fluctuations from other things happening on your computer will start to become significant. You should probably increase the iteration count.
- - If there's a runtime function that does the same thing as your code, the runtime function will win if your implementation is more than about **three arithmetic operations** in VM and about **six arithmetic operations** in YYC.
+ - As of 2024.11, if there's a runtime function that does the same thing as your code, the runtime function will win if your implementation is more than about **three arithmetic operations** in VM and about **six arithmetic operations** in YYC. This is likely to change in GMRT.
  - Context matters: a 40 ms operation in the Room Start event is much less offensive than a 5 ms operation in the Step event.
  - Don't be awful to people who you see writing "slow" code, because god knows the GameMaker community has a problem with this.
  - Don't be awful to YYG for GML execution speed being slow, either. They already have to deal with me regarding that.
