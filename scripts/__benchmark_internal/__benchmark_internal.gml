@@ -32,7 +32,10 @@ function Benchmark(source_name, tests) constructor {
                     percentage: 0
                 };
                 
-                var hue = (64 + (i - 1) / array_length(self.tests) * 191) % 255;
+                static hue_buffer_red = 30;
+                static hue_buffer_blue = 30;
+                
+                var hue = (hue_buffer_red + i / array_length(self.tests) * (255 - hue_buffer_red - hue_buffer_blue)) % 255;
                 var color = make_colour_hsv(hue, 255, 255);
                 var rr = colour_get_red(color);
                 var gg = colour_get_green(color);

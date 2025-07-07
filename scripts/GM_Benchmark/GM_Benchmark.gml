@@ -87,7 +87,7 @@ Benchmarks = [
             repeat (iterations) {
                 Q_rsqrt(0.5);
             }
-        }), new TestCase("Q_rsqrt optimized for gamemaker", function(iterations) {
+        }), new TestCase("Q_rsqrt optimized for gm", function(iterations) {
             repeat (iterations) {
                 Q_rsqrt_optimizedforgamemaker(0.5);
             }
