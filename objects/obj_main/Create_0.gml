@@ -371,6 +371,9 @@ self.DrawBarChart = function(w, h, mx, my) {
         
         static thickness = 2;
         static interval = 14;
+        static alpha = 0.85;
+        
+        draw_set_alpha(alpha);
         
         for (var i = 0; i < bar_finish_x; i += interval * 2) {
             draw_line_width_colour(
@@ -390,6 +393,8 @@ self.DrawBarChart = function(w, h, mx, my) {
                 c_red, c_red
             );
         }
+        
+        draw_set_alpha(1);
     }
     
     draw_line_colour(bar_finish_x, 0, bar_finish_x, bar_finish_y, c_white, c_white);
