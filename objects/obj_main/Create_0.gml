@@ -340,6 +340,56 @@ self.DrawBarChart = function(w, h, mx, my) {
         }
     }
     
+    if (selected_benchmark_test != undefined) {
+        var x1 = bar_start_x + (bar_width + bar_spacing) * i;
+        var y1 = 0;
+        var x2 =  x1 + bar_width;
+        var y2 = bar_finish_y;
+        
+        var y_plus_five = 0;
+        var y_minus_five = 0;
+        
+        switch (obj_main.display_type) {
+            case EDisplayTypes.TIME:
+                y1              = y2 - (bar_finish_y - bar_start_y) * selected_benchmark_test.runtime.ms / max_value;
+                y_plus_five     = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.ms * 1.1) / max_value;
+                y_minus_five    = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.ms * 0.9) / max_value;
+                break;
+            case EDisplayTypes.PERCENT:
+                y1              = y2 - (bar_finish_y - bar_start_y) * selected_benchmark_test.runtime.percentage;
+                y_plus_five     = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.percentage * 1.1);
+                y_minus_five    = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.percentage * 0.9);
+                break;
+            case EDisplayTypes.OPS_PER_MS:
+                y1              = y2 - (bar_finish_y - bar_start_y) * selected_benchmark_test.runtime.per_ms / max_value;
+                y_plus_five     = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.per_ms * 1.1) / max_value;
+                y_minus_five    = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.per_ms * 0.9) / max_value;
+                break;
+        }
+        
+        static thickness = 2;
+        static interval = 14;
+        
+        for (var i = 0; i < bar_finish_x; i += interval * 2) {
+            draw_line_width_colour(
+                i,
+                y_plus_five,
+                min(i + interval, bar_finish_x),
+                y_plus_five,
+                thickness,
+                c_red, c_red
+            );
+            draw_line_width_colour(
+                min(i + interval, bar_finish_x),
+                y_minus_five,
+                min(i + interval * 2, bar_finish_x),
+                y_minus_five,
+                thickness,
+                c_red, c_red
+            );
+        }
+    }
+    
     draw_line_colour(bar_finish_x, 0, bar_finish_x, bar_finish_y, c_white, c_white);
     draw_line_colour(0, bar_finish_y, bar_finish_x, bar_finish_y, c_white, c_white);
     
