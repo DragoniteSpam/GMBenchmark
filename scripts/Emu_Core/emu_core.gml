@@ -63,7 +63,7 @@ function EmuCore(x, y, width, height, text = "") constructor {
     /// @ignore
     self.element_spacing_x = 32;
     /// @ignore
-    self.element_spacing_y = 16;
+    self.element_spacing_y = 10;
     
     /// @ignore
     self.time_click_left = -1;

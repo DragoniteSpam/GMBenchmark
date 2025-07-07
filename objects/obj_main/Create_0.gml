@@ -101,7 +101,8 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
 	new EmuButton(c1, EMU_AUTO, ew, eh, "Export CSV...", function() {
 		obj_main.ExportCSV();
 	}),
-    new EmuRadioArray(c2, 32, ew2, eh, "Chart:", self.chart_type, function() {
+    // disabling this for now because nobody uses them
+    /*new EmuRadioArray(c2, 32, ew2, eh, "Chart:", self.chart_type, function() {
         obj_main.chart_type = self.value;
         switch (self.value) {
             case EChartTypes.PIE:
@@ -117,8 +118,8 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
         }
     })
         .SetColumns(1, chartw / 3)
-        .AddOptions(["Bar", "Pie"]),
-    new EmuRadioArray(c2, EMU_AUTO, ew2, eh, "Data display:", self.display_type, function() {
+        .AddOptions(["Bar", "Pie"]),*/
+    new EmuRadioArray(c2, 32, ew2, eh, "Data display:", self.display_type, function() {
         obj_main.display_type = self.value;
         switch (self.value) {
             case EDisplayTypes.TIME:
@@ -151,6 +152,7 @@ self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddC
     })
         .SetID("CHART")
         .SetScale(1),
+    new EmuText(c2, EMU_AUTO, ew2, eh * 3, "[c_orange]Individual operations that come in within about 5% of each other are highly subject to random noise and will generally be equivalent in the real world"),
     new EmuInput(c2, EMU_AUTO, ew2 / 2, eh, "Trials: ", DEFAULT_RUN_COUNT, "Number of independant runs", 4, E_InputTypes.INT, function() {
         obj_main.run_count = int64(self.value);
     })
