@@ -5,7 +5,6 @@ function Benchmark(source_name, tests) constructor {
     self.runtime = undefined;
     
     self.Run = function(trials, iterations, record_results = true) {
-        var color_offset = random(255);
         var best_time = infinity;
         var order = undefined;
         
@@ -33,8 +32,8 @@ function Benchmark(source_name, tests) constructor {
                     percentage: 0
                 };
                 
-                // pick a random color but if it's dark, brighten it a little
-                var color = make_colour_hsv((color_offset + (i - 1) / array_length(self.tests) * 255) % 255, 255, 255);
+                var hue = (64 + (i - 1) / array_length(self.tests) * 191) % 255;
+                var color = make_colour_hsv(hue, 255, 255);
                 var rr = colour_get_red(color);
                 var gg = colour_get_green(color);
                 var bb = colour_get_blue(color);
