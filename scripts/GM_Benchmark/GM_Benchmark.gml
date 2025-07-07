@@ -26,7 +26,116 @@ function __vbm_mat4inverse(outmat4, msrc) {
     outmat4[@12] = outmat4[12] * d; outmat4[@13] = outmat4[13] * d; outmat4[@14] = outmat4[14] * d; outmat4[@15] = outmat4[15] * d;
 }
 
+function Q_rsqrt(number)
+{
+    // https://en.wikipedia.org/wiki/Fast_inverse_square_root
+	var i;
+	var x2, yy;
+	var threehalfs = 1.5;
+    
+    var b = buffer_create(4, buffer_fixed, 4);
+
+	x2 = number * 0.5;
+	yy = number;
+    
+    buffer_poke(b, 0, buffer_f32, yy);
+    
+	i  = buffer_peek(b, 0, buffer_s32);         // evil floating point bit level hacking
+	i  = 0x5f3759df - ( i >> 1 );               // what the fuck?
+    
+    buffer_poke(b, 0, buffer_s32, i);
+    
+	yy  = buffer_peek(b, 0, buffer_f32);
+	yy  = yy * ( threehalfs - ( x2 * yy * yy ) );   // 1st iteration
+//	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
+
+    buffer_delete(b);
+
+	return yy;
+}
+
+function Q_rsqrt_optimizedforgamemaker(number)
+{
+	var i;
+	var x2;
+	#macro qrsqrt_threehalfs 1.5
+    
+    static b = buffer_create(4, buffer_fixed, 4);
+
+	x2 = number / 2;
+    
+    buffer_poke(b, 0, buffer_f32, number);
+    
+	i  = 0x5f3759df - (buffer_peek(b, 0, buffer_s32) >> 1);
+    
+    buffer_poke(b, 0, buffer_s32, i);
+    
+	number  = buffer_peek(b, 0, buffer_f32);
+	number  = number * ( qrsqrt_threehalfs - ( x2 * sqr(number) ) );
+
+	return number;
+}
+
+function normal_rsqrt(number) {
+    return 1 / sqrt(number);
+}
+
 Benchmarks = [
+    #region quake square root
+    new Benchmark("\"Fast\" inverse square root", [
+        new TestCase("Q_rsqrt", function(iterations) {
+            repeat (iterations) {
+                Q_rsqrt(0.5);
+            }
+        }), new TestCase("Q_rsqrt optimized for gamemaker", function(iterations) {
+            repeat (iterations) {
+                Q_rsqrt_optimizedforgamemaker(0.5);
+            }
+        }), new TestCase("1 / sqrt(n)", function(iterations) {
+            repeat (iterations) {
+                normal_rsqrt(0.5);
+            }
+        })
+    ]),
+    #endregion
+    
+    #region math functions
+    new Benchmark("Math Functions", [
+        new TestCase("Multiplication", function(iterations) {
+            var a = 1.23;
+            var b = 4.56;
+            repeat (iterations) {
+                var result = a * b;
+            }
+        }),
+        new TestCase("Division", function(iterations) {
+            var a = 1.23;
+            var b = 4.56;
+            repeat (iterations) {
+                var result = a / b;
+            }
+        }),
+        new TestCase("Sine", function(iterations) {
+            var a = 1.23;
+            repeat (iterations) {
+                var result = sin(a);
+            }
+        }),
+        new TestCase("Sqare", function(iterations) {
+            var a = 1.23;
+            repeat (iterations) {
+                var result = sqr(a);
+            }
+        }),
+        new TestCase("Square root", function(iterations) {
+            var a = 1.23;
+            repeat (iterations) {
+                var result = sqrt(a);
+            }
+        })
+    ]),
+    #endregion
+    
     #region arrays and queues
     new Benchmark("Matrix inverse", [
         new TestCase("built-in", function(iterations) {
@@ -129,43 +238,6 @@ Benchmarks = [
     ]),
     #endregion
 
-    #region math functions
-    new Benchmark("Math Functions", [
-        new TestCase("Multiplication", function(iterations) {
-            var a = 1.23;
-            var b = 4.56;
-            repeat (iterations) {
-                var result = a * b;
-            }
-        }),
-        new TestCase("Division", function(iterations) {
-            var a = 1.23;
-            var b = 4.56;
-            repeat (iterations) {
-                var result = a / b;
-            }
-        }),
-        new TestCase("Sine", function(iterations) {
-            var a = 1.23;
-            repeat (iterations) {
-                var result = sin(a);
-            }
-        }),
-        new TestCase("Sqare", function(iterations) {
-            var a = 1.23;
-            repeat (iterations) {
-                var result = sqr(a);
-            }
-        }),
-        new TestCase("Square root", function(iterations) {
-            var a = 1.23;
-            repeat (iterations) {
-                var result = sqrt(a);
-            }
-        })
-    ]),
-    #endregion
-    
     #region method types
     new Benchmark("Method Types", [
         new TestCase("Static", function(iterations) {
