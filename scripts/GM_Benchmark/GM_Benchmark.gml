@@ -81,6 +81,77 @@ function normal_rsqrt(number) {
 }
 
 Benchmarks = [
+    #region hash functions
+    new Benchmark("Hash functions (string)", [
+        new TestCase("md5", function(iterations) {
+            var str = string_repeat("ABC", 1000);
+            repeat (iterations) {
+                md5_string_unicode(str);
+            }
+        }), new TestCase("sha1", function(iterations) {
+            var str = string_repeat("ABC", 1000);
+            repeat (iterations) {
+                sha1_string_unicode(str);
+            }
+        })
+    ]),
+    
+    new Benchmark("Hash functions (file vs file with extra steps)", [
+        new TestCase("md5", function(iterations) {
+            repeat (iterations) {
+                md5_file("G:/file.txt");
+            }
+        }), new TestCase("md5 with extra steps", function(iterations) {
+            var str = string_repeat("ABC", 1000);
+            repeat (iterations) {
+                var b = buffer_load("G:/file.txt");
+                buffer_md5(b, 0, buffer_get_size(b));
+                buffer_delete(b);
+            }
+        }),
+        new TestCase("sha1", function(iterations) {
+            repeat (iterations) {
+                sha1_file("G:/file.txt");
+            }
+        }), new TestCase("sha1 with extra steps", function(iterations) {
+            var str = string_repeat("ABC", 1000);
+            repeat (iterations) {
+                var b = buffer_load("G:/file.txt");
+                buffer_sha1(b, 0, buffer_get_size(b));
+                buffer_delete(b);
+            }
+        })
+    ]),
+    
+    new Benchmark("Hash functions (buffer)", [
+        new TestCase("md5", function(iterations) {
+            var str = string_repeat("ABC", 1000);
+            var buffer = buffer_create(3100, buffer_fixed, 1);
+            buffer_write(buffer, buffer_text, str);
+            repeat (iterations) {
+                buffer_md5(buffer, 0, 3100);
+            }
+            buffer_delete(buffer);
+        }), new TestCase("sha1", function(iterations) {
+            var str = string_repeat("ABC", 1000);
+            var buffer = buffer_create(3100, buffer_fixed, 1);
+            buffer_write(buffer, buffer_text, str);
+            repeat (iterations) {
+                buffer_sha1(buffer, 0, 3100);
+            }
+            buffer_delete(buffer);
+        }), new TestCase("crc32", function(iterations) {
+            var str = string_repeat("ABC", 1000);
+            var buffer = buffer_create(4000, buffer_fixed, 1);
+            buffer_write(buffer, buffer_text, str);
+            repeat (iterations) {
+                buffer_crc32(buffer, 0, 4000);
+            }
+            buffer_delete(buffer);
+        })
+    ]),
+    #endregion
+    
     #region quake square root
     new Benchmark("\"Fast\" inverse square root", [
         new TestCase("Q_rsqrt", function(iterations) {
