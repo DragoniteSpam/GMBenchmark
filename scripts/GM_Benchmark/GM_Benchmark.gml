@@ -411,7 +411,6 @@ Benchmarks = [
             }
         }), new TestCase("local", function(iterations) {
             var local = 0;
-            var hash = variable_get_hash("x");
             repeat (iterations) {
                 var val = local;
             }
