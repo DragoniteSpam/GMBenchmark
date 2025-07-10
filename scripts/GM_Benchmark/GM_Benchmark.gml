@@ -414,7 +414,14 @@ Benchmarks = [
             repeat (iterations) {
                 var val = local;
             }
-        })
+        }), new TestCase("with", function(iterations) {
+			var struct = { x: 0 };
+			repeat(iterations) {
+				with(struct) {
+					var val = x;
+				}
+			}
+		})
     ]),
     #endregion
     
