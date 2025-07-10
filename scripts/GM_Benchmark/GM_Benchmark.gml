@@ -414,10 +414,17 @@ Benchmarks = [
             repeat (iterations) {
                 var val = local;
             }
-        }), new TestCase("with", function(iterations) {
+        }), new TestCase("with (inside loop)", function(iterations) {
 			var struct = { x: 0 };
 			repeat(iterations) {
 				with(struct) {
+					var val = x;
+				}
+			}
+		}), new TestCase("with (wrapped around loop)", function(iterations) {
+			var struct = { x: 0 };
+			with(struct) {
+				repeat(iterations) {
 					var val = x;
 				}
 			}
