@@ -102,7 +102,6 @@ Benchmarks = [
                 md5_file("file.txt");
             }
         }), new TestCase("md5 with extra steps", function(iterations) {
-            var str = string_repeat("ABC", 1000);
             repeat (iterations) {
                 var b = buffer_load("file.txt");
                 buffer_md5(b, 0, buffer_get_size(b));
@@ -114,7 +113,6 @@ Benchmarks = [
                 sha1_file("file.txt");
             }
         }), new TestCase("sha1 with extra steps", function(iterations) {
-            var str = string_repeat("ABC", 1000);
             repeat (iterations) {
                 var b = buffer_load("file.txt");
                 buffer_sha1(b, 0, buffer_get_size(b));
