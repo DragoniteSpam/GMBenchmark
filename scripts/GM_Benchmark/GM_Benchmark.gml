@@ -252,7 +252,7 @@ Benchmarks = [
             var buffer = buffer_create(iterations, buffer_fast, 1);
             var i = 0;
             repeat (iterations) {
-                buffer_peek(buffer, buffer_u8, i++);
+                buffer_peek(buffer, i++, buffer_u8);
             }
         }), new TestCase("buffer_poke", function(iterations) {
             var buffer = buffer_create(iterations, buffer_fast, 1);
