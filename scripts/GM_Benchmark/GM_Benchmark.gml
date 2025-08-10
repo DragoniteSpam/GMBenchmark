@@ -96,6 +96,39 @@ Benchmarks = [
         })
     ]),
     
+    new Benchmark("bitwise and bittomfoolery", [
+        new TestCase("n / 16", function(iterations) {
+            var n = 1000;
+            repeat (iterations) {
+                var result = n / 16;
+            }
+        }),
+        new TestCase("n div 16", function(iterations) {
+            var n = 1000;
+            repeat (iterations) {
+                var result = n div 16;
+            }
+        }),
+        new TestCase("int(n) div 16", function(iterations) {
+            var n = int64(1000);
+            repeat (iterations) {
+                var result = n / 16;
+            }
+        }),
+        new TestCase("n >> 4", function(iterations) {
+            var n = 1000;
+            repeat (iterations) {
+                var result = n >> 4;
+            }
+        }),
+        new TestCase("int64(n) >> 4", function(iterations) {
+            var n = int64(1000);
+            repeat (iterations) {
+                var result = n >> 4;
+            }
+        })
+    ]),
+    
     new Benchmark("Hash functions (file vs file with extra steps)", [
         new TestCase("md5", function(iterations) {
             repeat (iterations) {
