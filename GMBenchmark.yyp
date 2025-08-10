@@ -32,6 +32,7 @@
     {"$GMFolder":"","%Name":"Superfonts","folderPath":"folders/Scribble/Superfonts.yy","name":"Superfonts","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
   "IncludedFiles":[
+    {"$GMIncludedFile":"","%Name":"file.txt","CopyToMask":-1,"filePath":"datafiles","name":"file.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scribble_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"scribble_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
   ],
   "isEcma":false,

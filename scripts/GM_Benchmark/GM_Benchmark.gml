@@ -132,24 +132,22 @@ Benchmarks = [
     new Benchmark("Hash functions (file vs file with extra steps)", [
         new TestCase("md5", function(iterations) {
             repeat (iterations) {
-                md5_file("G:/file.txt");
+                md5_file("file.txt");
             }
         }), new TestCase("md5 with extra steps", function(iterations) {
-            var str = string_repeat("ABC", 1000);
             repeat (iterations) {
-                var b = buffer_load("G:/file.txt");
+                var b = buffer_load("file.txt");
                 buffer_md5(b, 0, buffer_get_size(b));
                 buffer_delete(b);
             }
         }),
         new TestCase("sha1", function(iterations) {
             repeat (iterations) {
-                sha1_file("G:/file.txt");
+                sha1_file("file.txt");
             }
         }), new TestCase("sha1 with extra steps", function(iterations) {
-            var str = string_repeat("ABC", 1000);
             repeat (iterations) {
-                var b = buffer_load("G:/file.txt");
+                var b = buffer_load("file.txt");
                 buffer_sha1(b, 0, buffer_get_size(b));
                 buffer_delete(b);
             }
@@ -285,7 +283,7 @@ Benchmarks = [
             var buffer = buffer_create(iterations, buffer_fast, 1);
             var i = 0;
             repeat (iterations) {
-                buffer_peek(buffer, buffer_u8, i++);
+                buffer_peek(buffer, i++, buffer_u8);
             }
         }), new TestCase("buffer_poke", function(iterations) {
             var buffer = buffer_create(iterations, buffer_fast, 1);
@@ -444,11 +442,24 @@ Benchmarks = [
             }
         }), new TestCase("local", function(iterations) {
             var local = 0;
-            var hash = variable_get_hash("x");
             repeat (iterations) {
                 var val = local;
             }
-        })
+        }), new TestCase("with (inside loop)", function(iterations) {
+			var struct = { x: 0 };
+			repeat(iterations) {
+				with(struct) {
+					var val = x;
+				}
+			}
+		}), new TestCase("with (wrapped around loop)", function(iterations) {
+			var struct = { x: 0 };
+			with(struct) {
+				repeat(iterations) {
+					var val = x;
+				}
+			}
+		})
     ]),
     #endregion
     
