@@ -111,7 +111,6 @@
     {"id":{"name":"EmuTab","path":"scripts/EmuTab/EmuTab.yy",},},
     {"id":{"name":"EmuTabGroup","path":"scripts/EmuTabGroup/EmuTabGroup.yy",},},
     {"id":{"name":"EmuText","path":"scripts/EmuText/EmuText.yy",},},
-    {"id":{"name":"GM_Benchmark_Command_Line","path":"scripts/GM_Benchmark_Command_Line/GM_Benchmark_Command_Line.yy",},},
     {"id":{"name":"GM_Benchmark","path":"scripts/GM_Benchmark/GM_Benchmark.yy",},},
     {"id":{"name":"scribble_add_macro","path":"scripts/scribble_add_macro/scribble_add_macro.yy",},},
     {"id":{"name":"scribble_anim_blink","path":"scripts/scribble_anim_blink/scribble_anim_blink.yy",},},

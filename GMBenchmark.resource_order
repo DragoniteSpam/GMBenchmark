@@ -83,7 +83,6 @@
     {"name":"EmuTab","order":13,"path":"scripts/EmuTab/EmuTab.yy",},
     {"name":"EmuTabGroup","order":14,"path":"scripts/EmuTabGroup/EmuTabGroup.yy",},
     {"name":"EmuText","order":15,"path":"scripts/EmuText/EmuText.yy",},
-    {"name":"GM_Benchmark_Command_Line","order":16,"path":"scripts/GM_Benchmark_Command_Line/GM_Benchmark_Command_Line.yy",},
     {"name":"GM_Benchmark","order":8,"path":"scripts/GM_Benchmark/GM_Benchmark.yy",},
     {"name":"scribble_anim_cycle","order":1,"path":"scripts/scribble_anim_cycle/scribble_anim_cycle.yy",},
     {"name":"scribble_anim_disabled","order":2,"path":"scripts/scribble_anim_disabled/scribble_anim_disabled.yy",},
