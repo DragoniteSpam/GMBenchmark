@@ -192,6 +192,84 @@ function benchmark_log_ceil(value) {
     var value_log = power(10, floor(log10(value)));
     return ceil(value / value_log) * value_log;
 }
+
+function benchmark_write_results_csv(filename) {
+	var output = buffer_create(1000, buffer_grow, 1);
+	
+	for (var i = 0, n = array_length(Benchmarks); i < n; i++) {
+		var benchmark = Benchmarks[i];
+		if (benchmark.runtime == undefined) continue;
+		
+		buffer_write(output, buffer_text, $"{string_replace_all(benchmark.source_name, ",", " ")},Trials:,{benchmark.runtime.trials},Iterations per trial:,{benchmark.runtime.iterations}");
+		
+		buffer_write(output, buffer_text, "\n");
+		buffer_write(output, buffer_text, "Total time");
+		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+			buffer_write(output, buffer_text, "," + string_replace_all(benchmark.tests[j].source_name, ",", " "));
+		}
+		buffer_write(output, buffer_text, "\n");
+		
+		buffer_write(output, buffer_text, string(benchmark.runtime.ms));
+		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+			var runtime = benchmark.tests[j].runtime;
+			buffer_write(output, buffer_text, "," + string(runtime.ms));
+		}
+		buffer_write(output, buffer_text, "\n");
+		
+		buffer_write(output, buffer_text, "Relative performance:");
+		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+			var runtime = benchmark.tests[j].runtime;
+			buffer_write(output, buffer_text, "," + string(runtime.percentage));
+		}
+		buffer_write(output, buffer_text, "\n");
+		
+		buffer_write(output, buffer_text, "Per ms:");
+		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+			var runtime = benchmark.tests[j].runtime;
+			buffer_write(output, buffer_text, "," + string(runtime.per_ms));
+		}
+		buffer_write(output, buffer_text, "\n\n");
+	}
+	
+	buffer_save_ext(output, filename, 0, buffer_tell(output));
+	buffer_delete(output);
+}
+
+function benchmark_write_results_text(filename, tests) {
+    var file = file_text_open_write(filename);
+    file_text_write_string(file, $"GMBenchmark - {array_length(tests)} benchmarks run");
+    // \n messes up template strings lol
+    file_text_writeln(file);
+    file_text_writeln(file);
+    
+    for (var i = 0, count = array_length(tests); i < count; i++) {
+        var benchmark = tests[i].benchmark;
+        
+        file_text_write_string(file, $"{benchmark.source_name}");
+        file_text_writeln(file);
+        file_text_write_string(file, $"    Trial count: {benchmark.runtime.trials}");
+        file_text_writeln(file);
+        file_text_write_string(file, $"    Iteration count: {benchmark.runtime.iterations}");
+        file_text_writeln(file);
+        file_text_write_string(file, $"    Runtime: {benchmark.runtime.ms}");
+        file_text_writeln(file);
+        file_text_writeln(file);
+        
+        file_text_write_string(file, $"    Tests: {array_length(benchmark.tests)}");
+        file_text_writeln(file);
+        
+        for (var j = 0, test_count = array_length(benchmark.tests); j < test_count; j++) {
+            var test = benchmark.tests[j];
+            
+            file_text_write_string(file, $"        {test.source_name}: {test.runtime.ms} ms ({test.runtime.percentage}% of the total)");
+            file_text_writeln(file);
+        }
+        
+        file_text_writeln(file);
+    }
+    
+    file_text_close(file);
+}
     
 #macro Benchmarks global.__benchmarks__
 
@@ -244,39 +322,13 @@ function deal_with_cmd_args(args) {
         });
         
         if (results != "") {
-            var file = file_text_open_write($"{program_directory}/{results}");
-            file_text_write_string(file, $"GMBenchmark - {array_length(tests)} benchmarks run");
-            // \n messes up template strings lol
-            file_text_writeln(file);
-            file_text_writeln(file);
+            var filename = $"{program_directory}/{results}";
             
-            for (var i = 0, count = array_length(tests); i < count; i++) {
-                var benchmark = tests[i].benchmark;
-                
-                file_text_write_string(file, $"{benchmark.source_name}");
-                file_text_writeln(file);
-                file_text_write_string(file, $"    Trial count: {benchmark.runtime.trials}");
-                file_text_writeln(file);
-                file_text_write_string(file, $"    Iteration count: {benchmark.runtime.iterations}");
-                file_text_writeln(file);
-                file_text_write_string(file, $"    Runtime: {benchmark.runtime.ms}");
-                file_text_writeln(file);
-                file_text_writeln(file);
-                
-                file_text_write_string(file, $"    Tests: {array_length(benchmark.tests)}");
-                file_text_writeln(file);
-                
-                for (var j = 0, test_count = array_length(benchmark.tests); j < test_count; j++) {
-                    var test = benchmark.tests[j];
-                    
-                    file_text_write_string(file, $"        {test.source_name}: {test.runtime.ms} ms ({test.runtime.percentage}% of the total)");
-                    file_text_writeln(file);
-                }
-                
-                file_text_writeln(file);
+            if (filename_ext(results) == ".csv") {
+                benchmark_write_results_csv(filename);
+            } else {
+                benchmark_write_results_text(filename, tests);
             }
-            
-            file_text_close(file);
         }
         
         if (kill) {
