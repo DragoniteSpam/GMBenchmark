@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GM_Benchmark_Command_Line",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GM_Benchmark_Command_Line",
+  "parent":{
+    "name":"GMBenchmark",
+    "path":"GMBenchmark.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

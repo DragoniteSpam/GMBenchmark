@@ -184,7 +184,7 @@ Benchmarks = [
     #endregion
     
     #region quake square root
-    new Benchmark("\"Fast\" inverse square root", [
+    new Benchmark("Fast inverse square root", [
         new TestCase("Q_rsqrt", function(iterations) {
             repeat (iterations) {
                 Q_rsqrt(0.5);
@@ -669,3 +669,20 @@ function avec3_dot(v1, v2) {
     return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 #endregion
+
+// deal with command line stuff after all of the benchmarks have been defined
+
+var ide_cmd_args = [
+    "Fast inverse square root", "-trials", 5, "-dontkill"
+];
+
+if (GM_build_type == "run") {
+    deal_with_cmd_args(ide_cmd_args);
+} else {
+    var n = parameter_count() - 1
+    var cmd_args = array_create(n);
+    for (var i = 0; i < n; i++) {
+        cmd_args[i] = parameter_string(i + 1);
+    }
+    deal_with_cmd_args(cmd_args);
+}
