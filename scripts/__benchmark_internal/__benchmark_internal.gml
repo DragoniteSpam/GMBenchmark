@@ -243,6 +243,42 @@ function deal_with_cmd_args(args) {
             test.benchmark.Run(test.trials, test.iterations);
         });
         
+        if (results != "") {
+            var file = file_text_open_write($"{program_directory}/{results}");
+            file_text_write_string(file, $"GMBenchmark - {array_length(tests)} benchmarks run");
+            // \n messes up template strings lol
+            file_text_writeln(file);
+            file_text_writeln(file);
+            
+            for (var i = 0, count = array_length(tests); i < count; i++) {
+                var benchmark = tests[i].benchmark;
+                
+                file_text_write_string(file, $"{benchmark.source_name}");
+                file_text_writeln(file);
+                file_text_write_string(file, $"    Trial count: {benchmark.runtime.trials}");
+                file_text_writeln(file);
+                file_text_write_string(file, $"    Iteration count: {benchmark.runtime.iterations}");
+                file_text_writeln(file);
+                file_text_write_string(file, $"    Runtime: {benchmark.runtime.ms}");
+                file_text_writeln(file);
+                file_text_writeln(file);
+                
+                file_text_write_string(file, $"    Tests: {array_length(benchmark.tests)}");
+                file_text_writeln(file);
+                
+                for (var j = 0, test_count = array_length(benchmark.tests); j < test_count; j++) {
+                    var test = benchmark.tests[j];
+                    
+                    file_text_write_string(file, $"        {test.source_name}: {test.runtime.ms} ms ({test.runtime.percentage}% of the total)");
+                    file_text_writeln(file);
+                }
+                
+                file_text_writeln(file);
+            }
+            
+            file_text_close(file);
+        }
+        
         if (kill) {
             game_end();
         }
