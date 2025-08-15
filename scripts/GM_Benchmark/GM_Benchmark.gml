@@ -673,9 +673,9 @@ function avec3_dot(v1, v2) {
 // deal with command line stuff after all of the benchmarks have been defined
 
 var ide_cmd_args = [
-    "Fast inverse square root", "-trials", 5,
-    "-dontkill", "-file", "C:/Users/drago/results.txt",
-    "Math Functions", "Fast Loops"
+    //"Fast inverse square root", "-trials", 5,
+    //"-dontkill", "-file", "C:/Users/drago/results.txt",
+    //"Math Functions", "Fast Loops"
 ];
 
 if (GM_build_type == "run") {
