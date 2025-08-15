@@ -80,7 +80,34 @@ You can decide how many trials of how many iterations you want to run in the too
 
 You can view the results as a bar chart or a pie chart. The bar chart also allows you to show the raw timings, the timings relative to the best performer, and the average number of times you'll be able to run a single iteration per millisecond.
 
-## Disclaimers and Best Practices
+## Command line benchmarks
+
+If you just wanna see results without clicking on a bunch of stuff, you can use some command line arguments.
+
+You can pass command line arguments as:
+
+- a name of a benchmark (use a quoted string if the name contains spaces) (this behaves correctly in Windows PowerShell, not sure about other terminals)
+- `-trials` or -iter followed by a number to set the trial and iteration count of the previous benchmark (defaults to 4 and 100,000 if not specified, the same as in the GUI)
+- `-file` followed by the name of the file to output; if the file is a .csv it’ll output a spreadsheet like the one you can export through the GUI, otherwise it’ll output a text file with the results written out in a list
+- `-dontkill`, if you don’t want the GUI to immediately close if it outputs results; the benchmarks that you ran through the command line will have their results shown in the list
+
+For example:
+
+    GMBenchmark.exe "Fast inverse square root" -trials 5 -file "results.txt" "Math Functions" "Fast Loops"
+
+will run `Fast inverse square root` with 5 trials, and `Math Functions` and `Fast Loops` with 4 trials, and output the results to `results.txt`.
+
+<img width="1115" height="628" alt="image" src="https://github.com/user-attachments/assets/e891680d-1b7e-4093-9b2b-4fe90ab15265" />
+
+The GameMaker IDE currently doesn’t support command line arguments, so if you want to emulate this behavior through the IDE, go down to the bottom of the file GM_Benchmark and edit the ide_cmd_args array with the same arguments as if they were command line arguments.
+
+    var ide_cmd_args = [
+        "Fast inverse square root", "-trials", 5,
+        "-dontkill", "-file", "C:/Users/drago/results.txt",
+        "Math Functions", "Fast Loops"
+    ];
+
+## Disclaimers, Context, and Best Practices
 
  - Unless you flush the draw pipeline, this will only count what happens on the CPU. Benchmarking the submitting of large vertex buffers or very weak hardware (mobile, etc) won't show very accurate results unless you flush the draw pipeline first. Calling `draw_flush()` is probably the easiest way to do that.
  - **Small or individual operations,** eg math functions, that rank within about 5% of each other are highly subject to random noise and will generally be equivalent in the real world. This is not necessarily true of larger procedures or algortithms, as code that takes longer to run has more time to smooth out the noise and the runtime is usually more consistent.
