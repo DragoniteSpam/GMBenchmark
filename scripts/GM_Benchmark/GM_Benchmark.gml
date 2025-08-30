@@ -80,7 +80,65 @@ function normal_rsqrt(number) {
     return 1 / sqrt(number);
 }
 
+function possiblyFail() {
+    if (random(1) < 0.5) {
+        throw "oops";
+    }
+    return "good value";
+}
+function possiblyFailControl() {
+    return "good value";
+}
+function possiblyFailErrorCode() {
+    if (random(1) < 0.5) {
+        return undefined;
+    }
+    return 12345;
+}
+
 Benchmarks = [
+    #region try catch
+    
+    new Benchmark("try catch", [
+        new TestCase("normal code", function(iterations) {
+            var n = 0;
+            var m = 1;
+            repeat (iterations) {
+                n += log2(m);
+            }
+        }), new TestCase("try (in this stack frame)", function(iterations) {
+            var n = 0;
+            var m = 0;
+            repeat (iterations) {
+                try {
+                    n += log2(m);
+                } catch (e) { }
+            }
+        }),
+        new TestCase("try (caught sometimes)", function(iterations) {
+            repeat (iterations) {
+                try {
+                   possiblyFail();
+                } catch (err) { }
+            }
+        }), new TestCase("using error codes instead", function(iterations) {
+            repeat (iterations) {
+                var status = possiblyFailErrorCode();
+                
+                // this part will be optimzied out by the gm compiler, just play along
+                if (status == undefined) {
+                    // assume some error has happened...
+                }
+            }
+        }), new TestCase("control group", function(iterations) {
+            repeat (iterations) {
+                possiblyFailControl();
+            }
+        })
+    ]),
+    
+    #endregion
+    
     #region hash functions
     new Benchmark("Hash functions (string)", [
         new TestCase("md5", function(iterations) {
@@ -95,6 +153,7 @@ Benchmarks = [
             }
         })
     ]),
+    #endregion
     
     new Benchmark("bitwise and bittomfoolery", [
         new TestCase("n / 16", function(iterations) {
