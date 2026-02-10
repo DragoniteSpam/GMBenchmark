@@ -96,6 +96,15 @@ function Benchmark(source_name, tests) constructor {
             }
         }
         
+        for (var i = 0, n = array_length(self.tests); i < n; i++) {
+            var test = self.tests[i];
+            if (!is_instanceof(test, TestCase)) {
+                continue;
+            }
+            
+            test.deinit(iterations);
+        }
+        
         if (record_results) {
             // divide the timings by the trial count
             for (var i = 0, n = array_length(self.tests); i < n; i++) {
@@ -164,11 +173,12 @@ function Benchmark(source_name, tests) constructor {
     };
 }
 
-function TestCase(name, fn, init = function() { }) constructor {
+function TestCase(name, fn, init = function() { }, deinit = function() { }) constructor {
     self.name = string("[c_gray]{0}", name);
     self.source_name = name;
     self.fn = method(self, fn);
     self.init = method(self, init);
+    self.deinit = method(self, deinit);
     self.runtime = undefined;
     self.color = c_white;
 }
@@ -194,45 +204,45 @@ function benchmark_log_ceil(value) {
 }
 
 function benchmark_write_results_csv(filename) {
-	var output = buffer_create(1000, buffer_grow, 1);
-	
-	for (var i = 0, n = array_length(Benchmarks); i < n; i++) {
-		var benchmark = Benchmarks[i];
-		if (benchmark.runtime == undefined) continue;
-		
-		buffer_write(output, buffer_text, $"{string_replace_all(benchmark.source_name, ",", " ")},Trials:,{benchmark.runtime.trials},Iterations per trial:,{benchmark.runtime.iterations}");
-		
-		buffer_write(output, buffer_text, "\n");
-		buffer_write(output, buffer_text, "Total time");
-		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
-			buffer_write(output, buffer_text, "," + string_replace_all(benchmark.tests[j].source_name, ",", " "));
-		}
-		buffer_write(output, buffer_text, "\n");
-		
-		buffer_write(output, buffer_text, string(benchmark.runtime.ms));
-		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
-			var runtime = benchmark.tests[j].runtime;
-			buffer_write(output, buffer_text, "," + string(runtime.ms));
-		}
-		buffer_write(output, buffer_text, "\n");
-		
-		buffer_write(output, buffer_text, "Relative performance:");
-		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
-			var runtime = benchmark.tests[j].runtime;
-			buffer_write(output, buffer_text, "," + string(runtime.percentage));
-		}
-		buffer_write(output, buffer_text, "\n");
-		
-		buffer_write(output, buffer_text, "Per ms:");
-		for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
-			var runtime = benchmark.tests[j].runtime;
-			buffer_write(output, buffer_text, "," + string(runtime.per_ms));
-		}
-		buffer_write(output, buffer_text, "\n\n");
-	}
-	
-	buffer_save_ext(output, filename, 0, buffer_tell(output));
-	buffer_delete(output);
+    var output = buffer_create(1000, buffer_grow, 1);
+    
+    for (var i = 0, n = array_length(Benchmarks); i < n; i++) {
+        var benchmark = Benchmarks[i];
+        if (benchmark.runtime == undefined) continue;
+        
+        buffer_write(output, buffer_text, $"{string_replace_all(benchmark.source_name, ",", " ")},Trials:,{benchmark.runtime.trials},Iterations per trial:,{benchmark.runtime.iterations}");
+        
+        buffer_write(output, buffer_text, "\n");
+        buffer_write(output, buffer_text, "Total time");
+        for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+            buffer_write(output, buffer_text, "," + string_replace_all(benchmark.tests[j].source_name, ",", " "));
+        }
+        buffer_write(output, buffer_text, "\n");
+        
+        buffer_write(output, buffer_text, string(benchmark.runtime.ms));
+        for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+            var runtime = benchmark.tests[j].runtime;
+            buffer_write(output, buffer_text, "," + string(runtime.ms));
+        }
+        buffer_write(output, buffer_text, "\n");
+        
+        buffer_write(output, buffer_text, "Relative performance:");
+        for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+            var runtime = benchmark.tests[j].runtime;
+            buffer_write(output, buffer_text, "," + string(runtime.percentage));
+        }
+        buffer_write(output, buffer_text, "\n");
+        
+        buffer_write(output, buffer_text, "Per ms:");
+        for (var j = 0, n2 = array_length(benchmark.tests); j < n2; j++) {
+            var runtime = benchmark.tests[j].runtime;
+            buffer_write(output, buffer_text, "," + string(runtime.per_ms));
+        }
+        buffer_write(output, buffer_text, "\n\n");
+    }
+    
+    buffer_save_ext(output, filename, 0, buffer_tell(output));
+    buffer_delete(output);
 }
 
 function benchmark_write_results_text(filename, tests) {
