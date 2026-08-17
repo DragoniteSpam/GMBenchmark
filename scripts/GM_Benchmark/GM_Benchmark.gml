@@ -637,8 +637,107 @@ Benchmarks = [
                 var result = some_value;
             }
         })
-    ])
+    ]),
     #endregion
+
+	#region string building
+    new Benchmark("String building", [
+        new TestCase("str += chunk", function(iterations) {
+            repeat (iterations) {
+                var str = "";
+                repeat (64) {
+                    str += "hello";
+                }
+            }
+        }),
+        new TestCase("buffer (fresh)", function(iterations) {
+            repeat (iterations) {
+                var b = buffer_create(64*5+1,buffer_fixed,1);
+                repeat (64) {
+                    buffer_write(b,buffer_text,"hello");
+                }
+                buffer_write(b,buffer_u8,0);
+                var str = buffer_peek(b,0,buffer_string);
+                buffer_delete(b);
+            }
+        }),
+        new TestCase("buffer (reused)", function(iterations) {
+            var b = self.scratch;
+            repeat (iterations) {
+                buffer_seek(b,buffer_seek_start,0);
+                repeat (64) {
+                    buffer_write(b,buffer_text,"hello");
+                }
+                buffer_write(b,buffer_u8,0);
+                var str = buffer_peek(b,0,buffer_string);
+            }
+        }, function(iterations) {
+            self.scratch = buffer_create(64*5+1,buffer_fixed,1);
+        }, function(iterations) {
+            buffer_delete(self.scratch);
+        }),
+        new TestCase("array + string_concat_ext", function(iterations) {
+            repeat (iterations) {
+                var parts = array_create(64);
+                for (var i = 0; i < 64; i++) {
+                    parts[i] = "hello";
+                }
+                var str = string_concat_ext(parts);
+            }
+        }),
+        new TestCase("string_repeat (control)", function(iterations) {
+            repeat (iterations) {
+                var str = string_repeat("hello",64);
+            }
+        })
+    ]),
+    #endregion
+    
+    #region string scanning
+    new Benchmark("String scanning", [
+        new TestCase("string_char_at (sequential)", function(iterations) {
+            var str = self.test_string;
+            var i = 1;
+            var count = 0;
+            repeat (iterations) {
+                if (string_char_at(str,i) == "A") count++;
+                i++;
+                if (i > 512) i = 1;
+            }
+        }, function(iterations) {
+            self.test_string = string_repeat("ABC",512);
+        }),
+        new TestCase("string_char_at (random)", function(iterations) {
+            var str = self.test_string;
+            var order = self.order;
+            var i = 0;
+            var count = 0;
+            repeat (iterations) {
+                if (string_char_at(str,order[i]) == "A") count++;
+                i = (i+1) % 512;
+            }
+        }, function(iterations) {
+            self.test_string = string_repeat("ABC",512);
+            self.order = array_shuffle(array_create_ext(512,function(index) {
+                return index+1;
+            }));
+        }),
+        new TestCase("buffer_peek (sequential)", function(iterations) {
+            var b = self.test_buffer;
+            var i = 0;
+            var count = 0;
+            repeat (iterations) {
+                if (buffer_peek(b,i,buffer_u8) == 65) count++;
+                i++;
+                if (i >= 512) i = 0;
+            }
+        }, function(iterations) {
+            self.test_buffer = buffer_create(512+1,buffer_fixed,1);
+            buffer_write(self.test_buffer,buffer_text,string_repeat("ABC",512));
+        }, function(iterations) {
+            buffer_delete(self.test_buffer);
+        })
+    ]),
 ];
 
 #region definitions
