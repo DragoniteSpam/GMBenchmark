@@ -582,7 +582,7 @@ Benchmarks = [
             var a = avec3(100, 200, 300);
             var b = avec3(100, 200, 300);
             repeat (iterations) {
-                var result = avec2_add(a, b);
+                var result = avec3_add(a, b);
             }
         }),
 /*        new TestCase("C++", function(iterations) {
@@ -605,7 +605,7 @@ Benchmarks = [
             var a = avec3(100, 100, 300);
             var b = avec3(200, 200, 300);
             repeat (iterations) {
-                var result = avec2_dot(a, b);
+                var result = avec3_dot(a, b);
             }
         }),
 /*        new TestCase("C++", function(iterations) {
