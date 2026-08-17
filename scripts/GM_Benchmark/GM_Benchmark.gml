@@ -216,18 +216,18 @@ Benchmarks = [
     new Benchmark("Hash functions (buffer)", [
         new TestCase("md5", function(iterations) {
             var str = string_repeat("ABC", 1000);
-            var buffer = buffer_create(3100, buffer_fixed, 1);
+            var buffer = buffer_create(4000, buffer_fixed, 1);
             buffer_write(buffer, buffer_text, str);
             repeat (iterations) {
-                buffer_md5(buffer, 0, 3100);
+                buffer_md5(buffer, 0, 4000);
             }
             buffer_delete(buffer);
         }), new TestCase("sha1", function(iterations) {
             var str = string_repeat("ABC", 1000);
-            var buffer = buffer_create(3100, buffer_fixed, 1);
+            var buffer = buffer_create(4000, buffer_fixed, 1);
             buffer_write(buffer, buffer_text, str);
             repeat (iterations) {
-                buffer_sha1(buffer, 0, 3100);
+                buffer_sha1(buffer, 0, 4000);
             }
             buffer_delete(buffer);
         }), new TestCase("crc32", function(iterations) {
