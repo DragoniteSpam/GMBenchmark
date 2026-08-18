@@ -37,8 +37,17 @@ var ew2 = chartw;
 var c1 = 32;
 var c2 = c1 + 32 + ew;
 
+var runtime_type = "";
+if (GM_runtime_type == "gmrt") {
+    runtime_type = "GMRT";
+}  else if (code_is_compiled()) {
+    runtime_type += "YYC";
+} else {
+    runtime_type += "VM";
+}
+
 self.container = new EmuCore(0, 0, window_get_width(), window_get_height()).AddContent([
-    new EmuText(c1, EMU_AUTO, ew, eh, string("[c_aqua]GameMaker Benchmark Tool[/c] ({0})", code_is_compiled() ? "YYC" : "VM")),
+    new EmuText(c1, EMU_AUTO, ew, eh, string("[c_aqua]GameMaker Benchmark[/c] ({0})", runtime_type)),
     new EmuList(c1, EMU_AUTO, ew, eh, "Benchmarks:", eh, 6, function() {
         var bench = self.GetSelectedItem();
         var item_list = self.GetSibling("BENCHMARK TEST LIST");
