@@ -363,18 +363,18 @@ self.DrawBarChart = function(w, h, mx, my) {
         switch (obj_main.display_type) {
             case EDisplayTypes.TIME:
                 y1              = y2 - (bar_finish_y - bar_start_y) * selected_benchmark_test.runtime.ms / max_value;
-                y_plus_five     = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.ms * 1.1) / max_value;
-                y_minus_five    = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.ms * 0.9) / max_value;
+                y_plus_five     = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.ms * 1.05) / max_value;
+                y_minus_five    = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.ms * 0.95) / max_value;
                 break;
             case EDisplayTypes.PERCENT:
                 y1              = y2 - (bar_finish_y - bar_start_y) * selected_benchmark_test.runtime.percentage;
-                y_plus_five     = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.percentage * 1.1);
-                y_minus_five    = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.percentage * 0.9);
+                y_plus_five     = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.percentage * 1.05);
+                y_minus_five    = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.percentage * 0.95);
                 break;
             case EDisplayTypes.OPS_PER_MS:
                 y1              = y2 - (bar_finish_y - bar_start_y) * selected_benchmark_test.runtime.per_ms / max_value;
-                y_plus_five     = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.per_ms * 1.1) / max_value;
-                y_minus_five    = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.per_ms * 0.9) / max_value;
+                y_plus_five     = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.per_ms * 1.05) / max_value;
+                y_minus_five    = y2 - (bar_finish_y - bar_start_y) * (selected_benchmark_test.runtime.per_ms * 0.95) / max_value;
                 break;
         }
         

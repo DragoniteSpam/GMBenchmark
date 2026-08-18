@@ -216,18 +216,18 @@ Benchmarks = [
     new Benchmark("Hash functions (buffer)", [
         new TestCase("md5", function(iterations) {
             var str = string_repeat("ABC", 1000);
-            var buffer = buffer_create(3100, buffer_fixed, 1);
+            var buffer = buffer_create(4000, buffer_fixed, 1);
             buffer_write(buffer, buffer_text, str);
             repeat (iterations) {
-                buffer_md5(buffer, 0, 3100);
+                buffer_md5(buffer, 0, 4000);
             }
             buffer_delete(buffer);
         }), new TestCase("sha1", function(iterations) {
             var str = string_repeat("ABC", 1000);
-            var buffer = buffer_create(3100, buffer_fixed, 1);
+            var buffer = buffer_create(4000, buffer_fixed, 1);
             buffer_write(buffer, buffer_text, str);
             repeat (iterations) {
-                buffer_sha1(buffer, 0, 3100);
+                buffer_sha1(buffer, 0, 4000);
             }
             buffer_delete(buffer);
         }), new TestCase("crc32", function(iterations) {
@@ -582,7 +582,7 @@ Benchmarks = [
             var a = avec3(100, 200, 300);
             var b = avec3(100, 200, 300);
             repeat (iterations) {
-                var result = avec2_add(a, b);
+                var result = avec3_add(a, b);
             }
         }),
 /*        new TestCase("C++", function(iterations) {
@@ -605,7 +605,7 @@ Benchmarks = [
             var a = avec3(100, 100, 300);
             var b = avec3(200, 200, 300);
             repeat (iterations) {
-                var result = avec2_dot(a, b);
+                var result = avec3_dot(a, b);
             }
         }),
 /*        new TestCase("C++", function(iterations) {
